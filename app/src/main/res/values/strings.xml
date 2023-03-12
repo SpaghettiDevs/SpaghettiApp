@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">BiteByByte</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_create">Create</string>
     <string name="title_notifications">Notifications</string>
+    <string name="create_post_default_title">Title</string>
+    <string name="create_post_tags">Tags</string>
+    <string name="create_post_add_label">Add Label</string>
+    <string name="plus_icon_desc">Plus Icon</string>
 </resources>

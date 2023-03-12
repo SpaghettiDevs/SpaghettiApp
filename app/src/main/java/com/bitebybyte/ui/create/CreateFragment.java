@@ -1,4 +1,4 @@
-package com.bitebybyte.ui.dashboard;
+package com.bitebybyte.ui.create;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bitebybyte.databinding.FragmentDashboardBinding;
+import com.bitebybyte.databinding.FragmentCreateBinding;
 
-public class DashboardFragment extends Fragment {
+public class CreateFragment extends Fragment {
 
-    private FragmentDashboardBinding binding;
+    private FragmentCreateBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        CreateViewModel createViewModel =
+                new ViewModelProvider(this).get(CreateViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+//        final TextView textView = binding.textDashboard;
+//        createViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
