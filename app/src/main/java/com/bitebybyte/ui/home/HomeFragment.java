@@ -27,6 +27,9 @@ public class HomeFragment extends Fragment {
         feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
         feed.setAdapter(new HomeFeedAdapter());
 
+        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
+        feed.addItemDecoration(decoration);
+
         return view;
     }
 }
