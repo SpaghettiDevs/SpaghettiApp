@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 
+import java.util.function.BiFunction;
+
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
     @NonNull
@@ -25,6 +27,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
+        BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
+                Math.random() * (max - min + 1) + min);
 
     }
 
