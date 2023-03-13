@@ -30,6 +30,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
                 Math.random() * (max - min + 1) + min);
 
+        String[] titles = {"Lasagne", "Hamburger", "Pizza", "Hutspot"};
+        holder.getPostTitle().setText(titles[position % titles.length]);
+
+        String[] names = {"Ashley", "John", "Bob", "Emma"};
+        holder.getPostAuthor().setText(names[position % names.length]);
+
+        holder.getPostTimeStamp().setText(String.format("%dd ago", randomInt.apply(1, 31)));
+        holder.getPostCookingTime().setText(String.format("%d min", randomInt.apply(5, 59)));
+        holder.getPostCommentsAmount().setText(String.format("%d", randomInt.apply(0, 50)));
+        holder.getPostLikesAmount().setText(String.format("%d", randomInt.apply(0, 50)));
     }
 
     @Override
