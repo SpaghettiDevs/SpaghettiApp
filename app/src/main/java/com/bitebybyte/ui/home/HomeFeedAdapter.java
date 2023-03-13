@@ -1,5 +1,6 @@
 package com.bitebybyte.ui.home;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,7 +17,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_home, parent,
+                                                                     false);
+        return new ViewHolder(view);
     }
 
     @Override
