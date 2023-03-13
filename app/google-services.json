@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "935904554773",
+    "project_id": "bitebybyte-ac8f2",
+    "storage_bucket": "bitebybyte-ac8f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935904554773:android:b7ea51dedcd0faebe1031c",
+        "android_client_info": {
+          "package_name": "com.bitebybyte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935904554773-dj02l7l4riq2351p4snd31tllcvnjko1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtIsMW83Tk3pOVZy9GD5R_nUAVsK7tm_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935904554773-dj02l7l4riq2351p4snd31tllcvnjko1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935904554773:android:09e48ece55f742c6e1031c",
+        "android_client_info": {
+          "package_name": "come.bitebybyte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935904554773-dj02l7l4riq2351p4snd31tllcvnjko1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtIsMW83Tk3pOVZy9GD5R_nUAVsK7tm_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "935904554773-dj02l7l4riq2351p4snd31tllcvnjko1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
