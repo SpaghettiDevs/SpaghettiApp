@@ -45,7 +45,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public int getItemCount()
     {
-        return 0;
+        return 25;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
