@@ -20,13 +20,17 @@ public class HomeFragment extends Fragment {
     private RecyclerView feed;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // store the fragment_home.xml as a view
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         feed = view.findViewById(R.id.home_feed);
         feed.setHasFixedSize(true);
+
+        // display the posts linearly
         feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
         feed.setAdapter(new HomeFeedAdapter());
 
+        // use ItemDecoration to get consistent margins inbetween items
         HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
         feed.addItemDecoration(decoration);
 
