@@ -56,16 +56,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         return 25;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public static class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView  postTitle;
-        private TextView  postTimeStamp;
-        private TextView  postCookingTime;
-        private TextView  postAuthor;
-        private TextView  postLikesAmount;
-        private TextView  postCommentsAmount;
-        private ImageView postAuthorProfilePicture;
-        private ImageView postImage;
+        private final TextView postTitle;
+        private final TextView postTimeStamp;
+        private final TextView postCookingTime;
+        private final TextView postAuthor;
+        private final TextView  postLikesAmount;
+        private final TextView  postCommentsAmount;
+        private final ImageView postAuthorProfilePicture;
+        private final ImageView postImage;
 
         public ViewHolder(@NonNull View itemView)
         {
