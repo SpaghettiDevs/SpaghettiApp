@@ -13,4 +13,5 @@
     <color name="gray_300">#CFC4BC</color>
     <color name="gray_500">#B19F92</color>
     <color name="text_primary">#FF000000</color>
+    <color name="text_secondary">#FFFFFFFF</color>
 </resources>

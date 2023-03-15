@@ -13,8 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingBottom="50dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +30,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_size_title" />
-            <!-- Add a pressable object without text, fills the entire width with a margin of 40dp and a height of 200dp -->
             <Button
                 android:id="@+id/create_post_image_button"
                 style="@style/CameraButton"
@@ -44,7 +42,6 @@
                 android:text=""
                 android:textSize="20sp"
                 tools:ignore="SpeakableTextPresentCheck" />
-            <!-- Add a row view with a text view and a button -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,7 +76,7 @@
                         app:tint="@color/text_primary" />
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/add_label"
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,11 +160,31 @@
                 <EditText
                     android:id="@+id/create_post_description"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:inputType="text|textMultiLine"
-                    android:gravity="top"
-                    android:autofillHints=""
-                    android:background="@drawable/background_rounded_border"/>
+                    style="@style/InputMultiline" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="10dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/create_post_ingredients_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/create_post_ingredients_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_size_medium"
+                    android:labelFor="@id/create_post_ingredients_input"/>
+                <EditText
+                    android:id="@+id/create_post_ingredients_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/BorderedInput"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -191,11 +208,25 @@
                 <EditText
                     android:id="@+id/create_post_method"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:inputType="text|textMultiLine"
-                    android:gravity="top"
-                    android:autofillHints=""
-                    android:background="@drawable/background_rounded_border"/>
+                    style="@style/InputMultiline" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingBottom="40dp"
+                >
+                <Button
+                    android:id="@+id/submit_button"
+                    style="@style/PrimaryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="@string/create_post_button"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
