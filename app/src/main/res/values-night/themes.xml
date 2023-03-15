@@ -13,4 +13,11 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="PrimaryButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_rounded</item>
+    </style>
+    <style name="CameraButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_rounded</item>
+        <item name="colorAccent">@color/gray_blue_500</item>
+    </style>
 </resources>
