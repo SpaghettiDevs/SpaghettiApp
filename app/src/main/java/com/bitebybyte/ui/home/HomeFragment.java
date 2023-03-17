@@ -9,29 +9,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bitebybyte.R;
 import com.bitebybyte.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
-
+    private RecyclerView feed;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        // store the fragment_home.xml as a view
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        feed = view.findViewById(R.id.home_feed);
+        feed.setHasFixedSize(true);
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
-    }
+        // display the posts linearly
+        feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        feed.setAdapter(new HomeFeedAdapter());
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        // use ItemDecoration to get consistent margins inbetween items
+        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
+        feed.addItemDecoration(decoration);
+
+        return view;
     }
 }
