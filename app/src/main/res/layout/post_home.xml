@@ -60,7 +60,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/postTitleTextView"
-            app:srcCompat="@color/teal_200"
+            app:srcCompat="@color/lightblue"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
