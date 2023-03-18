@@ -18,35 +18,27 @@
             android:layout_height="wrap_content"
             android:text="2d ago"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintBottom_toBottomOf="@+id/postTitleTextView"
+            app:layout_constraintBaseline_toBaselineOf="@+id/postTitleTextView"
             app:layout_constraintEnd_toStartOf="@+id/postCookingTimeTextView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postTitleTextView"
-            app:layout_constraintTop_toTopOf="@+id/postTitleTextView" />
+            app:layout_constraintStart_toEndOf="@+id/postTitleTextView" />
 
         <TextView
             android:id="@+id/postCookingTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
             android:text="20 min"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintBottom_toBottomOf="@+id/postTitleTextView"
-            app:layout_constraintEnd_toStartOf="@+id/postCookingTimeIcon"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postTimeStampTextView"
-            app:layout_constraintTop_toTopOf="@+id/postTimeStampTextView" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/postTitleTextView"
+            app:layout_constraintEnd_toStartOf="@+id/postCookingTimeIcon" />
 
         <ImageView
             android:id="@+id/postCookingTimeIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/postCookingTimeTextView"
             app:layout_constraintEnd_toStartOf="@+id/postPaddingRightGuideline"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCookingTimeTextView"
             app:layout_constraintTop_toTopOf="@+id/postCookingTimeTextView"
             app:srcCompat="@drawable/baseline_av_timer_24" />
 
@@ -70,24 +62,20 @@
             android:id="@+id/postTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
             android:text="Lasagne"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintBottom_toTopOf="@+id/postImageView"
-            app:layout_constraintEnd_toStartOf="@+id/postTimeStampTextView"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/postPaddingLeftGuideline"
-            app:layout_constraintTop_toTopOf="@id/postPaddingTopGuideline"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <ImageView
             android:id="@+id/postAuthorProfilePicture"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@id/postPaddingBottomGuideline"
-            app:layout_constraintEnd_toStartOf="@+id/postAuthor"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/postPaddingLeftGuideline"
             app:layout_constraintTop_toBottomOf="@+id/postImageView"
             app:srcCompat="@android:drawable/ic_menu_myplaces"
@@ -97,12 +85,10 @@
             android:id="@+id/postAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="8dp"
             android:text="Ashley"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
-            app:layout_constraintEnd_toStartOf="@+id/postCommentsIcon"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/postAuthorProfilePicture"
             app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture" />
@@ -111,23 +97,21 @@
             android:id="@+id/postLikesIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/postLikesAmountTextView"
             app:layout_constraintEnd_toStartOf="@+id/postLikesAmountTextView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCommentsAmountTextView"
-            app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture"
+            app:layout_constraintTop_toTopOf="@+id/postLikesAmountTextView"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/round_favorite_border_24" />
 
         <ImageView
             android:id="@+id/postCommentsIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/postCommentsAmountTextView"
             app:layout_constraintEnd_toStartOf="@+id/postCommentsAmountTextView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postAuthor"
-            app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture"
+            app:layout_constraintTop_toTopOf="@+id/postCommentsAmountTextView"
             app:srcCompat="@drawable/round_chat_bubble_outline_24" />
 
         <TextView
@@ -136,50 +120,38 @@
             android:layout_height="wrap_content"
             android:text="20"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintBottom_toBottomOf="@+id/postLikesIcon"
-            app:layout_constraintEnd_toStartOf="@+id/postPaddingRightGuideline"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postLikesIcon"
-            app:layout_constraintTop_toTopOf="@+id/postLikesIcon" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/postAuthor"
+            app:layout_constraintEnd_toStartOf="@+id/postPaddingRightGuideline" />
 
         <TextView
             android:id="@+id/postCommentsAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:text="10"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintBottom_toBottomOf="@+id/postCommentsIcon"
-            app:layout_constraintEnd_toStartOf="@+id/postLikesIcon"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCommentsIcon"
-            app:layout_constraintTop_toTopOf="@+id/postCommentsIcon" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/postPaddingTopGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/postAuthor"
+            app:layout_constraintEnd_toStartOf="@+id/postLikesIcon" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/postPaddingBottomGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="8dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/postPaddingLeftGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintGuide_begin="12dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/postPaddingRightGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="12dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
