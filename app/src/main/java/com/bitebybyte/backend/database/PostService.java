@@ -18,7 +18,7 @@ public class PostService implements OnSuccessListener, OnFailureListener{
     private static final String TAG = "Database operation: ";
     private FeedPost post = null;
 
-    PostService() { }
+    public PostService() { }
 
     PostService(FeedPost post) { this.post = post; }
 
