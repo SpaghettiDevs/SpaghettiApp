@@ -14,4 +14,11 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/notosansregular</item>
     </style>
+    <style name="PrimaryButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_rounded</item>
+    </style>
+    <style name="CameraButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_rounded</item>
+        <item name="colorAccent">@color/gray_blue_500</item>
+    </style>
 </resources>
