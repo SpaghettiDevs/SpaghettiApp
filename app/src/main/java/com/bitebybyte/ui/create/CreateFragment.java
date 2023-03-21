@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
 
 public class CreateFragment extends Fragment {
@@ -31,6 +32,7 @@ public class CreateFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        PostService service = new PostService();
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -53,8 +55,16 @@ public class CreateFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Form was submitted
-                //Do validation and send to database
+                System.out.println("title " + title.getText());
+                System.out.println("estimated time " + estimatedTime.getText());
+                System.out.println("description " + description.getText());
+                System.out.println("method " + method.getText());
+                System.out.println("Button Pressed! ");
+                //TODO `idOwner` get from login
+                //TODO ingredients is not a List. Should reconsider!
+                service.createPostWithRecipe("1", description.getText().toString(), title.getText().toString(),
+                        null, null,
+                        method.getText().toString(), null, Integer.parseInt(estimatedTime.getText().toString()));
             }
         });
 
