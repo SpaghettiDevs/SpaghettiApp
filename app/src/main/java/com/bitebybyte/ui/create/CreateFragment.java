@@ -8,10 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.content.Intent;
+import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.databinding.FragmentCreateBinding;
 
@@ -26,6 +29,7 @@ public class CreateFragment extends Fragment {
     private EditText ingredients;
     private EditText method;
     private Button submitButton;
+    private Button imageButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,12 +53,22 @@ public class CreateFragment extends Fragment {
         ingredients = root.findViewById(R.id.create_post_ingredients_input);
         method = root.findViewById(R.id.create_post_method);
         submitButton = root.findViewById(R.id.create_post_submit_button);
+        imageButton = root.findViewById(R.id.create_post_image_button);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Form was submitted
                 //Do validation and send to database
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                startActivity(intent);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
 
