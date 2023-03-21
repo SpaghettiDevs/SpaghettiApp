@@ -6,6 +6,7 @@
         android:id="@+id/app_bar_search"
         android:icon="@drawable/baseline_search_24"
         android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_over"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
@@ -13,12 +14,14 @@
         android:id="@+id/app_bar_filter"
         android:icon="@drawable/baseline_filter_24"
         android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_over"
         android:title="Filter"
         app:showAsAction="always" />
     <item
         android:id="@+id/app_bar_settings"
         android:icon="@drawable/baseline_settings_24"
         android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_over"
         android:title="Settings"
         app:showAsAction="always" />
 </menu>
