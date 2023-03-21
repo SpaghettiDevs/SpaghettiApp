@@ -2,11 +2,13 @@ package com.bitebybyte;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.os.Bundle;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Build;
 import android.provider.MediaStore;
 import androidx.camera.core.ImageCapture;
@@ -29,13 +31,17 @@ import java.util.Locale;
 
 import com.bitebybyte.databinding.ActivityCameraBinding;
 import com.google.common.util.concurrent.ListenableFuture;
+import android.net.Uri;
 
 public class CameraActivity extends AppCompatActivity {
     //Consts
     private static final String TAG = "CameraXApp";
     private static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS";
     private static final int REQUEST_CODE_PERMISSIONS = 10;
-    static final int CAMERA = 100;
+    private static final int CAMERA = 100;
+    private static final int PICK_IMAGE = 200;
+
+    public static final String URI_ID_CODE = "URI_ID_1001";
 
     //Must be initialized
     private ActivityCameraBinding viewBinding;
@@ -43,6 +49,8 @@ public class CameraActivity extends AppCompatActivity {
 
     //Might not be initialized
     private ImageCapture imageCapture = null;
+
+    private Uri selectedImageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,13 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 takePhoto();
+            }
+        });
+
+        viewBinding.searchGallaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchGallary();
             }
         });
 
@@ -101,6 +116,8 @@ public class CameraActivity extends AppCompatActivity {
                         String msg = "Photo capture succeeded: ${output.savedUri}";
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         Log.d(TAG, msg);
+                        selectedImageUri = outputFileResults.getSavedUri();
+                        terminate();
                     }
                     @Override
                     public void onError(ImageCaptureException exc) {
@@ -108,6 +125,13 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void searchGallary() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
 
     private void bindPreview(ProcessCameraProvider cameraProvider) {
@@ -144,6 +168,28 @@ public class CameraActivity extends AppCompatActivity {
                 // This should never be reached.
             }
         }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void terminate() {
+        Intent resultIntent = new Intent();
+
+        if (selectedImageUri != null) {
+            resultIntent.putExtra(URI_ID_CODE, selectedImageUri.toString());
+            setResult(Activity.RESULT_OK, resultIntent);
+        } else {
+            setResult(Activity.RESULT_CANCELED, resultIntent);
+        }
+
+        finish();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGE) {
+            selectedImageUri = data.getData();
+            super.onActivityResult(requestCode, resultCode, data);
+            terminate();
+        }
     }
 
     @Override

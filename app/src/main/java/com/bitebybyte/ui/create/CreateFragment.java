@@ -1,5 +1,7 @@
 package com.bitebybyte.ui.create;
 
+import static com.bitebybyte.CameraActivity.URI_ID_CODE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.content.Intent;
 import android.app.Activity;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +23,8 @@ import com.bitebybyte.databinding.FragmentCreateBinding;
 
 public class CreateFragment extends Fragment {
 
+    //const
+    private static final int CAMERA_ACTIVITY_CODE = 333;
 
     private FragmentCreateBinding binding;
 
@@ -67,13 +72,25 @@ public class CreateFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CameraActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, CAMERA_ACTIVITY_CODE);
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
 
         return root;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_ACTIVITY_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String msg = data.getStringExtra(URI_ID_CODE);
+                Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @Override
     public void onDestroyView() {
