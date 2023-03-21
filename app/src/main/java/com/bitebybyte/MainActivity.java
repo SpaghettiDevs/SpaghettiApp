@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         FirebaseUser currentUser = auth.getCurrentUser();
-        if(currentUser != null){
+        if(currentUser == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
 
