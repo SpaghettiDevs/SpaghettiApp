@@ -1,14 +1,14 @@
-package com.bitebybyte.ui.loginAndSignUp;
+package com.bitebybyte;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class SignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.signup_activity);
+        //setContentView(R.layout.login_activity);
     }
 }
