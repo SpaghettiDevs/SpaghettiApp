@@ -34,4 +34,8 @@ public abstract class AbstractContent {
         return idOwner;
     }
 
+    public String getPostId() {
+        return id;
+    }
+
 }
