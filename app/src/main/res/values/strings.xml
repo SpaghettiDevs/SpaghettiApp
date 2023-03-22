@@ -15,4 +15,6 @@
     <string name="navigation_feed">Feed</string>
     <string name="navigation_create">Create</string>
     <string name="navigation_saved">Saved</string>
+    <string name="saved_recipes">Saved Recipes</string>
+    <string name="my_recipes">My recipes</string>
 </resources>

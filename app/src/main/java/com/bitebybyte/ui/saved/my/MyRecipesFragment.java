@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ui.home.HomeItemDecoration;
 
 public class MyRecipesFragment extends Fragment {
 
@@ -30,6 +31,10 @@ public class MyRecipesFragment extends Fragment {
 
         //Set the adapter
         myRecipes.setAdapter(new MyRecipesAdapter());
+
+        // use ItemDecoration to get consistent margins inbetween items
+        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
+        myRecipes.addItemDecoration(decoration);
 
         return view;
     }

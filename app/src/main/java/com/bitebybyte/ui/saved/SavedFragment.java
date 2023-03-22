@@ -42,9 +42,9 @@ public class SavedFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     if (position == 0) {
-                        tab.setText("Saved Posts");
+                        tab.setText(R.string.saved_recipes);
                     } else {
-                        tab.setText("My Posts");
+                        tab.setText(R.string.my_recipes);
                     }
                 }
         ).attach();
