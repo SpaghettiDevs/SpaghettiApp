@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.bitebybyte.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/navigation_feed"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_create"
         android:name="com.bitebybyte.ui.create.CreateFragment"
-        android:label="@string/title_create"
+        android:label="@string/navigation_create"
         tools:layout="@layout/fragment_create" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.bitebybyte.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_saved"
+        android:name="com.bitebybyte.ui.saved.SavedFragment"
+        android:label="@string/navigation_saved"
+        tools:layout="@layout/fragment_saved" />
 </navigation>

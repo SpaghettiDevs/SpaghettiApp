@@ -13,163 +13,163 @@
         android:padding="0dp">
 
         <TextView
-            android:id="@+id/postTimeStampTextView"
+            android:id="@+id/savedPostTimeStampTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2d ago"
-            app:layout_constraintBottom_toBottomOf="@+id/postTitleTextView"
-            app:layout_constraintEnd_toStartOf="@+id/postCookingTimeTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostTitleTextView"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostCookingTimeTextView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postTitleTextView"
-            app:layout_constraintTop_toTopOf="@+id/postTitleTextView" />
+            app:layout_constraintStart_toEndOf="@+id/savedPostTitleTextView"
+            app:layout_constraintTop_toTopOf="@+id/savedPostTitleTextView" />
 
         <TextView
-            android:id="@+id/postCookingTimeTextView"
+            android:id="@+id/savedPostCookingTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="20 min"
-            app:layout_constraintBottom_toBottomOf="@+id/postTitleTextView"
-            app:layout_constraintEnd_toStartOf="@+id/postCookingTimeIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostTitleTextView"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostCookingTimeIcon"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postTimeStampTextView"
-            app:layout_constraintTop_toTopOf="@+id/postTimeStampTextView" />
+            app:layout_constraintStart_toEndOf="@+id/savedPostTimeStampTextView"
+            app:layout_constraintTop_toTopOf="@+id/savedPostTimeStampTextView" />
 
         <ImageView
-            android:id="@+id/postCookingTimeIcon"
+            android:id="@+id/savedPostCookingTimeIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/postCookingTimeTextView"
-            app:layout_constraintEnd_toStartOf="@+id/postPaddingRightGuideline"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostCookingTimeTextView"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostPaddingRightGuideline"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCookingTimeTextView"
-            app:layout_constraintTop_toTopOf="@+id/postCookingTimeTextView"
+            app:layout_constraintStart_toEndOf="@+id/savedPostCookingTimeTextView"
+            app:layout_constraintTop_toTopOf="@+id/savedPostCookingTimeTextView"
             app:srcCompat="@drawable/baseline_av_timer_24" />
 
         <ImageView
-            android:id="@+id/postImageView"
+            android:id="@+id/savedPostImageView"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/postAuthorProfilePicture"
+            app:layout_constraintBottom_toTopOf="@+id/savedPostAuthorProfilePicture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postTitleTextView"
-            app:srcCompat="@color/teal_200"
+            app:layout_constraintTop_toBottomOf="@+id/savedPostTitleTextView"
+            app:srcCompat="@color/orange"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/postTitleTextView"
+            android:id="@+id/savedPostTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:text="Lasagne"
-            app:layout_constraintBottom_toTopOf="@+id/postImageView"
-            app:layout_constraintEnd_toStartOf="@+id/postTimeStampTextView"
+            app:layout_constraintBottom_toTopOf="@+id/savedPostImageView"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostTimeStampTextView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/postPaddingLeftGuideline"
-            app:layout_constraintTop_toTopOf="@id/postPaddingTopGuideline"
+            app:layout_constraintStart_toStartOf="@+id/savedPostPaddingLeftGuideline"
+            app:layout_constraintTop_toTopOf="@id/savedPostPaddingTopGuideline"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <ImageView
-            android:id="@+id/postAuthorProfilePicture"
+            android:id="@+id/savedPostAuthorProfilePicture"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/postPaddingBottomGuideline"
-            app:layout_constraintEnd_toStartOf="@+id/postAuthor"
+            app:layout_constraintBottom_toBottomOf="@id/savedPostPaddingBottomGuideline"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostAuthor"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/postPaddingLeftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/postImageView"
+            app:layout_constraintStart_toStartOf="@+id/savedPostPaddingLeftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/savedPostImageView"
             app:srcCompat="@android:drawable/ic_menu_myplaces"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/postAuthor"
+            android:id="@+id/savedPostAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             android:text="Ashley"
-            app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
-            app:layout_constraintEnd_toStartOf="@+id/postCommentsIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostAuthorProfilePicture"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostCommentsIcon"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@+id/postAuthorProfilePicture"
-            app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture" />
+            app:layout_constraintStart_toEndOf="@+id/savedPostAuthorProfilePicture"
+            app:layout_constraintTop_toTopOf="@+id/savedPostAuthorProfilePicture" />
 
         <ImageView
-            android:id="@+id/postLikesIcon"
+            android:id="@+id/savedPostLikesIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
-            app:layout_constraintEnd_toStartOf="@+id/postLikesAmountTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostAuthorProfilePicture"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostLikesAmountTextView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCommentsAmountTextView"
-            app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture"
+            app:layout_constraintStart_toEndOf="@+id/savedPostCommentsAmountTextView"
+            app:layout_constraintTop_toTopOf="@+id/savedPostAuthorProfilePicture"
             app:srcCompat="@drawable/round_favorite_border_24" />
 
         <ImageView
-            android:id="@+id/postCommentsIcon"
+            android:id="@+id/savedPostCommentsIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/postAuthorProfilePicture"
-            app:layout_constraintEnd_toStartOf="@+id/postCommentsAmountTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostAuthorProfilePicture"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostCommentsAmountTextView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postAuthor"
-            app:layout_constraintTop_toTopOf="@+id/postAuthorProfilePicture"
+            app:layout_constraintStart_toEndOf="@+id/savedPostAuthor"
+            app:layout_constraintTop_toTopOf="@+id/savedPostAuthorProfilePicture"
             app:srcCompat="@drawable/round_chat_bubble_outline_24" />
 
         <TextView
-            android:id="@+id/postLikesAmountTextView"
+            android:id="@+id/savedPostLikesAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20"
-            app:layout_constraintBottom_toBottomOf="@+id/postLikesIcon"
-            app:layout_constraintEnd_toStartOf="@+id/postPaddingRightGuideline"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostLikesIcon"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostPaddingRightGuideline"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postLikesIcon"
-            app:layout_constraintTop_toTopOf="@+id/postLikesIcon" />
+            app:layout_constraintStart_toEndOf="@+id/savedPostLikesIcon"
+            app:layout_constraintTop_toTopOf="@+id/savedPostLikesIcon" />
 
         <TextView
-            android:id="@+id/postCommentsAmountTextView"
+            android:id="@+id/savedPostCommentsAmountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10"
-            app:layout_constraintBottom_toBottomOf="@+id/postCommentsIcon"
-            app:layout_constraintEnd_toStartOf="@+id/postLikesIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/savedPostCommentsIcon"
+            app:layout_constraintEnd_toStartOf="@+id/savedPostLikesIcon"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/postCommentsIcon"
-            app:layout_constraintTop_toTopOf="@+id/postCommentsIcon" />
+            app:layout_constraintStart_toEndOf="@+id/savedPostCommentsIcon"
+            app:layout_constraintTop_toTopOf="@+id/savedPostCommentsIcon" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/postPaddingTopGuideline"
+            android:id="@+id/savedPostPaddingTopGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/postPaddingBottomGuideline"
+            android:id="@+id/savedPostPaddingBottomGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_end="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/postPaddingLeftGuideline"
+            android:id="@+id/savedPostPaddingLeftGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/postPaddingRightGuideline"
+            android:id="@+id/savedPostPaddingRightGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

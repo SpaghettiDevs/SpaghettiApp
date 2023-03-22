@@ -6,33 +6,75 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bitebybyte.R;
-import com.bitebybyte.databinding.FragmentCreateBinding;
+import com.bitebybyte.ui.saved.my.MyRecipesFragment;
+import com.bitebybyte.ui.saved.recipes.SavedRecipesFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class SavedFragment extends Fragment {
-    // When requested, this adapter returns a DemoObjectFragment,
-    // representing an object in the collection.
-    SavedAdapter demoCollectionAdapter;
-    ViewPager2 viewPager;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_saved, container, false);
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+
+    public SavedFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_saved, container, false);
+
+        // Find the TabLayout and ViewPager in the layout
+        tabLayout = view.findViewById(R.id.saved_tab_layout);
+        viewPager = view.findViewById(R.id.saved_view_pager);
+
+        // Set up the ViewPager with the sections adapter
+        viewPager.setAdapter(new SectionsPagerAdapter(this));
+
+        // Connect the TabLayout and ViewPager
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText("OBJECT " + (position + 1))
+                (tab, position) -> {
+                    if (position == 0) {
+                        tab.setText("Saved Posts");
+                    } else {
+                        tab.setText("My Posts");
+                    }
+                }
         ).attach();
+
+        return view;
     }
+
+    private static class SectionsPagerAdapter extends FragmentStateAdapter {
+
+        public SectionsPagerAdapter(Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new SavedRecipesFragment();
+                case 1:
+                    return new MyRecipesFragment();
+                default:
+                    throw new IllegalArgumentException("Invalid position: " + position);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+    }
+
 }

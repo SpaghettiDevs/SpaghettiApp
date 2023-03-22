@@ -12,4 +12,7 @@
     <string name="create_post_method_label">Method</string>
     <string name="create_post_button">Create post</string>
     <string name="create_post_ingredients_label">Ingredients</string>
+    <string name="navigation_feed">Feed</string>
+    <string name="navigation_create">Create</string>
+    <string name="navigation_saved">Saved</string>
 </resources>
