@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.content.Intent;
 import android.app.Activity;
 import android.widget.Toast;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.databinding.FragmentCreateBinding;
+import android.net.Uri;
 
 public class CreateFragment extends Fragment {
 
@@ -34,7 +36,7 @@ public class CreateFragment extends Fragment {
     private EditText ingredients;
     private EditText method;
     private Button submitButton;
-    private Button imageButton;
+    private ImageButton imageButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -85,12 +87,11 @@ public class CreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                String msg = data.getStringExtra(URI_ID_CODE);
-                Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                Uri selectedImageUri = Uri.parse(data.getStringExtra(URI_ID_CODE));
+                imageButton.setImageURI(selectedImageUri);
             }
         }
     }
-
 
     @Override
     public void onDestroyView() {

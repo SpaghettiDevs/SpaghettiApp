@@ -33,7 +33,7 @@
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_size_title" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/create_post_image_button"
                 style="@style/CameraButton"
                 android:layout_width="match_parent"
