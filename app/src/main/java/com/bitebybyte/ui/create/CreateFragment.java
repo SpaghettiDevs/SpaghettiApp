@@ -1,5 +1,7 @@
 package com.bitebybyte.ui.create;
 
+import static com.bitebybyte.CameraActivity.URI_ID_CODE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +10,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.content.Intent;
+import android.app.Activity;
+import android.widget.Toast;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.databinding.FragmentCreateBinding;
+import android.net.Uri;
 
 public class CreateFragment extends Fragment {
 
+    //const
+    private static final int CAMERA_ACTIVITY_CODE = 333;
 
     private FragmentCreateBinding binding;
 
@@ -26,6 +36,7 @@ public class CreateFragment extends Fragment {
     private EditText ingredients;
     private EditText method;
     private Button submitButton;
+    private ImageButton imageButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class CreateFragment extends Fragment {
         ingredients = root.findViewById(R.id.create_post_ingredients_input);
         method = root.findViewById(R.id.create_post_method);
         submitButton = root.findViewById(R.id.create_post_submit_button);
+        imageButton = root.findViewById(R.id.create_post_image_button);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +70,27 @@ public class CreateFragment extends Fragment {
             }
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                startActivityForResult(intent, CAMERA_ACTIVITY_CODE);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+            }
+        });
+
         return root;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_ACTIVITY_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri selectedImageUri = Uri.parse(data.getStringExtra(URI_ID_CODE));
+                imageButton.setImageURI(selectedImageUri);
+            }
+        }
     }
 
     @Override
