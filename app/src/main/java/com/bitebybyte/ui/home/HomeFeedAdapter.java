@@ -42,22 +42,24 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         // returns a random integer within the range [min, max]
-        BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
-                Math.random() * (max - min + 1) + min);
+//        BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
+//                Math.random() * (max - min + 1) + min);
 
         // cycle through the same post titles
-        String[] titles = {"Lasagne", "Hamburger", "Pizza", "Hutspot"};
-        holder.getPostTitle().setText(titles[position % titles.length]);
+        //String[] titles = {"Lasagne", "Hamburger", "Pizza", "Hutspot"};
+        FeedPost post = posts.get(position);
+        holder.getPostTitle().setText(post.getTitle());
 
         // cycle through the same post authors
-        String[] names = {"Ashley", "John", "Bob", "Emma"};
-        holder.getPostAuthor().setText(names[position % names.length]);
+        //String[] names = {"Ashley", "John", "Bob", "Emma"};
+        //TODO get the name of the owner not the ID.
+        holder.getPostAuthor().setText(post.getIdOwner());
 
-        // use random numbers as placeholders for real data
-        holder.getPostTimeStamp().setText(String.format("%dd ago", randomInt.apply(1, 31)));
-        holder.getPostCookingTime().setText(String.format("%d min", randomInt.apply(5, 59)));
-        holder.getPostCommentsAmount().setText(String.format("%d", randomInt.apply(0, 50)));
-        holder.getPostLikesAmount().setText(String.format("%d", randomInt.apply(0, 50)));
+        holder.getPostTimeStamp().setText(post.getDate().toString());
+        holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
+        //TODO add comments below
+        //holder.getPostCommentsAmount().setText(post.getComents().length());
+        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes()));
     }
 
     // For now, display 25 posts in the recycler view

@@ -85,7 +85,8 @@ public class CreateFragment extends Fragment {
                 //TODO ingredients is not a List. Should reconsider!
                 service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
                         imageURI == null ? null: imageURI.toString(), null,
-                        method.getText().toString(), null, Integer.parseInt(estimatedTime.getText().toString()));
+                        method.getText().toString(), null,
+                        estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
             }
         });
 
