@@ -22,6 +22,9 @@ import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import android.net.Uri;
 
 public class CreateFragment extends Fragment {
@@ -39,8 +42,12 @@ public class CreateFragment extends Fragment {
     private Button submitButton;
     private ImageButton imageButton;
 
+    private Uri imageURI;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         PostService service = new PostService();
@@ -64,6 +71,8 @@ public class CreateFragment extends Fragment {
         submitButton = root.findViewById(R.id.create_post_submit_button);
         imageButton = root.findViewById(R.id.create_post_image_button);
 
+        String idOwner = user.getUid();
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,10 +81,9 @@ public class CreateFragment extends Fragment {
                 System.out.println("description " + description.getText());
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
-                //TODO `idOwner` get from login
                 //TODO ingredients is not a List. Should reconsider!
-                service.createPostWithRecipe("1", description.getText().toString(), title.getText().toString(),
-                        null, null,
+                service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
+                        imageURI == null ? null: imageURI.toString(), null,
                         method.getText().toString(), null, Integer.parseInt(estimatedTime.getText().toString()));
             }
         });
@@ -97,8 +105,8 @@ public class CreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri selectedImageUri = Uri.parse(data.getStringExtra(URI_ID_CODE));
-                imageButton.setImageURI(selectedImageUri);
+                imageURI = Uri.parse(data.getStringExtra(URI_ID_CODE));
+                imageButton.setImageURI(imageURI);
             }
         }
     }

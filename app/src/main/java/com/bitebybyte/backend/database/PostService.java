@@ -1,5 +1,7 @@
 package com.bitebybyte.backend.database;
 
+import static com.bitebybyte.CameraActivity.URI_ID_CODE;
+
 import android.media.Image;
 import android.util.Log;
 
@@ -11,9 +13,47 @@ import com.bitebybyte.backend.local.Recipe;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import android.media.Image;
+import androidx.camera.core.ImageCapture;
+import android.provider.MediaStore;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.os.Bundle;
+import android.Manifest;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.os.Build;
+import android.provider.MediaStore;
+import androidx.camera.core.ImageCapture;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import android.view.View;
+import android.widget.Toast;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.core.Preview;
+import androidx.camera.core.CameraSelector;
+import android.util.Log;
+import androidx.camera.core.ImageCaptureException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+import com.bitebybyte.databinding.ActivityCameraBinding;
+import com.google.common.util.concurrent.ListenableFuture;
+import android.net.Uri;
 
 import java.util.List;
-
 public class PostService implements OnSuccessListener, OnFailureListener {
         private static final String TAG = "Database operation: ";
         private FeedPost post = null;
@@ -40,7 +80,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         public void createPostWithRecipe(String idOwner, String content, String title,
-                        List<Image> images, List<String> labels,
+                                         String images, List<String> labels,
                         String methods, List<Ingredient> ingredients, int preparationTime) {
                 System.out.println("CreatePostWithRecipe IN");
                 Recipe recipe = createRecipe(methods, ingredients, preparationTime);
@@ -49,8 +89,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         public void createPost(String idOwner, String content, String title,
-                        List<Image> images, List<String> labels, Recipe recipe) {
-
+                               String images, List<String> labels, Recipe recipe) {
                 System.out.println("CreatePost IN");
                 FeedPost post = new FeedPost(idOwner, content, title,
                                 images, labels, recipe);
