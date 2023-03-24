@@ -41,6 +41,7 @@ public class CreateFragment extends Fragment {
     private EditText method;
     private Button submitButton;
     private ImageButton imageButton;
+    private Uri imageUri;
 
     private Uri imageURI;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,6 +97,8 @@ public class CreateFragment extends Fragment {
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
+
+
 
         return root;
     }

@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedPost extends AbstractContent{
-    private String images;
+    private String images; //Currently only one image
     private List<String> labels;
     private String title;
     private Recipe recipe;
+
+    public FeedPost() {
+        super();
+        labels = new ArrayList<>();
+    }
 
     public FeedPost(String idOwner, String content, String title,
                     String images, List<String> labels, Recipe recipe) {

@@ -10,11 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.local.FeedPost;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
+
+    int itemCount;
+    List<FeedPost> posts;
+
+    public HomeFeedAdapter(List<FeedPost> posts) {
+        this.itemCount = posts.size();
+        this.posts = posts;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -53,7 +64,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public int getItemCount()
     {
-        return 25;
+        return itemCount;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder

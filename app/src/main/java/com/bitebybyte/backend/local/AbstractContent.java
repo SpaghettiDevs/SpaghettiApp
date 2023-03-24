@@ -4,26 +4,30 @@ import java.util.Date;
 import java.util.UUID;
 
 public abstract class AbstractContent {
-    protected int likesCount;
-    protected Date datePublished;
+    protected int likes;
+    protected Date date;
     protected String content;
     protected String idOwner;
-    protected String id;
+    protected String postId;
+
+    public  AbstractContent() {
+
+    }
 
     public AbstractContent(String idOwner, String content) {
-        this.likesCount = 0;
-        this.datePublished = new Date();
+        this.likes = 0;
+        this.date = new Date();
         this.content = content;
         this.idOwner = idOwner;
-        this.id = String.valueOf(UUID.randomUUID());
+        this.postId = String.valueOf(UUID.randomUUID());
     }
 
     public int getLikes() {
-        return likesCount;
+        return likes;
     }
 
     public Date getDate() {
-        return datePublished;
+        return date;
     }
 
     public String getContent() {
@@ -35,7 +39,7 @@ public abstract class AbstractContent {
     }
 
     public String getPostId() {
-        return id;
+        return postId;
     }
 
 }
