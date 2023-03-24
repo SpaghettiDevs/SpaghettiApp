@@ -5,16 +5,18 @@ import java.util.List;
 
 public class Recipe {
     private String methods;
-    private List<Ingredient> ingredients;
+    //private List<Ingredient> ingredients;
+    private String ingredients;
     private int preparationTime;
 
     public Recipe() {
         methods = "";
         preparationTime = 0;
-        ingredients = new ArrayList<>();
+        //ingredients = new ArrayList<>();
+        ingredients = "";
     }
 
-    public Recipe(String methods, List<Ingredient> ingredients, int preparationTime) {
+    public Recipe(String methods, String ingredients, int preparationTime) {
         this.methods = methods;
         this.ingredients = ingredients;
         this.preparationTime = preparationTime;
@@ -24,7 +26,7 @@ public class Recipe {
         return preparationTime;
     }
 
-    public List<Ingredient> getIngredients() {
+    public String getIngredients() {
         return ingredients;
     }
 

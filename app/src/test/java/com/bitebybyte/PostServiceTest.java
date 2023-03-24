@@ -32,8 +32,8 @@ public class PostServiceTest {
 
     // Testing with crate post requires to check manually what in the database!
     private void testCreatePost (String idOwner, String content, String title,
-                                 List<Image> images, List<String> labels,
-                                 String methods, List<Ingredient> ingredients, int preparationTime) {
+                                 String images, List<String> labels,
+                                 String methods, String ingredients, int preparationTime) {
 
         service.createPostWithRecipe(idOwner, content, title, images,
                 labels, methods, ingredients, preparationTime);

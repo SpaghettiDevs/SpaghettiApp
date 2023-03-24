@@ -81,7 +81,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
         public void createPostWithRecipe(String idOwner, String content, String title,
                                          String images, List<String> labels,
-                        String methods, List<Ingredient> ingredients, int preparationTime) {
+                        String methods, String ingredients, int preparationTime) {
                 System.out.println("CreatePostWithRecipe IN");
                 Recipe recipe = createRecipe(methods, ingredients, preparationTime);
                 createPost(idOwner, content, title, images, labels, recipe);
@@ -98,7 +98,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 System.out.println("CreatePost OUT");
         }
 
-        public Recipe createRecipe(String methods, List<Ingredient> ingredients, int preparationTime) {
+        public Recipe createRecipe(String methods, String ingredients, int preparationTime) {
                 return new Recipe(methods, ingredients, preparationTime);
         }
 

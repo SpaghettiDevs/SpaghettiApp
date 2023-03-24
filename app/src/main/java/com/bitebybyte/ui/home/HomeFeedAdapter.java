@@ -1,5 +1,7 @@
 package com.bitebybyte.ui.home;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.local.FeedPost;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -41,17 +45,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        // returns a random integer within the range [min, max]
-//        BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
-//                Math.random() * (max - min + 1) + min);
-
-        // cycle through the same post titles
-        //String[] titles = {"Lasagne", "Hamburger", "Pizza", "Hutspot"};
         FeedPost post = posts.get(position);
         holder.getPostTitle().setText(post.getTitle());
 
-        // cycle through the same post authors
-        //String[] names = {"Ashley", "John", "Bob", "Emma"};
         //TODO get the name of the owner not the ID.
         holder.getPostAuthor().setText(post.getIdOwner());
 
@@ -59,7 +55,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
         //TODO add comments below
         //holder.getPostCommentsAmount().setText(post.getComents().length());
-        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes()));
+
+        //TODO add image from received URL.
     }
 
     // For now, display 25 posts in the recycler view
