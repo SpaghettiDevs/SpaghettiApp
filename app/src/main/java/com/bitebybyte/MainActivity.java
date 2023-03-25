@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements
     private ActivityMainBinding binding;
     private FirebaseAuth        auth = FirebaseAuth.getInstance();
     private Toolbar             toolbar;
+    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,13 +51,14 @@ public class MainActivity extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).build();
-        NavController navController = Navigation.findNavController(this,
-                                                                   R.id.nav_host_fragment_activity_main);
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_create, R.id.navigation_notifications)
+                .build();
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
