@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements
     private NavController        navController;
     private BottomNavigationView bottomNavigationView;
 
+    private DrawerLayout drawerLayout;
+
+    private NavigationView sideBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        sideBar = findViewById(R.id.side_bar);
+        drawerLayout = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
