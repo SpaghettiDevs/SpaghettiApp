@@ -1,5 +1,6 @@
 package com.bitebybyte;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -11,14 +12,23 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bitebybyte.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        auth.signOut();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser == null){
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
