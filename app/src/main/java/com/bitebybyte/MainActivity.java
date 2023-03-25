@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
