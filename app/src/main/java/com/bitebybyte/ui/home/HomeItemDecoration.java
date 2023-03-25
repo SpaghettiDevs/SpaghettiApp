@@ -11,7 +11,7 @@ public class HomeItemDecoration extends RecyclerView.ItemDecoration
     private final int columns;
     private final int margin;
 
-    HomeItemDecoration(int margin, int columns) {
+    public HomeItemDecoration(int margin, int columns) {
         this.margin = margin;
         this.columns = columns;
     }
