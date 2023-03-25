@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements
     private FirebaseAuth        auth = FirebaseAuth.getInstance();
     private Toolbar             toolbar;
     private AppBarConfiguration appBarConfiguration;
-    private NavController navController;
-    private BottomNavigationView navView;
+    private NavController        navController;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navView = findViewById(R.id.nav_view);
+        bottomNavigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
