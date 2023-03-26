@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(sideBar, navController);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        // remove hamburger icon on the left the toolbar
+        toolbar.setNavigationIcon(null);
     }
 
     @Override
