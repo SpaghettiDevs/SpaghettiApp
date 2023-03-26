@@ -1,7 +1,5 @@
 package com.bitebybyte.ui.home;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
 
     int itemCount;
     List<FeedPost> posts;
+    PostService postService;
 
     public HomeFeedAdapter(List<FeedPost> posts) {
         this.itemCount = posts.size();
         this.posts = posts;
+        postService = new PostService();
     }
 
     @NonNull
@@ -56,7 +54,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         //TODO add comments below
         //holder.getPostCommentsAmount().setText(post.getComents().length());
 
-        //TODO add image from received URL.
+        postService.loadImage(holder.getPostImage(), post.getPostId());
     }
 
     // For now, display 25 posts in the recycler view

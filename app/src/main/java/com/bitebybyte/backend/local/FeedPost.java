@@ -1,11 +1,5 @@
 package com.bitebybyte.backend.local;
 
-import android.media.Image;
-import androidx.camera.core.ImageCapture;
-
-import android.net.Uri;
-import android.provider.MediaStore;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +12,7 @@ public class FeedPost extends AbstractContent{
     public FeedPost() {
         super();
         labels = new ArrayList<>();
+        images = this.postId; /// Design decision. Post and image associated with post are strongly coupled!!
     }
 
     public FeedPost(String idOwner, String content, String title,

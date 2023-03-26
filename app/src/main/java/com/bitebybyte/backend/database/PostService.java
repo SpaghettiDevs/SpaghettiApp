@@ -1,73 +1,25 @@
 package com.bitebybyte.backend.database;
 
-import static androidx.camera.core.impl.utils.ContextUtil.getApplicationContext;
-
-import android.app.usage.StorageStats;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.util.Log;
+import android.net.Uri;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
 import com.bitebybyte.backend.local.FeedPost;
-import com.bitebybyte.backend.local.Ingredient;
 import com.bitebybyte.backend.local.Recipe;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import android.media.Image;
-import androidx.camera.core.ImageCapture;
-import android.provider.MediaStore;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.os.Bundle;
-import android.Manifest;
-import android.content.ContentValues;
-import android.content.pm.PackageManager;
-import android.content.Intent;
-import android.os.Build;
-import android.provider.MediaStore;
-import androidx.camera.core.ImageCapture;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.core.Preview;
-import androidx.camera.core.CameraSelector;
-import android.util.Log;
-import androidx.camera.core.ImageCaptureException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
-import com.bitebybyte.databinding.ActivityCameraBinding;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import android.net.Uri;
-
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
 public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
         FirebaseStorage dbStore;
@@ -89,8 +41,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 System.out.println("SavetoDatabase OUT");
         }
 
-        public void saveImageToDatabase(Uri imageUri, ImageView imageView) {
-                StorageReference storageReference = dbStore.getReference("images/image");
+        public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId) {
+                StorageReference storageReference = dbStore.getReference("images/" + postId);
                 try {
                         storageReference.putFile(imageUri)
                                 .addOnSuccessListener(this)
@@ -111,23 +63,37 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 }
         }
 
-        public void createPostWithRecipe(String idOwner, String content, String title,
-                                         String images, List<String> labels,
-                        String methods, String ingredients, int preparationTime) {
-                System.out.println("CreatePostWithRecipe IN");
-                Recipe recipe = createRecipe(methods, ingredients, preparationTime);
-                createPost(idOwner, content, title, images, labels, recipe);
-                System.out.println("CreatePostWithRecipe OUT");
+        public void loadImage(ImageView imageView, String postId) {
+                StorageReference storageReference = dbStore.getReference("images/" + postId);
+                System.out.println(storageReference);
+                storageReference.getDownloadUrl()
+                        .addOnSuccessListener(uri ->
+                                Glide.with(imageView.getContext())
+                                        .load(uri)
+                                        .into(imageView))
+                        .addOnFailureListener(exception ->
+                                Glide.with(imageView.getContext())
+                                        .load("https://firebasestorage.googleapis.com/v0/b/bitebybyte-ac8f2.appspot.com/o/default_Image%20(1).jpg?alt=media&token=db6bf7f0-6c34-4f9f-892c-e8cc031f23c8")
+                                        .into(imageView));
         }
 
-        public void createPost(String idOwner, String content, String title,
-                               String images, List<String> labels, Recipe recipe) {
+        public String createPostWithRecipe(String idOwner, String content, String title,
+                                         String images, List<String> labels,
+                        String methods, String ingredients, int preparationTime) {
+                Recipe recipe = createRecipe(methods, ingredients, preparationTime);
+                return createPost(idOwner, content, title, images, labels, recipe);
+        }
+
+        public String createPost(String idOwner, String content, String title,
+                                     String images, List<String> labels, Recipe recipe) {
                 System.out.println("CreatePost IN");
                 FeedPost post = new FeedPost(idOwner, content, title,
                                 images, labels, recipe);
 
                 this.saveToDatabase(post);
                 System.out.println("CreatePost OUT");
+
+                return post.getPostId();
         }
 
         public Recipe createRecipe(String methods, String ingredients, int preparationTime) {

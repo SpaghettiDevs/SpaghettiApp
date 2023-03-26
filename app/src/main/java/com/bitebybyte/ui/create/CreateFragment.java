@@ -2,6 +2,9 @@ package com.bitebybyte.ui.create;
 
 import static com.bitebybyte.CameraActivity.URI_ID_CODE;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.content.Intent;
-import android.app.Activity;
-import android.widget.Toast;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,8 +24,6 @@ import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import android.net.Uri;
 
 public class CreateFragment extends Fragment {
 
@@ -81,12 +79,12 @@ public class CreateFragment extends Fragment {
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
 
-                service.saveImageToDatabase(imageURI, imageButton);
-
-                service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
-                        imageURI == null ? null: imageURI.toString(), null,
+                String postID = service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
+                        null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
+
+                service.saveImageToDatabase(imageURI, imageButton, postID);
             }
         });
 
