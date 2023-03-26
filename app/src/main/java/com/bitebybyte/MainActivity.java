@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(this, "Filter activated", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.app_bar_settings:
-                Toast.makeText(this, "Settings activated", Toast.LENGTH_SHORT).show();
                 drawerLayout.openDrawer(GravityCompat.END);
                 return true;
             default:
