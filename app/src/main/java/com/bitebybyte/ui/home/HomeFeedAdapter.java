@@ -12,9 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -65,33 +62,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         //TODO add image from received URL.
 
         //set the likes in the beginning
-        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes()));
-        System.out.println(post.getLikes());
+        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
 
         //update the likes when someone presses the like button
         holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // update the likes amount
-                DocumentReference postRef = db.collection("posts").document(holder.getPostUUID());
-                postRef
-                        .update("likes", Integer.parseInt(holder.getPostLikesAmount().getText().toString()) + 1)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                System.out.println("DocumentSnapshot successfully updated!");
-                                System.out.println(post.getLikes());
-                                post.incrementLikes();
-                                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes()));
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                System.out.println("Error updating document:" + e);
-                            }
-                        });
-              // holder.getPostLikesAmount().setText(Integer.toString(post.getLikes()));
+                postService.updateLikes(post);
+                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
             }
         });
 

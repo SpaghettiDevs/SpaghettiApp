@@ -7,11 +7,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.backend.local.AbstractContent;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -23,10 +26,12 @@ import java.util.List;
 public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
         FirebaseStorage dbStore;
+        FirebaseAuth auth;
 
         public PostService() {
                 db = FirebaseFirestore.getInstance();
                 dbStore = FirebaseStorage.getInstance();
+                auth = FirebaseAuth.getInstance();
         }
 
         public void saveToDatabase(FeedPost post) {
@@ -98,6 +103,46 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
         public Recipe createRecipe(String methods, String ingredients, int preparationTime) {
                 return new Recipe(methods, ingredients, preparationTime);
+        }
+
+        public void updateLikes(AbstractContent post) {
+                // update the likes amount
+                DocumentReference postRef = db.collection("posts").document(post.getPostId());
+
+                if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
+                        postRef
+                                .update("likes", (post.getLikes().remove(auth.getCurrentUser().getUid())))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                                System.out.println("DocumentSnapshot successfully updated!");
+                                                post.getLikes().remove(auth.getCurrentUser().getUid());
+                                        }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                                System.out.println("Error updating document:" + e);
+                                        }
+                                });
+                } else {
+                        postRef
+                                .update("likes", (post.getLikes().put(auth.getCurrentUser().getUid(), true)))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                                System.out.println("DocumentSnapshot successfully updated!");
+                                                post.getLikes().put(auth.getCurrentUser().getUid(), true);
+                                        }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                                System.out.println("Error updating document:" + e);
+                                        }
+                                });
+                }
+
         }
 
         @Override
