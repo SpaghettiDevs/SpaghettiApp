@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements
         appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(sideBar, navController);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             case R.id.app_bar_settings:
                 Toast.makeText(this, "Settings activated", Toast.LENGTH_SHORT).show();
+                drawerLayout.openDrawer(GravityCompat.END);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
