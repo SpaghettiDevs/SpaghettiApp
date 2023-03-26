@@ -25,6 +25,7 @@ public abstract class AbstractContent {
     public int getLikes() {
         return likes;
     }
+    public void incrementLikes() {likes++;}
 
     public Date getDate() {
         return date;
