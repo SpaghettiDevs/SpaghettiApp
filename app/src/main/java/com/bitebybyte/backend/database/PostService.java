@@ -108,39 +108,19 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         public void updateLikes(AbstractContent post) {
                 // update the likes amount
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
-
+                if(post.getLikes() == null) { return; }
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
+                        post.getLikes().remove(auth.getCurrentUser().getUid());
                         postRef
-                                .update("likes", (post.getLikes().remove(auth.getCurrentUser().getUid())))
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                                System.out.println("DocumentSnapshot successfully updated!");
-                                                post.getLikes().remove(auth.getCurrentUser().getUid());
-                                        }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                                System.out.println("Error updating document:" + e);
-                                        }
-                                });
+                                .update("likes", post.getLikes())
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
                 } else {
+                        post.getLikes().put(auth.getCurrentUser().getUid(), true);
                         postRef
-                                .update("likes", (post.getLikes().put(auth.getCurrentUser().getUid(), true)))
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                                System.out.println("DocumentSnapshot successfully updated!");
-                                                post.getLikes().put(auth.getCurrentUser().getUid(), true);
-                                        }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                                System.out.println("Error updating document:" + e);
-                                        }
-                                });
+                                .update("likes", post.getLikes())
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
                 }
 
         }

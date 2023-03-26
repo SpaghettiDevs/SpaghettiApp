@@ -62,7 +62,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         //TODO add image from received URL.
 
         //set the likes in the beginning
-        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+        if (post.getLikes() != null) {
+            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+        }
 
         //update the likes when someone presses the like button
         holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
