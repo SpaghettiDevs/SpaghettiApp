@@ -43,7 +43,6 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
         public void saveToDatabase(FeedPost post) {
                 System.out.println("SaveToDatabase IN");
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                 db.collection("posts")
                                 .document(post.getPostId()).set(post)

@@ -8,11 +8,13 @@ public class FeedPost extends AbstractContent{
     private List<String> labels;
     private String title;
     private Recipe recipe;
+    private List<Comments> comments;
 
     public FeedPost() {
         super();
         labels = new ArrayList<>();
         images = this.postId; /// Design decision. Post and image associated with post are strongly coupled!!
+        comments = new ArrayList<>();
     }
 
     public FeedPost(String idOwner, String content, String title,
