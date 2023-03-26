@@ -41,8 +41,6 @@ public class CreateFragment extends Fragment {
     private EditText method;
     private Button submitButton;
     private ImageButton imageButton;
-    private Uri imageUri;
-
     private Uri imageURI;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +80,9 @@ public class CreateFragment extends Fragment {
                 System.out.println("description " + description.getText());
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
-                //TODO ingredients is not a List. Should reconsider!
+
+                service.saveImageToDatabase(imageURI, imageButton);
+
                 service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
                         imageURI == null ? null: imageURI.toString(), null,
                         method.getText().toString(), ingredients.getText().toString(),
