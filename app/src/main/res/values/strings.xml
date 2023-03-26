@@ -21,4 +21,8 @@
     <string name="start_capture">Start Capture</string>
     <string name="stop_capture">Stop Capture</string>
     <string name="search_gallary">Search Gallery</string>
+    <string name="post_detail_description_title">Description</string>
+    <string name="post_detail_method_title">Method</string>
+    <string name="post_detail_ingredients_title">Ingredients</string>
+    <string name="post_detail_description_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consectetur leo at elit volutpat auctor. Etiam dapibus dui mi, sit amet pretium arcu tempus ut. Mauris dapibus feugiat elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi rutrum velit mollis venenatis consequat. Fusce a velit sed tellus hendrerit viverra.</string>
 </resources>
