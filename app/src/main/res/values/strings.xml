@@ -12,8 +12,13 @@
     <string name="create_post_method_label">Method</string>
     <string name="create_post_button">Create post</string>
     <string name="create_post_ingredients_label">Ingredients</string>
+    <string name="navigation_feed">Feed</string>
+    <string name="navigation_create">Create</string>
+    <string name="navigation_saved">Saved</string>
+    <string name="saved_recipes">Saved Recipes</string>
+    <string name="my_recipes">My recipes</string>
     <string name="take_photo">Take Photo</string>
     <string name="start_capture">Start Capture</string>
     <string name="stop_capture">Stop Capture</string>
-    <string name="search_gallary">Search Gallary</string>
+    <string name="search_gallary">Search Gallery</string>
 </resources>
