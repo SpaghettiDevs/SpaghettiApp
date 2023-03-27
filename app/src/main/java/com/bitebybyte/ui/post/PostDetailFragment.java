@@ -11,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
+import com.bitebybyte.ui.home.HomeFragmentDirections;
 
 public class PostDetailFragment extends Fragment {
 
@@ -34,10 +36,14 @@ public class PostDetailFragment extends Fragment {
     private ImageView bookmarkIcon;
     private EditText addComment;
 
+    private NavController navController;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPostDetailBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
 
         //Find the text-inputs
         title = root.findViewById(R.id.post_detail_title);
@@ -58,7 +64,7 @@ public class PostDetailFragment extends Fragment {
         //Find the add comment edit text
         addComment = root.findViewById(R.id.post_detail_comment_input);
 
-//        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+
 
         //Add event listeners for the icons
         likeIcon.setOnClickListener(event -> {
@@ -67,7 +73,8 @@ public class PostDetailFragment extends Fragment {
 
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
-//            navController.navigate(R.id.fragment_post_comments);
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
         });
 
         bookmarkIcon.setOnClickListener(event -> {
@@ -77,7 +84,8 @@ public class PostDetailFragment extends Fragment {
         //Add event listener for the add comment button
         addComment.setOnClickListener(event -> {
             //Navigate to the comments page.
-//            navController.navigate(R.id.fragment_post_comments);
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
         });
 
         //TODO: Add firebase code to populate the post details.
