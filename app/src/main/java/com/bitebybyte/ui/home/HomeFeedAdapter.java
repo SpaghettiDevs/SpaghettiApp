@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
@@ -15,6 +17,9 @@ import java.util.function.BiFunction;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
+
+    private NavController navController;
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -22,6 +27,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_home, parent,
                                                                      false);
+        navController = Navigation.findNavController(parent);
         return new ViewHolder(view);
     }
 
@@ -47,6 +53,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostCookingTime().setText(String.format("%d min", randomInt.apply(5, 59)));
         holder.getPostCommentsAmount().setText(String.format("%d", randomInt.apply(0, 50)));
         holder.getPostLikesAmount().setText(String.format("%d", randomInt.apply(0, 50)));
+
+        holder.getPostTitle().setOnClickListener(event -> {
+            navController.navigate(R.id.post_detail);
+        });
     }
 
     // For now, display 25 posts in the recycler view
@@ -79,6 +89,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
 
             postAuthorProfilePicture = itemView.findViewById(R.id.postAuthorProfilePicture);
             postImage                = itemView.findViewById(R.id.postImageView);
+
         }
 
         public TextView getPostTitle()

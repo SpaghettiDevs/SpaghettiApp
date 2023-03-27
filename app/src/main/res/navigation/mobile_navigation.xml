@@ -22,4 +22,10 @@
         android:name="com.bitebybyte.ui.saved.SavedFragment"
         android:label="@string/navigation_saved"
         tools:layout="@layout/fragment_saved" />
+
+    <fragment
+        android:id="@+id/post_detail"
+        android:name="com.bitebybyte.ui.post.PostDetailFragment"
+        android:label="@string/post_detail"
+        tools:layout="@layout/fragment_post_detail" />
 </navigation>

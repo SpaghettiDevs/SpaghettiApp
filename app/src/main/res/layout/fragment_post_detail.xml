@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.create.CreateFragment">
+    tools:context=".ui.post.PostDetailFragment">
 
     <ScrollView
+        android:id="@+id/post_detail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFFF"
@@ -96,18 +97,19 @@
                 tools:ignore="UseCompoundDrawables"
                 android:orientation="horizontal">
                 <EditText
+                    android:inputType="none"
+                    android:id="@+id/post_detail_comment_input"
                     android:layout_width="200dp"
                     android:layout_height="30dp"
                     style="@style/CameraButton"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
-                    android:text="Comment..."
+                    android:text="@string/post_detail_comment"
                     android:paddingHorizontal="10dp"
                     />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:gravity="end"
                     tools:ignore="UseCompoundDrawables">
                     <ImageView
@@ -115,7 +117,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        app:srcCompat="@drawable/round_chat_bubble_outline_24" />
+                        app:srcCompat="@drawable/round_chat_bubble_outline_24"
+                        android:contentDescription="TODO" />
                     <TextView
                         android:id="@+id/post_detail_comment_amount"
                         android:layout_width="wrap_content"
