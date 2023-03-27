@@ -18,7 +18,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.List;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
@@ -75,6 +79,36 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                 Glide.with(imageView.getContext())
                                         .load("https://firebasestorage.googleapis.com/v0/b/bitebybyte-ac8f2.appspot.com/o/default_Image%20(1).jpg?alt=media&token=db6bf7f0-6c34-4f9f-892c-e8cc031f23c8")
                                         .into(imageView));
+        }
+
+        public String dateFormat(Date date) {
+                Date currentTime = Calendar.getInstance().getTime();
+                long difference = currentTime.getTime()- date.getTime();
+
+                long secondsInMilli = 1000;
+                long minutesInMilli = secondsInMilli * 60;
+                long hoursInMilli = minutesInMilli * 60;
+                long daysInMilli = hoursInMilli * 24;
+
+                long elapsedDays = difference / daysInMilli;
+                difference = difference % daysInMilli;
+
+                long elapsedHours = difference / hoursInMilli;
+                difference = difference % hoursInMilli;
+
+                long elapsedMinutes = difference / minutesInMilli;
+                difference = difference % minutesInMilli;
+
+                long elapsedSeconds = difference / secondsInMilli;
+
+                String elapsedDaysS = Long.toString(elapsedDays);
+                String elapsedHoursS = Long.toString(elapsedHours);
+                String elapsedMinutesS = Long.toString(elapsedMinutes);
+                String elapsedSecondsS = Long.toString(elapsedSeconds);
+
+                        return ("Posted: " + elapsedDaysS +" days " + elapsedHoursS +
+                                " h " + elapsedMinutesS + " m " + elapsedSecondsS + " s ago");
+
         }
 
         public String createPostWithRecipe(String idOwner, String content, String title,
