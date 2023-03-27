@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,7 +56,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostLikesAmount().setText(String.format("%d", randomInt.apply(0, 50)));
 
         holder.getPostTitle().setOnClickListener(event -> {
-            navController.navigate(R.id.post_detail);
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
         });
     }
 
