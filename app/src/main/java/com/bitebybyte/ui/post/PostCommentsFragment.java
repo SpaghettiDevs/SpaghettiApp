@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.ui.home.HomeItemDecoration;
-import com.bitebybyte.ui.saved.my.MyRecipesAdapter;
 
 public class PostCommentsFragment extends Fragment {
     private RecyclerView commentsRecycler;
@@ -31,7 +30,7 @@ public class PostCommentsFragment extends Fragment {
         commentsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         //Set the adapter
-        commentsRecycler.setAdapter(new MyRecipesAdapter());
+        commentsRecycler.setAdapter(new PostCommentsAdapter());
 
         // use ItemDecoration to get consistent margins inbetween items
         HomeItemDecoration decoration = new HomeItemDecoration(32, 1);

@@ -92,21 +92,19 @@
                 android:layout_height="40dp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="20dp"
-                android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
                 tools:ignore="UseCompoundDrawables"
                 android:orientation="horizontal">
-                <EditText
-                    android:inputType="none"
+                <TextView
                     android:id="@+id/post_detail_comment_input"
                     android:layout_width="200dp"
                     android:layout_height="30dp"
                     style="@style/CameraButton"
+                    android:textColor="@color/text_primary"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:text="@string/post_detail_comment"
-                    android:paddingHorizontal="10dp"
-                    />
+                    android:paddingHorizontal="10dp" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        app:srcCompat="@drawable/round_favorite_border_24" />
+                        app:srcCompat="@drawable/ic_favorites_black_24dp" />
                 </LinearLayout>
             </LinearLayout>
             <!-- Seperator -->
@@ -251,6 +249,7 @@
                 android:background="@null"
                 android:textColor="@color/text_primary"
                 android:paddingHorizontal="20dp"
+                android:paddingBottom="10dp"
                 />
         </LinearLayout>
     </ScrollView>

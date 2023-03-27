@@ -59,6 +59,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
             NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
             navController.navigate(action);
         });
+
+        holder.getPostImage().setOnClickListener(event -> {
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
+        });
     }
 
     // For now, display 25 posts in the recycler view

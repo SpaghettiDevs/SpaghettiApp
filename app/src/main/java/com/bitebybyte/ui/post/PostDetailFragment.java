@@ -34,7 +34,7 @@ public class PostDetailFragment extends Fragment {
     private ImageView likeIcon;
     private ImageView commentIcon;
     private ImageView bookmarkIcon;
-    private EditText addComment;
+    private TextView addComment;
 
     private NavController navController;
 
@@ -73,7 +73,7 @@ public class PostDetailFragment extends Fragment {
 
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
             navController.navigate(action);
         });
 
@@ -84,7 +84,7 @@ public class PostDetailFragment extends Fragment {
         //Add event listener for the add comment button
         addComment.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
             navController.navigate(action);
         });
 
