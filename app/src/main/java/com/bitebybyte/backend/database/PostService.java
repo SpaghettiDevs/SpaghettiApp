@@ -105,10 +105,9 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 return new Recipe(methods, ingredients, preparationTime);
         }
 
+        // update the likes amount locally and in the firestore.
         public void updateLikes(AbstractContent post) {
-                // update the likes amount
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
-                if(post.getLikes() == null) { return; }
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
                         post.getLikes().remove(auth.getCurrentUser().getUid());
                         postRef

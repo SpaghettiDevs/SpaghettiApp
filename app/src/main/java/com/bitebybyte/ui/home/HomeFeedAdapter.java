@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -22,14 +21,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     int itemCount;
     List<FeedPost> posts;
     PostService postService;
-    FirebaseFirestore db;
 
     public HomeFeedAdapter(List<FeedPost> posts) {
         this.itemCount = posts.size();
         this.posts = posts;
         postService = new PostService();
-        this.db = FirebaseFirestore.getInstance();
-
     }
 
     @NonNull
@@ -61,10 +57,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         postService.loadImage(holder.getPostImage(), post.getPostId());
         //TODO add image from received URL.
 
-        //set the likes in the beginning
-        if (post.getLikes() != null) {
+        //set the likes when the post is loaded
             holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
-        }
 
         //update the likes when someone presses the like button
         holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
@@ -74,8 +68,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
                 holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
             }
         });
-
-
     }
 
     // For now, display 25 posts in the recycler view
@@ -96,7 +88,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         private final ImageView postAuthorProfilePicture;
         private final ImageView postImage;
         private final ImageView postLikeButton;
-        private final String postUUID;
 
         public ViewHolder(@NonNull View itemView)
         {
@@ -111,7 +102,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
 
             postAuthorProfilePicture = itemView.findViewById(R.id.postAuthorProfilePicture);
             postImage                = itemView.findViewById(R.id.postImageView);
-            postUUID                 = "9b1180a0-4d88-4f42-9240-11036ac2b0c9";
         }
 
         public TextView getPostTitle()
@@ -154,6 +144,5 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
             return postImage;
         }
         public ImageView getPostLikeButton() {return postLikeButton;}
-        public String getPostUUID() {return postUUID;}
     }
 }
