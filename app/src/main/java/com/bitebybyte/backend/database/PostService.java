@@ -7,11 +7,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.backend.local.AbstractContent;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -27,10 +30,12 @@ import java.util.Date;
 public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
         FirebaseStorage dbStore;
+        FirebaseAuth auth;
 
         public PostService() {
                 db = FirebaseFirestore.getInstance();
                 dbStore = FirebaseStorage.getInstance();
+                auth = FirebaseAuth.getInstance();
         }
 
         public void saveToDatabase(FeedPost post) {
@@ -132,6 +137,25 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
         public Recipe createRecipe(String methods, String ingredients, int preparationTime) {
                 return new Recipe(methods, ingredients, preparationTime);
+        }
+
+        // update the likes amount locally and in the firestore.
+        public void updateLikes(AbstractContent post) {
+                DocumentReference postRef = db.collection("posts").document(post.getPostId());
+                if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
+                        post.getLikes().remove(auth.getCurrentUser().getUid());
+                        postRef
+                                .update("likes", post.getLikes())
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
+                } else {
+                        post.getLikes().put(auth.getCurrentUser().getUid(), true);
+                        postRef
+                                .update("likes", post.getLikes())
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
+                }
+
         }
 
         @Override

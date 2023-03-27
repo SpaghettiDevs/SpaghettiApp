@@ -56,6 +56,19 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         //holder.getPostCommentsAmount().setText(post.getComents().length());
 
         postService.loadImage(holder.getPostImage(), post.getPostId());
+        //TODO add image from received URL.
+
+        //set the likes when the post is loaded
+            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+
+        //update the likes when someone presses the like button
+        holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postService.updateLikes(post);
+                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+            }
+        });
     }
 
     // For now, display 25 posts in the recycler view
@@ -75,6 +88,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         private final TextView  postCommentsAmount;
         private final ImageView postAuthorProfilePicture;
         private final ImageView postImage;
+        private final ImageView postLikeButton;
 
         public ViewHolder(@NonNull View itemView)
         {
@@ -84,6 +98,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
             postCookingTime    = itemView.findViewById(R.id.postCookingTimeTextView);
             postAuthor         = itemView.findViewById(R.id.postAuthor);
             postLikesAmount    = itemView.findViewById(R.id.postLikesAmountTextView);
+            postLikeButton     = itemView.findViewById(R.id.postLikesIcon);
             postCommentsAmount = itemView.findViewById(R.id.postCommentsAmountTextView);
 
             postAuthorProfilePicture = itemView.findViewById(R.id.postAuthorProfilePicture);
@@ -129,5 +144,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         {
             return postImage;
         }
+        public ImageView getPostLikeButton() {return postLikeButton;}
     }
 }
