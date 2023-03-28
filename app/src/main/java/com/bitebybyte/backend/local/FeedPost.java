@@ -8,7 +8,7 @@ public class FeedPost extends AbstractContent{
     private List<String> labels;
     private String title;
     private Recipe recipe;
-    private List<Comments> comments;
+    private List<Comment> comments;
 
     public FeedPost() {
         super();
@@ -40,5 +40,9 @@ public class FeedPost extends AbstractContent{
 
     public Recipe getRecipe() {
         return recipe;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 }
