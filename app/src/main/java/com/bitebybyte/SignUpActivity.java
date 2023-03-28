@@ -54,7 +54,7 @@ public class SignUpActivity extends AppCompatActivity {
                     signupEmail.setError("Email cannot be empty");
                 } else if (password.isEmpty()) {
                     signupPassword.setError("Password cannot be empty");
-                } else if(userService.usernameCheckQuery(username)) {
+                } else if(!userService.usernameCheck(username)) {
                     signupUsername.setError("Username already exists");
                 } else {
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -62,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(SignUpActivity.this, "SignUp Succesful", Toast.LENGTH_SHORT).show();
+                                userService.createUser(username, auth.getUid());
                                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                                 finish();
                             } else {

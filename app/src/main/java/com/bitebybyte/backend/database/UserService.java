@@ -17,22 +17,20 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         db = FirebaseFirestore.getInstance();
     }
 
-    //save a new user to the database
-    public void saveUserToDb(User user) {
-        db.collection("users")
-                .document(user.getUserId()).set(user)
-                .addOnSuccessListener(this)
-                .addOnFailureListener(this);
+    //creates a new User object
+    //and forwards new User to be saved on the database
+    public void createUser(String username, String userId) {
+        saveUserToDb(new User(userId, username));
     }
 
     //check if an existant user already has the same username.
-    public boolean usernameCheckQuery(String username) {
+    public boolean usernameCheck(String username) {
         //query that looks through the users collection and checks the username field
         Task<QuerySnapshot> task = db.collection("users")
                 .whereEqualTo("username", username)
                 .get();
 
-        //wait for the query to finish. since its async.
+        //wait for the query to finish, since its async.
         while (task.isComplete() == false) {}
 
         //if the result is empty return true that there is no the same username.
@@ -42,6 +40,14 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         } else {
             return false;
         }
+    }
+
+    //save a user to the database
+    private void saveUserToDb(User user) {
+        db.collection("users")
+                .document(user.getUserId()).set(user)
+                .addOnSuccessListener(this)
+                .addOnFailureListener(this);
     }
 
     @Override
