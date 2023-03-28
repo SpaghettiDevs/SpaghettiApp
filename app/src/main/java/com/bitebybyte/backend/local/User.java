@@ -5,19 +5,31 @@ import java.util.List;
 
 public class User {
 
-    private String UserId;
+    private String userId;
     private String username;
     private List<String> myPosts;
     private List<String> savedPosts;
+    private static User instance;
 
-    public User(String UserId, String username) {
-        this.UserId = UserId;
+    //setting the user with the values, only called once
+    public void setUser(String userId, String username) {
+        this.userId = userId;
         this.username = username;
         this.myPosts = new ArrayList<>();
         this.savedPosts = new ArrayList<>();
     }
 
-    public String getUserId() { return this.UserId; }
+    //singleton pattern
+    //to ensure every where the same User instance is used
+    public static User getUserInstance() {
+        if (instance == null) {
+            instance = new User();
+        }
+
+        return instance;
+    }
+
+    public String getUserId() { return this.userId; }
     public String getUsername() { return this.username; }
     public List<String> getMyPosts() { return this.myPosts; }
     public List<String> getSavedPosts() { return this.savedPosts; }

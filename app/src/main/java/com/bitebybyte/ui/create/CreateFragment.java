@@ -22,8 +22,7 @@ import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.bitebybyte.backend.local.User;
 
 public class CreateFragment extends Fragment {
 
@@ -43,11 +42,10 @@ public class CreateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         PostService service = new PostService();
+        User user = User.getUserInstance();
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -68,8 +66,6 @@ public class CreateFragment extends Fragment {
         submitButton = root.findViewById(R.id.create_post_submit_button);
         imageButton = root.findViewById(R.id.create_post_image_button);
 
-        String idOwner = user.getUid();
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +75,10 @@ public class CreateFragment extends Fragment {
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
 
-                String postID = service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
+                //adding the post to my post list of the user that created the post
+
+
+                String postID = service.createPostWithRecipe(user.getUsername(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));

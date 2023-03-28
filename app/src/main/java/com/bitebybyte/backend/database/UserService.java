@@ -2,10 +2,12 @@ package com.bitebybyte.backend.database;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.backend.local.FeedPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.bitebybyte.backend.local.User;
@@ -13,14 +15,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserService implements OnSuccessListener, OnFailureListener {
     FirebaseFirestore db;
+    User user;
     public UserService() {
         db = FirebaseFirestore.getInstance();
+        user = User.getUserInstance();
     }
 
-    //creates a new User object
+    //sets the fields in the user object
     //and forwards new User to be saved on the database
     public void createUser(String username, String userId) {
-        saveUserToDb(new User(userId, username));
+        user.setUser(userId, username);
+        saveUserToDb(user);
     }
 
     //check if an existant user already has the same username.
@@ -39,6 +44,24 @@ public class UserService implements OnSuccessListener, OnFailureListener {
             return true;
         } else {
             return false;
+        }
+    }
+
+    //updating the posts the user creates
+    public void updateMyPosts(FeedPost post) {
+        DocumentReference postRef = db.collection("users").document(user.getUserId());
+        if (user.getMyPosts().contains(post.getPostId())) {
+            user.getMyPosts().remove(post.getPostId());
+            postRef
+                    .update("users", user.getMyPosts())
+                    .addOnSuccessListener(this)
+                    .addOnFailureListener(this);
+        } else {
+            user.getMyPosts().add(post.getPostId());
+            postRef
+                    .update("users", user.getMyPosts())
+                    .addOnSuccessListener(this)
+                    .addOnFailureListener(this);
         }
     }
 

@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bitebybyte.backend.local.User;
 import com.bitebybyte.backend.database.UserService;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -48,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = signupUsername.getText().toString().trim();
                 userService = new UserService();
 
+                //check if everything is filled in.
                 if (username.isEmpty()) {
                     signupUsername.setError("Username cannot be empty");
                 } else if (email.isEmpty()) {
@@ -57,12 +57,13 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if(!userService.usernameCheck(username)) {
                     signupUsername.setError("Username already exists");
                 } else {
+                    //create a new user in FirebaseAuth for authentication.
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(SignUpActivity.this, "SignUp Succesful", Toast.LENGTH_SHORT).show();
-                                userService.createUser(username, auth.getUid());
+                                userService.createUser(username, auth.getUid()); //save the newly created user to the database with additional info
                                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                                 finish();
                             } else {

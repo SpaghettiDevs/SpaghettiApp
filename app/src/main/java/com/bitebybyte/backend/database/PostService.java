@@ -155,7 +155,6 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                 .addOnSuccessListener(this)
                                 .addOnFailureListener(this);
                 }
-
         }
 
         @Override
