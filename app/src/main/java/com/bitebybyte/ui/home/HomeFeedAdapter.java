@@ -69,8 +69,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postService.updateLikes(post);
-                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+                postService.updateLikes(post, holder.getPostLikesAmount());
             }
         });
 

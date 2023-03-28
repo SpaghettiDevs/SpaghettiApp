@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -143,7 +144,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         // update the likes amount locally and in the firestore.
-        public void updateLikes(AbstractContent post) {
+        public void updateLikes(AbstractContent post, @NonNull TextView view) {
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
                         post.getLikes().remove(auth.getCurrentUser().getUid());
@@ -158,7 +159,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                 .addOnSuccessListener(this)
                                 .addOnFailureListener(this);
                 }
-
+                view.setText(Integer.toString(post.getLikes().size()));
         }
 
         @Override

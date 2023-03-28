@@ -72,12 +72,6 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         addComment = root.findViewById(R.id.post_detail_comment_input);
 
 
-
-        //Add event listeners for the icons
-        likeIcon.setOnClickListener(event -> {
-            //Handle post like.
-        });
-
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
             NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
@@ -113,6 +107,11 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         author.setText(post.getIdOwner());
         likeAmount.setText(Integer.toString(post.getLikes().size()));
         commentAmount.setText("0"); // TODO Add comment amount
+
+        //Add event listeners for the icons
+        likeIcon.setOnClickListener(event -> {
+            postService.updateLikes(post, likeAmount);
+        });
     }
 
     @Override
