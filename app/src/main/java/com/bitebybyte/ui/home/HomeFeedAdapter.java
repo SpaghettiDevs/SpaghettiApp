@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
@@ -17,7 +20,7 @@ import java.util.List;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
-
+    private NavController navController;
     int itemCount;
     List<FeedPost> posts;
     PostService postService;
@@ -35,6 +38,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_home, parent,
                                                                      false);
+        navController = Navigation.findNavController(parent);
         return new ViewHolder(view);
     }
 
@@ -68,6 +72,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
                 postService.updateLikes(post);
                 holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
             }
+        });
+
+        holder.getPostTitle().setOnClickListener(event -> {
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
+        });
+
+        holder.getPostImage().setOnClickListener(event -> {
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            navController.navigate(action);
         });
     }
 
@@ -103,6 +117,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
 
             postAuthorProfilePicture = itemView.findViewById(R.id.postAuthorProfilePicture);
             postImage                = itemView.findViewById(R.id.postImageView);
+
         }
 
         public TextView getPostTitle()
