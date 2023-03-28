@@ -10,11 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.local.FeedPost;
 
-import java.util.function.BiFunction;
+import java.util.List;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
 {
+
+    int itemCount;
+    List<FeedPost> posts;
+    PostService postService;
+
+    public HomeFeedAdapter(List<FeedPost> posts) {
+        this.itemCount = posts.size();
+        this.posts = posts;
+        postService = new PostService();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -30,30 +43,39 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        // returns a random integer within the range [min, max]
-        BiFunction<Integer, Integer, Integer> randomInt = (min, max) -> (int) Math.floor(
-                Math.random() * (max - min + 1) + min);
+        FeedPost post = posts.get(position);
+        holder.getPostTitle().setText(post.getTitle());
 
-        // cycle through the same post titles
-        String[] titles = {"Lasagne", "Hamburger", "Pizza", "Hutspot"};
-        holder.getPostTitle().setText(titles[position % titles.length]);
+        //TODO get the name of the owner not the ID.
+        holder.getPostAuthor().setText(post.getIdOwner());
+        //Creating correct date
+        String completeDate = postService.dateFormat(post.getDate());
+        holder.getPostTimeStamp().setText(completeDate);
+        holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
+        //TODO add comments below
+        //holder.getPostCommentsAmount().setText(post.getComents().length());
 
-        // cycle through the same post authors
-        String[] names = {"Ashley", "John", "Bob", "Emma"};
-        holder.getPostAuthor().setText(names[position % names.length]);
+        postService.loadImage(holder.getPostImage(), post.getPostId());
+        //TODO add image from received URL.
 
-        // use random numbers as placeholders for real data
-        holder.getPostTimeStamp().setText(String.format("%dd ago", randomInt.apply(1, 31)));
-        holder.getPostCookingTime().setText(String.format("%d min", randomInt.apply(5, 59)));
-        holder.getPostCommentsAmount().setText(String.format("%d", randomInt.apply(0, 50)));
-        holder.getPostLikesAmount().setText(String.format("%d", randomInt.apply(0, 50)));
+        //set the likes when the post is loaded
+            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+
+        //update the likes when someone presses the like button
+        holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postService.updateLikes(post);
+                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+            }
+        });
     }
 
     // For now, display 25 posts in the recycler view
     @Override
     public int getItemCount()
     {
-        return 25;
+        return itemCount;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
@@ -66,6 +88,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         private final TextView  postCommentsAmount;
         private final ImageView postAuthorProfilePicture;
         private final ImageView postImage;
+        private final ImageView postLikeButton;
 
         public ViewHolder(@NonNull View itemView)
         {
@@ -75,6 +98,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
             postCookingTime    = itemView.findViewById(R.id.postCookingTimeTextView);
             postAuthor         = itemView.findViewById(R.id.postAuthor);
             postLikesAmount    = itemView.findViewById(R.id.postLikesAmountTextView);
+            postLikeButton     = itemView.findViewById(R.id.postLikesIcon);
             postCommentsAmount = itemView.findViewById(R.id.postCommentsAmountTextView);
 
             postAuthorProfilePicture = itemView.findViewById(R.id.postAuthorProfilePicture);
@@ -120,5 +144,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         {
             return postImage;
         }
+        public ImageView getPostLikeButton() {return postLikeButton;}
     }
 }

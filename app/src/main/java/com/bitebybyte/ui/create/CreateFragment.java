@@ -2,6 +2,9 @@ package com.bitebybyte.ui.create;
 
 import static com.bitebybyte.CameraActivity.URI_ID_CODE;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +12,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.content.Intent;
-import android.app.Activity;
-import android.widget.Toast;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
-import android.net.Uri;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class CreateFragment extends Fragment {
 
@@ -37,11 +39,15 @@ public class CreateFragment extends Fragment {
     private EditText method;
     private Button submitButton;
     private ImageButton imageButton;
-
+    private Uri imageURI;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        PostService service = new PostService();
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -62,11 +68,23 @@ public class CreateFragment extends Fragment {
         submitButton = root.findViewById(R.id.create_post_submit_button);
         imageButton = root.findViewById(R.id.create_post_image_button);
 
+        String idOwner = user.getUid();
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Form was submitted
-                //Do validation and send to database
+                System.out.println("title " + title.getText());
+                System.out.println("estimated time " + estimatedTime.getText());
+                System.out.println("description " + description.getText());
+                System.out.println("method " + method.getText());
+                System.out.println("Button Pressed! ");
+
+                String postID = service.createPostWithRecipe(idOwner, description.getText().toString(), title.getText().toString(),
+                        null, null,
+                        method.getText().toString(), ingredients.getText().toString(),
+                        estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
+
+                service.saveImageToDatabase(imageURI, imageButton, postID);
             }
         });
 
@@ -79,6 +97,8 @@ public class CreateFragment extends Fragment {
             }
         });
 
+
+
         return root;
     }
 
@@ -87,8 +107,8 @@ public class CreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri selectedImageUri = Uri.parse(data.getStringExtra(URI_ID_CODE));
-                imageButton.setImageURI(selectedImageUri);
+                imageURI = Uri.parse(data.getStringExtra(URI_ID_CODE));
+                imageButton.setImageURI(imageURI);
             }
         }
     }
