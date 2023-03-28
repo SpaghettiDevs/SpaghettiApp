@@ -1,6 +1,5 @@
 package com.bitebybyte.ui.post;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.local.Comment;
+import com.bitebybyte.backend.local.FeedPost;
 
-import java.util.function.BiFunction;
+import java.util.List;
 
 public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapter.ViewHolder> {
+
+    private List<Comment> comments;
+    private PostService postService;
+
+    protected PostCommentsAdapter(FeedPost post) {
+        comments = post.getComments();
+        postService = new PostService();
+    }
 
     @NonNull
     @Override
@@ -26,23 +36,29 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         return new ViewHolder(view);
     }
 
-    //TODO: Connect the view with firebase, load data here!
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //TODO: Load text, author and likes from firebase
-        //TODO: Load user profile image from firebase if it is set
+        Comment comment = comments.get(position);
+
+        holder.getAuthorName().setText(comment.getIdOwner());
+        holder.getContent().setText(comment.getContent());
+
+        String formattedDate = postService.dateFormat(comment.getDate());
+        holder.postedDateTime.setText(formattedDate);
+        holder.likesCount.setText(Integer.toString(comment.getLikes().size()));
 
         //Add delete button listener
+
         holder.getLikeButton().setOnClickListener(v -> {
-            //Handle like button click
-            System.out.println("Like button clicked");
+            postService.updateLikes(comment);
+            holder.getLikesCount().setText(Integer.toString(comment.getLikes().size()));
         });
 
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return comments.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
