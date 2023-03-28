@@ -28,4 +28,5 @@
     <string name="post_detail_comment">Comment...</string>
     <string name="post_detail">Post Details</string>
     <string name="post_comments">Post Comments</string>
+    <string name="post_detail_comments_type_comment">Type comment...</string>
 </resources>
