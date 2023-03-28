@@ -2,6 +2,7 @@ package com.bitebybyte;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView sideBar;
     private TextView sideBarEmail;
     private TextView sideBarUsername;
+
+    private ImageButton settingsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -113,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     });
+            settingsButton =  sideBar.getHeaderView(0).findViewById(R.id.account_settings_button);
+
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                }
+            });
         }
     }
 
