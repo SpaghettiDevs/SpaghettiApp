@@ -49,7 +49,9 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                 .addOnFailureListener(this);
         }
 
-        public void addComment(FeedPost post, Comment comment) {
+        public void addComment(FeedPost post, String commentText) {
+                String idOwner= auth.getCurrentUser().getUid();
+                Comment comment = new Comment(idOwner, commentText);
                 post.getComments().add(comment);
                 saveToDatabase(post);
         }
@@ -147,6 +149,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          * @param post
          */
         public void updateLikes(AbstractContent post) {
+                //TODO likes don't work properly on Comments! (Solution ideas in the commit).
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
                         post.getLikes().remove(auth.getCurrentUser().getUid());

@@ -24,6 +24,7 @@ import java.util.List;
 public class PostCommentsFragment extends Fragment implements ServicableFragment {
     private RecyclerView commentsRecycler;
     private PostService postService;
+    private FeedPost post;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -49,10 +50,14 @@ public class PostCommentsFragment extends Fragment implements ServicableFragment
 
         //Set the button to send the comment
         commentButton.setOnClickListener(v -> {
-            //Handle sending the comment
-            System.out.println("Comment: " + commentInput.getText().toString());
+            if (!commentInput.getText().toString().equals("")) {
+                postService.addComment(post, commentInput.getText().toString());
 
-            //Clear the input
+                System.out.println("Comment: " + commentInput.getText().toString());
+                // TODO Add Toast response to the user
+
+                commentInput.setText("");
+            }
         });
 
         // use ItemDecoration to get consistent margins inbetween items
@@ -66,6 +71,7 @@ public class PostCommentsFragment extends Fragment implements ServicableFragment
     public void addDataToView(FeedPost post) {
         //Set the adapter and add the data there
         commentsRecycler.setAdapter(new PostCommentsAdapter(post));
+        this.post = post;
     }
 
     @Override
