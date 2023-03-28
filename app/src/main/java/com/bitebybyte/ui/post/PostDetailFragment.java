@@ -91,7 +91,6 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
         postService.getPostById(postId, this);
-
         return root;
 
 
@@ -110,12 +109,13 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
 
         //Add event listeners for the icons
         likeIcon.setOnClickListener(event -> {
-            postService.updateLikes(post, likeAmount);
+            postService.updateLikes(post);
+            likeAmount.setText(Integer.toString(post.getLikes().size()));
         });
     }
 
     @Override
-    public void listOfPosts(List<FeedPost> posts) {
+    public void getListOfPosts(List<FeedPost> posts) {
 
     }
 }

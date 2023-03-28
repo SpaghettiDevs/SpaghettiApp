@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment implements ServicableFragment {
     }
 
     @Override
-    public void listOfPosts(List<FeedPost> posts) {
+    public void getListOfPosts(List<FeedPost> posts) {
         feed.setAdapter(new HomeFeedAdapter(posts));
     }
 }

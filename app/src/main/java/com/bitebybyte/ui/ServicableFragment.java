@@ -11,5 +11,5 @@ public interface ServicableFragment {
 
     void addDataToView(FeedPost post);
 
-    void listOfPosts(List<FeedPost> posts);
+    void getListOfPosts(List<FeedPost> posts);
 }
