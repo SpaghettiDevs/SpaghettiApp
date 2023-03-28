@@ -16,12 +16,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bitebybyte.backend.local.User;
+import com.bitebybyte.backend.database.UserService;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private EditText signupEmail, signupPassword, signupUsername;
     private Button signupButton;
     private TextView loginRedirectText;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +39,23 @@ public class SignUpActivity extends AppCompatActivity {
         loginRedirectText = findViewById(R.id.loginRedirectText);
         signupUsername = findViewById(R.id.signup_username);
 
+        //sign up button is clicked
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
                 String username = signupUsername.getText().toString().trim();
+                userService = new UserService();
 
                 if (username.isEmpty()) {
                     signupUsername.setError("Username cannot be empty");
-                } else if(email.isEmpty()) {
+                } else if (email.isEmpty()) {
                     signupEmail.setError("Email cannot be empty");
                 } else if (password.isEmpty()) {
                     signupPassword.setError("Password cannot be empty");
+                } else if(userService.usernameCheckQuery(username)) {
+                    signupUsername.setError("Username already exists");
                 } else {
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
