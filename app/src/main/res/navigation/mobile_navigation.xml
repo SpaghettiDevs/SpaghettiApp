@@ -21,6 +21,9 @@
         tools:layout="@layout/fragment_post_detail">
         <action android:id="@+id/action_post_detail_to_post_comments"
             app:destination="@id/post_comments" />
+        <argument
+            android:name="postId"
+            app:argType="string" />
     </fragment>
 
     <fragment

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,10 +14,14 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
-import com.bitebybyte.ui.home.HomeFragmentDirections;
+import com.bitebybyte.ui.ServicableFragment;
 
-public class PostDetailFragment extends Fragment {
+import java.util.List;
+
+public class PostDetailFragment extends Fragment implements ServicableFragment {
 
     private FragmentPostDetailBinding binding;
 
@@ -38,12 +41,16 @@ public class PostDetailFragment extends Fragment {
 
     private NavController navController;
 
+    private PostService postService;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPostDetailBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+        postService = new PostService();
 
         //Find the text-inputs
         title = root.findViewById(R.id.post_detail_title);
@@ -65,12 +72,6 @@ public class PostDetailFragment extends Fragment {
         addComment = root.findViewById(R.id.post_detail_comment_input);
 
 
-
-        //Add event listeners for the icons
-        likeIcon.setOnClickListener(event -> {
-            //Handle post like.
-        });
-
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
             NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
@@ -88,11 +89,33 @@ public class PostDetailFragment extends Fragment {
             navController.navigate(action);
         });
 
-        //TODO: Add firebase code to populate the post details.
-
+        String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
+        postService.getPostById(postId, this);
         return root;
 
 
     }
 
+    @Override
+    public void addDataToView(FeedPost post) {
+        title.setText(post.getTitle());
+        estimatedTime.setText(Integer.toString(post.getRecipe().getPreparationTime()));
+        description.setText(post.getContent());
+        ingredients.setText(post.getRecipe().getIngredients());
+        method.setText(post.getRecipe().getMethods());
+        author.setText(post.getIdOwner());
+        likeAmount.setText(Integer.toString(post.getLikes().size()));
+        commentAmount.setText("0"); // TODO Add comment amount
+
+        //Add event listeners for the icons
+        likeIcon.setOnClickListener(event -> {
+            postService.updateLikes(post);
+            likeAmount.setText(Integer.toString(post.getLikes().size()));
+        });
+    }
+
+    @Override
+    public void getListOfPosts(List<FeedPost> posts) {
+
+    }
 }

@@ -3,6 +3,7 @@ package com.bitebybyte.backend.database;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -10,22 +11,24 @@ import androidx.annotation.NonNull;
 import com.bitebybyte.backend.local.AbstractContent;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
+import com.bitebybyte.ui.ServicableFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
-import java.util.List;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
@@ -155,7 +158,6 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                 .addOnSuccessListener(this)
                                 .addOnFailureListener(this);
                 }
-
         }
 
         @Override
@@ -166,5 +168,47 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         @Override
         public void onFailure(@NonNull Exception e) {
                 System.out.println("Failed add" + e);
+        }
+
+        /**
+         * Query Firebase given a postId to find a single document.
+         *
+         * @param postId
+         * @param fragment callback
+         */
+        public void getPostById(String postId, ServicableFragment fragment) {
+                DocumentReference postRef = db.collection("posts").document(postId);
+                postRef.get().addOnSuccessListener(documentSnapshot -> {
+                        Log.v("Firebase", "Post fetched successfully");
+                        fragment.addDataToView(documentSnapshot.toObject(FeedPost.class));
+                });
+        }
+
+
+        /**
+         * Query Firebase to get all posts in descending order by time published.
+         *
+         * @param fragment callback
+         */
+        public void getAllPosts(ServicableFragment fragment) {
+                db.collection("posts")
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                        List<FeedPost> posts = new ArrayList<>();
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                try {
+                                                        posts.add(document.toObject(FeedPost.class));
+                                                        Log.v("Firebase", "Successfully loaded document " + document.getId());
+                                                } catch (Exception e) {
+                                                        Log.v("Firebase", "Failed to load document " + document.getId());
+                                                }
+                                        }
+                                        fragment.getListOfPosts(posts);
+                                } else {
+                                        Log.v("Firebase", "Error getting documents: " + task.getException());
+                                }
+                        });
         }
 }

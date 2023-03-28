@@ -75,12 +75,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         });
 
         holder.getPostTitle().setOnClickListener(event -> {
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail(post.getPostId());
             navController.navigate(action);
         });
 
         holder.getPostImage().setOnClickListener(event -> {
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail();
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail(post.getPostId());
             navController.navigate(action);
         });
     }
