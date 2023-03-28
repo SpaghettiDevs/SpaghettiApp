@@ -65,6 +65,23 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         }
     }
 
+    public void updateSavedPosts(FeedPost post) {
+        DocumentReference postRef = db.collection("users").document(user.getUserId());
+        if (user.getSavedPosts().contains(post.getPostId())) {
+            user.getSavedPosts().remove(post.getPostId());
+            postRef
+                    .update("users", user.getSavedPosts())
+                    .addOnSuccessListener(this)
+                    .addOnFailureListener(this);
+        } else {
+            user.getSavedPosts().add(post.getPostId());
+            postRef
+                    .update("users", user.getSavedPosts())
+                    .addOnSuccessListener(this)
+                    .addOnFailureListener(this);
+        }
+    }
+
     //save a user to the database
     private void saveUserToDb(User user) {
         db.collection("users")
