@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
 
-                // auth.signOut();
+                auth.signOut();
                 FirebaseUser currentUser = auth.getCurrentUser();
                 if (currentUser == null) {
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
