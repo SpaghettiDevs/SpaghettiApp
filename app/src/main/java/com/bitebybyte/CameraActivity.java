@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import com.bitebybyte.databinding.ActivityCameraBinding;
+import com.bitebybyte.databinding.FragmentCreateBinding;
 import com.google.common.util.concurrent.ListenableFuture;
 import android.net.Uri;
 
@@ -76,10 +77,10 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        viewBinding.searchGallaryButton.setOnClickListener(new View.OnClickListener() {
+        viewBinding.searchGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchGallary();
+                searchGallery();
             }
         });
 
@@ -127,7 +128,7 @@ public class CameraActivity extends AppCompatActivity {
         );
     }
 
-    private void searchGallary() {
+    private void searchGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -185,9 +186,10 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PICK_IMAGE) {
             selectedImageUri = data.getData();
-            super.onActivityResult(requestCode, resultCode, data);
             terminate();
         }
     }
