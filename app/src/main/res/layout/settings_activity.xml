@@ -57,6 +57,15 @@
             android:padding="8dp"
             android:textColor="@color/black" />
 
+        <Button
+            android:id="@+id/confirm_changes_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:text="Confirm changes"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
