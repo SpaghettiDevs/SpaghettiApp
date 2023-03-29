@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.BiteByByte" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.BiteByByte" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/dark_orange</item>
@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/gray_blue_500</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar.PrimaryColor</item>
     </style>
     <style name="PrimaryButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_rounded</item>
@@ -40,5 +41,12 @@
         <item name="android:inputType">text</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:fontFamily">@font/notosansregular</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar.PrimaryColor</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.ActionBar.PrimaryColor">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
     </style>
 </resources>
