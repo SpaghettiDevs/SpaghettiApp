@@ -30,7 +30,11 @@
         android:id="@+id/post_comments"
         android:name="com.bitebybyte.ui.post.PostCommentsFragment"
         android:label="@string/post_comments"
-        tools:layout="@layout/fragment_post_comments" />
+        tools:layout="@layout/fragment_post_comments" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_create"

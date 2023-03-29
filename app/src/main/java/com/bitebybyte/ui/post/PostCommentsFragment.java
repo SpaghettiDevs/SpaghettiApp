@@ -14,16 +14,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.ui.ServicableFragment;
 import com.bitebybyte.ui.home.HomeItemDecoration;
 
-public class PostCommentsFragment extends Fragment {
+import java.util.List;
+
+public class PostCommentsFragment extends Fragment implements ServicableFragment {
     private RecyclerView commentsRecycler;
+    private PostService postService;
+    private FeedPost post;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_comments, container, false);
+        postService = new PostService();
+        String postId = PostCommentsFragmentArgs.fromBundle(getArguments()).getPostId();
 
         commentsRecycler = view.findViewById(R.id.post_comments_recycler);
 
@@ -32,8 +41,7 @@ public class PostCommentsFragment extends Fragment {
         //Display linearly
         commentsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        //Set the adapter
-        commentsRecycler.setAdapter(new PostCommentsAdapter());
+        postService.getPostById(postId, this);
 
         //Find input and button
         ConstraintLayout commentInputHolder = view.findViewById(R.id.comment_input_holder);
@@ -42,10 +50,14 @@ public class PostCommentsFragment extends Fragment {
 
         //Set the button to send the comment
         commentButton.setOnClickListener(v -> {
-            //Handle sending the comment
-            System.out.println("Comment: " + commentInput.getText().toString());
+            if (!commentInput.getText().toString().equals("")) {
+                postService.addComment(post, commentInput.getText().toString());
 
-            //Clear the input
+                System.out.println("Comment: " + commentInput.getText().toString());
+                // TODO Add Toast response to the user
+
+                commentInput.setText("");
+            }
         });
 
         // use ItemDecoration to get consistent margins inbetween items
@@ -53,5 +65,17 @@ public class PostCommentsFragment extends Fragment {
         commentsRecycler.addItemDecoration(decoration);
 
         return view;
+    }
+
+    @Override
+    public void addDataToView(FeedPost post) {
+        //Set the adapter and add the data there
+        commentsRecycler.setAdapter(new PostCommentsAdapter(post));
+        this.post = post;
+    }
+
+    @Override
+    public void getListOfPosts(List<FeedPost> posts) {
+
     }
 }

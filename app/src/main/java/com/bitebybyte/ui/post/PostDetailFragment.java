@@ -70,11 +70,11 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
 
         //Find the add comment edit text
         addComment = root.findViewById(R.id.post_detail_comment_input);
-
+        String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
 
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments(postId);
             navController.navigate(action);
         });
 
@@ -85,11 +85,9 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         //Add event listener for the add comment button
         addComment.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments();
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments(postId);
             navController.navigate(action);
         });
-
-        String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
         postService.getPostById(postId, this);
         return root;
 
@@ -105,7 +103,7 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         method.setText(post.getRecipe().getMethods());
         author.setText(post.getIdOwner());
         likeAmount.setText(Integer.toString(post.getLikes().size()));
-        commentAmount.setText("0"); // TODO Add comment amount
+        commentAmount.setText(Integer.toString(post.getComments().size()));
 
         //Add event listeners for the icons
         likeIcon.setOnClickListener(event -> {

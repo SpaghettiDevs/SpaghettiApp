@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.bitebybyte.backend.local.AbstractContent;
+import com.bitebybyte.backend.local.Comment;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
 import com.bitebybyte.ui.ServicableFragment;
@@ -42,23 +43,25 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         public void saveToDatabase(FeedPost post) {
-                System.out.println("SaveToDatabase IN");
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-
                 db.collection("posts")
                                 .document(post.getPostId()).set(post)
                                 .addOnSuccessListener(this)
                                 .addOnFailureListener(this);
+        }
 
-                System.out.println("SavetoDatabase OUT");
+        public void addComment(FeedPost post, String commentText) {
+                String idOwner= auth.getCurrentUser().getUid();
+                Comment comment = new Comment(idOwner, commentText);
+                post.getComments().add(comment);
+                saveToDatabase(post);
         }
 
         public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId) {
                 StorageReference storageReference = dbStore.getReference("images/" + postId);
                 try {
                         storageReference.putFile(imageUri)
-                                .addOnSuccessListener(this)
-                                .addOnFailureListener(this);
+                                        .addOnSuccessListener(this)
+                                        .addOnFailureListener(this);
                 } catch (SecurityException e) {
                         imageView.setDrawingCacheEnabled(true);
                         imageView.buildDrawingCache();
@@ -69,7 +72,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
                         UploadTask uploadTask = storageReference.putBytes(data);
                         uploadTask.addOnFailureListener(this)
-                                .addOnSuccessListener(this);
+                                        .addOnSuccessListener(this);
                 } catch (Exception e) {
                         System.out.println("Error Uploading photo");
                 }
@@ -79,19 +82,17 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 StorageReference storageReference = dbStore.getReference("images/" + postId);
                 System.out.println(storageReference);
                 storageReference.getDownloadUrl()
-                        .addOnSuccessListener(uri ->
-                                Glide.with(imageView.getContext())
-                                        .load(uri)
-                                        .into(imageView))
-                        .addOnFailureListener(exception ->
-                                Glide.with(imageView.getContext())
-                                        .load("https://firebasestorage.googleapis.com/v0/b/bitebybyte-ac8f2.appspot.com/o/default_Image%20(1).jpg?alt=media&token=db6bf7f0-6c34-4f9f-892c-e8cc031f23c8")
-                                        .into(imageView));
+                                .addOnSuccessListener(uri -> Glide.with(imageView.getContext())
+                                                .load(uri)
+                                                .into(imageView))
+                                .addOnFailureListener(exception -> Glide.with(imageView.getContext())
+                                                .load("https://firebasestorage.googleapis.com/v0/b/bitebybyte-ac8f2.appspot.com/o/default_Image%20(1).jpg?alt=media&token=db6bf7f0-6c34-4f9f-892c-e8cc031f23c8")
+                                                .into(imageView));
         }
 
         public String dateFormat(Date date) {
                 Date currentTime = Calendar.getInstance().getTime();
-                long difference = currentTime.getTime()- date.getTime();
+                long difference = currentTime.getTime() - date.getTime();
 
                 long secondsInMilli = 1000;
                 long minutesInMilli = secondsInMilli * 60;
@@ -114,20 +115,20 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 String elapsedMinutesS = Long.toString(elapsedMinutes);
                 String elapsedSecondsS = Long.toString(elapsedSeconds);
 
-                        return ("Posted: " + elapsedDaysS +" days " + elapsedHoursS +
+                return ("Posted: " + elapsedDaysS + " days " + elapsedHoursS +
                                 " h " + elapsedMinutesS + " m " + elapsedSecondsS + " s ago");
 
         }
 
         public String createPostWithRecipe(String idOwner, String content, String title,
-                                         String images, List<String> labels,
+                        String images, List<String> labels,
                         String methods, String ingredients, int preparationTime) {
                 Recipe recipe = createRecipe(methods, ingredients, preparationTime);
                 return createPost(idOwner, content, title, images, labels, recipe);
         }
 
         public String createPost(String idOwner, String content, String title,
-                                     String images, List<String> labels, Recipe recipe) {
+                        String images, List<String> labels, Recipe recipe) {
                 System.out.println("CreatePost IN");
                 FeedPost post = new FeedPost(idOwner, content, title,
                                 images, labels, recipe);
@@ -142,32 +143,37 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 return new Recipe(methods, ingredients, preparationTime);
         }
 
-        // update the likes amount locally and in the firestore.
+        /**
+         * Updates the likes locally and in the Firebase.
+         *
+         * @param post
+         */
         public void updateLikes(AbstractContent post) {
+                //TODO likes don't work properly on Comments! (Solution ideas in the commit).
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
                         post.getLikes().remove(auth.getCurrentUser().getUid());
                         postRef
-                                .update("likes", post.getLikes())
-                                .addOnSuccessListener(this)
-                                .addOnFailureListener(this);
+                                        .update("likes", post.getLikes())
+                                        .addOnSuccessListener(this)
+                                        .addOnFailureListener(this);
                 } else {
                         post.getLikes().put(auth.getCurrentUser().getUid(), true);
                         postRef
-                                .update("likes", post.getLikes())
-                                .addOnSuccessListener(this)
-                                .addOnFailureListener(this);
+                                        .update("likes", post.getLikes())
+                                        .addOnSuccessListener(this)
+                                        .addOnFailureListener(this);
                 }
         }
 
         @Override
         public void onSuccess(Object o) {
-                System.out.println("Successfully added");
+                Log.v("Firebase", "Successfully added");
         }
 
         @Override
         public void onFailure(@NonNull Exception e) {
-                System.out.println("Failed add" + e);
+                Log.v("Firebase", "Failed add" + e);
         }
 
         /**
@@ -184,7 +190,6 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 });
         }
 
-
         /**
          * Query Firebase to get all posts in descending order by time published.
          *
@@ -192,23 +197,25 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          */
         public void getAllPosts(ServicableFragment fragment) {
                 db.collection("posts")
-                        .orderBy("date", Query.Direction.DESCENDING)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                        List<FeedPost> posts = new ArrayList<>();
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                                try {
-                                                        posts.add(document.toObject(FeedPost.class));
-                                                        Log.v("Firebase", "Successfully loaded document " + document.getId());
-                                                } catch (Exception e) {
-                                                        Log.v("Firebase", "Failed to load document " + document.getId());
+                                .orderBy("date", Query.Direction.DESCENDING)
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                                List<FeedPost> posts = new ArrayList<>();
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        try {
+                                                                posts.add(document.toObject(FeedPost.class));
+                                                                Log.v("Firebase", "Successfully loaded document "
+                                                                                + document.getId());
+                                                        } catch (Exception e) {
+                                                                Log.v("Firebase", "Failed to load document "
+                                                                                + document.getId());
+                                                        }
                                                 }
+                                                fragment.getListOfPosts(posts);
+                                        } else {
+                                                Log.v("Firebase", "Error getting documents: " + task.getException());
                                         }
-                                        fragment.getListOfPosts(posts);
-                                } else {
-                                        Log.v("Firebase", "Error getting documents: " + task.getException());
-                                }
-                        });
+                                });
         }
 }
