@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     {
         super.onCreate(savedInstanceState);
 
-        // auth.signOut();
+//         auth.signOut();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null)
         {

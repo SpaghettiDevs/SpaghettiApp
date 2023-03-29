@@ -12,5 +12,6 @@ public class Comment extends AbstractContent{
     }
     public Comment(String idOwner, String content) {
         super(idOwner, content);
+        comments = new ArrayList<>();
     }
 }

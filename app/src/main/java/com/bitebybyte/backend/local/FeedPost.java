@@ -24,6 +24,7 @@ public class FeedPost extends AbstractContent{
         this.images = images;
         this.labels = labels != null ? labels : new ArrayList<>();
         this.recipe = recipe != null ? recipe : new Recipe();
+        this.comments = getComments() != null ? getComments() : new ArrayList<>();
     }
 
     public String getImages() {
