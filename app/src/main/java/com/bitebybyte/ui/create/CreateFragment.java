@@ -21,8 +21,8 @@ import androidx.fragment.app.Fragment;
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
-import com.bitebybyte.backend.local.User;
 
 public class CreateFragment extends Fragment {
 
@@ -39,13 +39,15 @@ public class CreateFragment extends Fragment {
     private Button submitButton;
     private ImageButton imageButton;
     private Uri imageURI;
+    private UserService userService;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         PostService service = new PostService();
-        User user = User.getUserInstance();
+        userService = new UserService();
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -78,7 +80,7 @@ public class CreateFragment extends Fragment {
                 //adding the post to my post list of the user that created the post
 
 
-                String postID = service.createPostWithRecipe(user.getUsername(), description.getText().toString(), title.getText().toString(),
+                String postID = service.createPostWithRecipe(userService.getUsername(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));

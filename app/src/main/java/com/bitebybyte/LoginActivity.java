@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bitebybyte.backend.local.User;
 import com.bitebybyte.backend.database.UserService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(LoginActivity.this, "Login Succesfull", Toast.LENGTH_SHORT).show();
-                            User.getUserInstance();//creating a user instance
-                            userService.setUser(auth.getUid());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }
