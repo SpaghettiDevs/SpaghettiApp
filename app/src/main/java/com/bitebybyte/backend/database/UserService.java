@@ -64,28 +64,6 @@ public class UserService implements OnSuccessListener, OnFailureListener {
 
     }
 
-    //find the owner's username of a post.
-    public String getUsernameOfPost(String postId) {
-        String owner = "";
-        Task<QuerySnapshot> task = db.collection("users")
-                .whereEqualTo("myPosts", postId)
-                .get();
-
-        //wait for the query to finish, since its async.
-        while (!task.isComplete()) {}
-
-        //should only be one person
-        if (task.isSuccessful()) {
-            for (QueryDocumentSnapshot doc : task.getResult()) {
-                owner = doc.getData().get("username").toString();
-            }
-        } else {
-            System.out.println("Error loading owner of : " + postId);
-        }
-
-        return owner;
-    }
-
     //check if an existent user already has the same username.
     //true if username doesn't exist, false otherwise
     public boolean usernameCheck(String username) {

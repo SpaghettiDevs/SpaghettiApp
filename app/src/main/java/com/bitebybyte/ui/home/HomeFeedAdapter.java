@@ -54,7 +54,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostTitle().setText(post.getTitle());
 
         //TODO get the name of the owner not the ID.
-        holder.getPostAuthor().setText(userService.getUsernameOfPost(post.getPostId()));
+        holder.getPostAuthor().setText(post.getIdOwner());
         //Creating correct date
         String completeDate = postService.dateFormat(post.getDate());
         holder.getPostTimeStamp().setText(completeDate);
