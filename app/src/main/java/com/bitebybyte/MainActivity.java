@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -108,5 +109,10 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
         return false;
+    }
+
+    public void pressLogoutButton(MenuItem item) {
+        auth.signOut();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 }
