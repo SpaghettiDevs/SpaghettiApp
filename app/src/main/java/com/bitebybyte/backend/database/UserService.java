@@ -79,15 +79,15 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     }
 
     //updating the posts the user creates
-    public void updateMyPosts(FeedPost post) {
+    public void updateMyPosts(String postId) {
         List<String> myPosts = getMyPosts();
         DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
-        if (myPosts.contains(post.getPostId())) {
-            myPosts.remove(post.getPostId());
-        } else {myPosts.add(post.getPostId());}
+        if (myPosts.contains(postId)) {
+            myPosts.remove(postId);
+        } else {myPosts.add(postId);}
 
             postRef
-                    .update("users", myPosts)
+                    .update("myPosts", myPosts)
                     .addOnSuccessListener(this)
                     .addOnFailureListener(this);
     }
@@ -101,7 +101,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         } else {savedPosts.add(post.getPostId());}
 
         postRef
-                .update("users", savedPosts)
+                .update("savedPosts", savedPosts)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }

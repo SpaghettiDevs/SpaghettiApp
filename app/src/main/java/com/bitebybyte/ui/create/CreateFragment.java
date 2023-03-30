@@ -77,13 +77,14 @@ public class CreateFragment extends Fragment {
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
 
-                //adding the post to my post list of the user that created the post
-
-
+                //creating a post
                 String postID = service.createPostWithRecipe(userService.getUsername(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
+
+                //adding the post to my post list of the user that created the post
+                userService.updateMyPosts(postID);
 
                 service.saveImageToDatabase(imageURI, imageButton, postID);
             }
