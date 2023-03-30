@@ -3,11 +3,13 @@ package com.bitebybyte.backend.database;
 import androidx.annotation.NonNull;
 
 import com.bitebybyte.backend.local.FeedPost;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.bitebybyte.backend.local.User;
@@ -23,6 +25,27 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     public UserService() {
         db = FirebaseFirestore.getInstance();
         user = User.getUserInstance();
+    }
+
+    //getting the user info from the database
+    //and setting the local User object to the User object stored.
+    public void setUser(String userId) {
+        DocumentReference docRef = db.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        user = document.toObject(User.class);
+                    } else {
+                        System.out.println("Couldn't find document: " + userId);
+                    }
+                } else {
+                    System.out.println("Error getting document" + userId + ": " + task.getException());
+                }
+            }
+        });
     }
 
     //check if an existant user already has the same username.

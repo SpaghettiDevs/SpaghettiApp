@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bitebybyte.backend.local.User;
+import com.bitebybyte.backend.database.UserService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -24,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginEmail, loginPassword;
     private Button loginButton;
     private TextView signupRedirectText;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_activity);
 
         auth = FirebaseAuth.getInstance();
+        userService = new UserService();
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
@@ -44,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
-                } else if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     loginEmail.setError("please enter a valid email");
                 } else if (password.isEmpty()) {
                     loginPassword.setError("Password cannot be empty");
@@ -53,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(LoginActivity.this, "Login Succesfull", Toast.LENGTH_SHORT).show();
+                            User.getUserInstance();//creating a user instance
+                            userService.setUser(auth.getUid());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }

@@ -11,15 +11,6 @@ public class User {
     private List<String> savedPosts;
     private static User instance;
 
-    //setting the user with the values
-    //called at login
-    public void setUser(String userId, String username) {
-        this.userId = userId;
-        this.username = username;
-        this.myPosts = new ArrayList<>();
-        this.savedPosts = new ArrayList<>();
-    }
-
     //singleton pattern
     //to ensure every where the same User instance is used
     //called at login
