@@ -13,19 +13,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.bitebybyte.backend.local.User;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserService implements OnSuccessListener, OnFailureListener {
     FirebaseFirestore db;
     User user;
     public UserService() {
         db = FirebaseFirestore.getInstance();
         user = User.getUserInstance();
-    }
-
-    //sets the fields in the user object
-    //and forwards new User to be saved on the database
-    public void createUser(String username, String userId) {
-        user.setUser(userId, username);
-        saveUserToDb(user);
     }
 
     //check if an existant user already has the same username.
@@ -82,10 +79,16 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         }
     }
 
-    //save a user to the database
-    private void saveUserToDb(User user) {
+    //save a new user to the database
+    public void saveNewUserToDb(String username, String userId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userId", userId);
+        data.put("username", username);
+        data.put("myPosts", new ArrayList<>());
+        data.put("savedPosts", new ArrayList<>());
+
         db.collection("users")
-                .document(user.getUserId()).set(user)
+                .document(userId).set(data)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }

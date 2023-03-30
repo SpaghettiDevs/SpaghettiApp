@@ -11,7 +11,8 @@ public class User {
     private List<String> savedPosts;
     private static User instance;
 
-    //setting the user with the values, only called once
+    //setting the user with the values
+    //called at login
     public void setUser(String userId, String username) {
         this.userId = userId;
         this.username = username;
@@ -21,6 +22,7 @@ public class User {
 
     //singleton pattern
     //to ensure every where the same User instance is used
+    //called at login
     public static User getUserInstance() {
         if (instance == null) {
             instance = new User();
