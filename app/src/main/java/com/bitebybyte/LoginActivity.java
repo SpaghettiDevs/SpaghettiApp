@@ -42,29 +42,26 @@ public class LoginActivity extends AppCompatActivity {
                 String email = loginEmail.getText().toString().trim();
                 String password = loginPassword.getText().toString().trim();
 
-
-                if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    if (!password.isEmpty()) {
-                        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                Toast.makeText(LoginActivity.this, "Login Succesfull", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        loginPassword.setError("Password cannot be empty");
-                    }
-                } else if (email.isEmpty()) {
+                if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
-                } else {
+                } else if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     loginEmail.setError("please enter a valid email");
+                } else if (password.isEmpty()) {
+                    loginPassword.setError("Password cannot be empty");
+                } else {
+                    auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            Toast.makeText(LoginActivity.this, "Login Succesfull", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
