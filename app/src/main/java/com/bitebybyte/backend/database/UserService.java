@@ -37,7 +37,12 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         //wait for the query to finish, since its async.
         while (!task.isComplete()) {}
 
-        return task.getResult().getData().get("username").toString();
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("username") != null)
+            return data.get("username").toString();
+        else
+            return "Unknown user";
 
     }
 
@@ -49,7 +54,12 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         //wait for the query to finish, since its async.
         while (!task.isComplete()) {}
 
-        return (List<String>) task.getResult().getData().get("myPosts");
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("myPosts") != null)
+            return (List<String>) data.get("myPosts");
+        else
+            return new ArrayList<>();
     }
 
     //get the saved posts of the current user from the database.
@@ -60,7 +70,12 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         //wait for the query to finish, since its async.
         while (!task.isComplete()) {}
 
-        return (List<String>) task.getResult().getData().get("savedPosts");
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("savedPosts") != null)
+            return (List<String>) data.get("savedPosts");
+        else
+            return new ArrayList<>();
 
     }
 
