@@ -56,6 +56,8 @@ public class SignUpActivity extends AppCompatActivity {
                     signupPassword.setError("Password cannot be empty");
                 } else if(!userService.usernameCheck(username)) {
                     signupUsername.setError("Username already exists");
+                } else if(username.length() > 16) {
+                    signupUsername.setError("Username is longer then 16 characters");
                 } else {
                     //create a new user in FirebaseAuth for authentication.
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
