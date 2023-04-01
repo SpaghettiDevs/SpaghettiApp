@@ -103,6 +103,16 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
             });
+
+            navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
+                switch(destination.getId()) {
+                    case R.id.navigation_home:
+                    case R.id.navigation_create:
+                    case R.id.navigation_saved:
+                        toolbar.setNavigationIcon(null);
+                        break;
+                }
+            });
         }
     }
 
