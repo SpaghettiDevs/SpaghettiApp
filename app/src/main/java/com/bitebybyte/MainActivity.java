@@ -89,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements
             NavigationUI.setupWithNavController(sideBar, navController);
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-            // remove hamburger icon on the left the toolbar
-            toolbar.setNavigationIcon(null);
-
             // Disable the bottom navigation bar according to the argument "showBottomBar"
             navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
                 boolean showBottomBar = true; // show bottomBar by default
