@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -90,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements
 
             // remove hamburger icon on the left the toolbar
             toolbar.setNavigationIcon(null);
+
+            // Disable the bottom navigation bar according to the argument "showBottomBar"
+            navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
+                boolean showBottomBar = true; // show bottomBar by default
+
+                // Update showBottomBar if it is specified in the navigation graph
+                if (arguments != null && arguments.containsKey("showBottomBar"))
+                {
+                    showBottomBar = arguments.getBoolean("showBottomBar");
+                }
+                bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
+            });
         }
     }
 

@@ -24,6 +24,10 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <argument
+            android:name="showBottomBar"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
     <fragment
@@ -34,6 +38,10 @@
         <argument
             android:name="postId"
             app:argType="string" />
+        <argument
+            android:name="showBottomBar"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
     <fragment
