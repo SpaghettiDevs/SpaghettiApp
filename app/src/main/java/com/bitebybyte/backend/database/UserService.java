@@ -5,13 +5,11 @@ import androidx.annotation.NonNull;
 import com.bitebybyte.backend.local.FeedPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -99,10 +97,11 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
         if (myPosts.contains(postId)) {
             myPosts.remove(postId);
-        } else {myPosts.add(postId);}
+        } else {
+            myPosts.add(postId);
+        }
 
-            postRef
-                    .update("myPosts", myPosts)
+            postRef.update("myPosts", myPosts)
                     .addOnSuccessListener(this)
                     .addOnFailureListener(this);
     }
@@ -113,10 +112,11 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
         if (savedPosts.contains(post.getPostId())) {
             savedPosts.remove(post.getPostId());
-        } else {savedPosts.add(post.getPostId());}
+        } else {
+            savedPosts.add(post.getPostId());
+        }
 
-        postRef
-                .update("savedPosts", savedPosts)
+        postRef.update("savedPosts", savedPosts)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }

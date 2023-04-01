@@ -1,8 +1,5 @@
 package com.bitebybyte;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -12,10 +9,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bitebybyte.backend.database.UserService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -48,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    loginEmail.setError("please enter a valid email");
+                    loginEmail.setError("Please enter a valid email");
                 } else if (password.isEmpty()) {
                     loginPassword.setError("Password cannot be empty");
                 } else {
