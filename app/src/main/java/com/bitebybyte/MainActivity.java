@@ -6,9 +6,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bitebybyte.backend.database.UserService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private ActivityMainBinding binding;
     private FirebaseAuth        auth = FirebaseAuth.getInstance();
+    private UserService userService = new UserService();
     private Toolbar             toolbar;
     private AppBarConfiguration appBarConfiguration;
     private NavController        navController;
@@ -42,42 +46,51 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
 
     private NavigationView sideBar;
+    private TextView sideBarEmail;
+    private TextView sideBarUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-//         auth.signOut();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null)
         {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else {
+            binding = ActivityMainBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
+
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            bottomNavigationView = findViewById(R.id.bottom_nav_view);
+            sideBar = findViewById(R.id.side_bar);
+            drawerLayout = findViewById(R.id.drawer_layout);
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
+
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+
+            //setting the email on the sidebar
+            sideBarEmail = sideBar.getHeaderView(0).findViewById(R.id.user_email_sidebar);
+            sideBarEmail.setText(currentUser.getEmail());
+
+            //setting the username on the sidebar
+            sideBarUsername = sideBar.getHeaderView(0).findViewById(R.id.user_name_sidebar);
+            sideBarUsername.setText(userService.getUsername());
+
+            appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
+
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(sideBar, navController);
+            NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+            // remove hamburger icon on the left the toolbar
+            toolbar.setNavigationIcon(null);
         }
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        bottomNavigationView = findViewById(R.id.bottom_nav_view);
-        sideBar = findViewById(R.id.side_bar);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
-        appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
-
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(sideBar, navController);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        // remove hamburger icon on the left the toolbar
-        toolbar.setNavigationIcon(null);
     }
 
     @Override
