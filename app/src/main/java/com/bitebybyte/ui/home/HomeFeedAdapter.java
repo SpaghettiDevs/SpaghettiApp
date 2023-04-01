@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     int itemCount;
     List<FeedPost> posts;
     PostService postService;
+    UserService userService;
 
     public HomeFeedAdapter(List<FeedPost> posts) {
         this.itemCount = posts.size();
         this.posts = posts;
         postService = new PostService();
+        userService = new UserService();
     }
 
     @NonNull

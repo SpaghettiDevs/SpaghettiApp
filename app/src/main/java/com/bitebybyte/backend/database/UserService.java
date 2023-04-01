@@ -5,30 +5,80 @@ import androidx.annotation.NonNull;
 import com.bitebybyte.backend.local.FeedPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import com.bitebybyte.backend.local.User;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class UserService implements OnSuccessListener, OnFailureListener {
-    FirebaseFirestore db;
-    User user;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private PostService postService;
     public UserService() {
         db = FirebaseFirestore.getInstance();
-        user = User.getUserInstance();
+        auth = FirebaseAuth.getInstance();
+        postService = new PostService();
     }
 
-    //sets the fields in the user object
-    //and forwards new User to be saved on the database
-    public void createUser(String username, String userId) {
-        user.setUser(userId, username);
-        saveUserToDb(user);
+    //get the username from the database for the current user.
+    public String getUsername() {
+        Task<DocumentSnapshot> task = db.collection("users")
+                .document(auth.getCurrentUser().getUid())
+                .get();
+        //wait for the query to finish, since its async.
+        while (!task.isComplete()) {}
+
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("username") != null)
+            return data.get("username").toString();
+        else
+            return "Unknown user";
+
     }
 
-    //check if an existant user already has the same username.
+    //get the posts created by the current user from the database.
+    public List<String> getMyPosts() {
+        Task<DocumentSnapshot> task = db.collection("users")
+                .document(auth.getCurrentUser().getUid())
+                .get();
+        //wait for the query to finish, since its async.
+        while (!task.isComplete()) {}
+
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("myPosts") != null)
+            return (List<String>) data.get("myPosts");
+        else
+            return new ArrayList<>();
+    }
+
+    //get the saved posts of the current user from the database.
+    public List<String> getSavedPosts() {
+        Task<DocumentSnapshot> task = db.collection("users")
+                .document(auth.getCurrentUser().getUid())
+                .get();
+        //wait for the query to finish, since its async.
+        while (!task.isComplete()) {}
+
+        Map<String, Object> data = task.getResult().getData();
+
+        if(data != null && data.get("savedPosts") != null)
+            return (List<String>) data.get("savedPosts");
+        else
+            return new ArrayList<>();
+
+    }
+
+    //check if an existent user already has the same username.
+    //true if username doesn't exist, false otherwise
     public boolean usernameCheck(String username) {
         //query that looks through the users collection and checks the username field
         Task<QuerySnapshot> task = db.collection("users")
@@ -36,56 +86,51 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                 .get();
 
         //wait for the query to finish, since its async.
-        while (task.isComplete() == false) {}
+        while (!task.isComplete()) {}
 
-        //if the result is empty return true that there is no the same username.
-        //if not empty there is someone with the same username.
-        if (task.getResult().isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return task.getResult().isEmpty();
     }
 
     //updating the posts the user creates
-    public void updateMyPosts(FeedPost post) {
-        DocumentReference postRef = db.collection("users").document(user.getUserId());
-        if (user.getMyPosts().contains(post.getPostId())) {
-            user.getMyPosts().remove(post.getPostId());
-            postRef
-                    .update("users", user.getMyPosts())
-                    .addOnSuccessListener(this)
-                    .addOnFailureListener(this);
+    public void updateMyPosts(String postId) {
+        List<String> myPosts = getMyPosts();
+        DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        if (myPosts.contains(postId)) {
+            myPosts.remove(postId);
         } else {
-            user.getMyPosts().add(post.getPostId());
-            postRef
-                    .update("users", user.getMyPosts())
+            myPosts.add(postId);
+        }
+
+            postRef.update("myPosts", myPosts)
                     .addOnSuccessListener(this)
                     .addOnFailureListener(this);
-        }
     }
 
+    //updating the posts the user creates
     public void updateSavedPosts(FeedPost post) {
-        DocumentReference postRef = db.collection("users").document(user.getUserId());
-        if (user.getSavedPosts().contains(post.getPostId())) {
-            user.getSavedPosts().remove(post.getPostId());
-            postRef
-                    .update("users", user.getSavedPosts())
-                    .addOnSuccessListener(this)
-                    .addOnFailureListener(this);
+        List<String> savedPosts = getSavedPosts();
+        DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        if (savedPosts.contains(post.getPostId())) {
+            savedPosts.remove(post.getPostId());
         } else {
-            user.getSavedPosts().add(post.getPostId());
-            postRef
-                    .update("users", user.getSavedPosts())
-                    .addOnSuccessListener(this)
-                    .addOnFailureListener(this);
+            savedPosts.add(post.getPostId());
         }
+
+        postRef.update("savedPosts", savedPosts)
+                .addOnSuccessListener(this)
+                .addOnFailureListener(this);
     }
 
-    //save a user to the database
-    private void saveUserToDb(User user) {
+    //save a new user to the database
+    public void saveNewUserToDb(String username, String userId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userId", userId);
+        data.put("username", username);
+        data.put("myPosts", new ArrayList<>());
+        data.put("savedPosts", new ArrayList<>());
+
         db.collection("users")
-                .document(user.getUserId()).set(user)
+                .document(userId).set(data)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }

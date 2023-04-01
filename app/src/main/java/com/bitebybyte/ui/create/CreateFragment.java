@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
-import com.bitebybyte.backend.local.User;
 
 public class CreateFragment extends Fragment {
 
@@ -39,13 +40,15 @@ public class CreateFragment extends Fragment {
     private Button submitButton;
     private ImageButton imageButton;
     private Uri imageURI;
+    private UserService userService;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         PostService service = new PostService();
-        User user = User.getUserInstance();
+        userService = new UserService();
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -75,15 +78,54 @@ public class CreateFragment extends Fragment {
                 System.out.println("method " + method.getText());
                 System.out.println("Button Pressed! ");
 
-                //adding the post to my post list of the user that created the post
+                if (title.getText().toString().equals("Title") || title.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Filling in a title is required", Toast.LENGTH_SHORT).show();
+                    title.setError("Filling in a title is required");
+                    return;
+                }
 
+                if (description.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Filling in a description is required", Toast.LENGTH_SHORT).show();
+                    description.setError("Filling in a description is required");
+                    return;
+                }
 
-                String postID = service.createPostWithRecipe(user.getUsername(), description.getText().toString(), title.getText().toString(),
+                if (ingredients.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Filling in ingredients is required", Toast.LENGTH_SHORT).show();
+                    ingredients.setError("Filling in ingredients is required");
+                    return;
+                }
+
+                if (method.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Filling in a method is required", Toast.LENGTH_SHORT).show();
+                    method.setError("Filling in a method is required");
+                    return;
+                }
+
+                if (imageURI == null) {
+                    Toast.makeText(getContext(), "Please add an image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(estimatedTime.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(), "Filling in an estimated time is required", Toast.LENGTH_SHORT).show();
+                    estimatedTime.setError("Filling in an estimated time is required");
+                    return;
+                }
+
+                //creating a post
+                String postID = service.createPostWithRecipe(userService.getUsername(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
 
+                //adding the post to my post list of the user that created the post
+                userService.updateMyPosts(postID);
+
                 service.saveImageToDatabase(imageURI, imageButton, postID);
+
+
+
             }
         });
 
