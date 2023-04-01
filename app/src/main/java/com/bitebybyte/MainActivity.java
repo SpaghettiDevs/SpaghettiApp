@@ -104,15 +104,19 @@ public class MainActivity extends AppCompatActivity implements
                 bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
             });
 
-            navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
-                switch(destination.getId()) {
-                    case R.id.navigation_home:
-                    case R.id.navigation_create:
-                    case R.id.navigation_saved:
-                        toolbar.setNavigationIcon(null);
-                        break;
-                }
-            });
+            // Remove hamburger icon when on a top level fragment
+            navController.addOnDestinationChangedListener(
+                    (navController, destination, arguments) -> {
+                        int id = destination.getId();
+
+                        if (id == R.id.navigation_home ||
+                            id == R.id.navigation_create ||
+                            id == R.id.navigation_saved)
+                        {
+                            toolbar.setNavigationIcon(null);
+                        }
+
+                    });
         }
     }
 
