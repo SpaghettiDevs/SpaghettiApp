@@ -128,18 +128,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
-        switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                return true;
-            case R.id.app_bar_filter:
-                Toast.makeText(this, "Filter activated", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.app_bar_settings:
-                drawerLayout.openDrawer(GravityCompat.END);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.app_bar_settings)
+        {
+            drawerLayout.openDrawer(GravityCompat.END);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
