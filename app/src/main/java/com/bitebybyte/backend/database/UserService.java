@@ -2,7 +2,6 @@ package com.bitebybyte.backend.database;
 
 import androidx.annotation.NonNull;
 
-import com.bitebybyte.backend.local.FeedPost;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -105,18 +104,22 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     }
 
     //updating the posts the user creates
-    public void updateSavedPosts(FeedPost post) {
+    public String updateSavedPosts(String postId) {
+        String msg = "";
         List<String> savedPosts = getSavedPosts();
         DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
-        if (savedPosts.contains(post.getPostId())) {
-            savedPosts.remove(post.getPostId());
+        if (savedPosts.contains(postId)) {
+            savedPosts.remove(postId);
+            msg = "Recipe unsaved";
         } else {
-            savedPosts.add(0, post.getPostId());
+            savedPosts.add(0, postId);
+            msg = "Recipe saved";
         }
 
         postRef.update("savedPosts", savedPosts)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
+        return msg;
     }
 
     //save a new user to the database
