@@ -35,11 +35,13 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         FirebaseFirestore db;
         FirebaseStorage dbStore;
         FirebaseAuth auth;
+        UserService userService;
 
         public PostService() {
                 db = FirebaseFirestore.getInstance();
                 dbStore = FirebaseStorage.getInstance();
                 auth = FirebaseAuth.getInstance();
+                userService = new UserService();
         }
 
         public void saveToDatabase(FeedPost post) {
@@ -50,7 +52,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         public void addComment(FeedPost post, String commentText) {
-                String idOwner= auth.getCurrentUser().getUid();
+                String idOwner = userService.getUsername();
                 Comment comment = new Comment(idOwner, commentText);
                 post.getComments().add(comment);
                 saveToDatabase(post);

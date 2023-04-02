@@ -20,11 +20,9 @@ import java.util.Map;
 public class UserService implements OnSuccessListener, OnFailureListener {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    private PostService postService;
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        postService = new PostService();
     }
 
     //get the username from the database for the current user.

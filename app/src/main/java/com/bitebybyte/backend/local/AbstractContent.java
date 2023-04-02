@@ -10,7 +10,7 @@ public abstract class AbstractContent {
     protected Date date;
 
     protected String content;
-    protected String idOwner;
+    protected String idOwner; // This is currently the username of the owner. Refactor later!
     protected String postId;
 
     public  AbstractContent() {

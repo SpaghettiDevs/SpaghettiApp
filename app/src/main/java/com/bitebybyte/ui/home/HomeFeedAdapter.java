@@ -45,36 +45,31 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-    // Note that the random values change if you reload the fragment
-    // TODO: Connect the view with a database/firebase
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         FeedPost post = posts.get(position);
         holder.getPostTitle().setText(post.getTitle());
 
-        //TODO get the name of the owner not the ID.
         holder.getPostAuthor().setText(post.getIdOwner());
+
         //Creating correct date
         String completeDate = postService.dateFormat(post.getDate());
         holder.getPostTimeStamp().setText(completeDate);
+
         holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
-        //TODO add comments below
-        //holder.getPostCommentsAmount().setText(post.getComents().length());
+        holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
 
         postService.loadImage(holder.getPostImage(), post.getPostId());
         //TODO add image from received URL.
 
         //set the likes when the post is loaded
-            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
 
         //update the likes when someone presses the like button
-        holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postService.updateLikes(post);
-                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
-            }
+        holder.getPostLikeButton().setOnClickListener(view -> {
+            postService.updateLikes(post);
+            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
         });
 
         holder.getPostTitle().setOnClickListener(event -> {
