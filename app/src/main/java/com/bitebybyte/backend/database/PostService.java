@@ -158,8 +158,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
 
         public String createPostWithRecipe(String idOwner, String content, String title,
                         String images, List<String> labels,
-                        String methods, String ingredients, int preparationTime) {
-                Recipe recipe = createRecipe(methods, ingredients, preparationTime);
+                        String methods, String ingredients, int preparationTime, String preparationTimeUnit) {
+                Recipe recipe = createRecipe(methods, ingredients, preparationTime, preparationTimeUnit);
                 return createPost(idOwner, content, title, images, labels, recipe);
         }
 
@@ -175,8 +175,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 return post.getPostId();
         }
 
-        public Recipe createRecipe(String methods, String ingredients, int preparationTime) {
-                return new Recipe(methods, ingredients, preparationTime);
+        public Recipe createRecipe(String methods, String ingredients, int preparationTime, String preparationTimeUnit) {
+                return new Recipe(methods, ingredients, preparationTime, preparationTimeUnit);
         }
 
         /**
@@ -200,6 +200,15 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                         .addOnSuccessListener(this)
                                         .addOnFailureListener(this);
                 }
+        }
+
+        /**
+         * Checks if the current user has liked the post.
+         * @param post The post to check.
+         * @return True if the current user has liked the post, false otherwise.
+         */
+        public boolean hasLikedPost(AbstractContent post) {
+                return post.getLikes().containsKey(auth.getCurrentUser().getUid());
         }
 
         @Override

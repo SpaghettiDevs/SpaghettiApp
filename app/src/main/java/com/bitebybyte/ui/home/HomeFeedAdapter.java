@@ -51,25 +51,48 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         FeedPost post = posts.get(position);
         holder.getPostTitle().setText(post.getTitle());
 
+        //Get the username
         holder.getPostAuthor().setText(post.getIdOwner());
 
         //Creating correct date
         String completeDate = postService.dateFormat(post.getDate());
         holder.getPostTimeStamp().setText(completeDate);
+        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
 
-        holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
-        holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
-
+        //Load in the amount of comments
+//        holder.getPostCommentsAmount().setText(post.getComments().size());
+        //Load in the image
         postService.loadImage(holder.getPostImage(), post.getPostId());
-        //TODO add image from received URL.
 
         //set the likes when the post is loaded
         holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
 
+        //check if this user has liked the post
+        if (postService.hasLikedPost(post))
+            //Update the like icon to be solid if the user has liked the post
+            holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
+        else
+            //Update the like icon to be outline if the user has liked the post
+            holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);
+
         //update the likes when someone presses the like button
-        holder.getPostLikeButton().setOnClickListener(view -> {
-            postService.updateLikes(post);
-            holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+        holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int oldLikes = post.getLikes().size();
+                postService.updateLikes(post);
+                int newLikes = post.getLikes().size();
+
+                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+
+                if (oldLikes < newLikes)
+                    //Update the like icon to be solid if the user has liked the post
+                    holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
+                else
+                    //Update the like icon to be outline if the user has liked the post
+                    holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);
+            }
         });
 
         holder.getPostTitle().setOnClickListener(event -> {

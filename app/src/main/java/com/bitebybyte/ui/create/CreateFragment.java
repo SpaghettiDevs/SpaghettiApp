@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
@@ -31,6 +34,7 @@ public class CreateFragment extends Fragment {
     private static final int CAMERA_ACTIVITY_CODE = 333;
 
     private FragmentCreateBinding binding;
+    private NavController navController;
 
     private EditText title;
     private EditText estimatedTime;
@@ -44,6 +48,12 @@ public class CreateFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        if (getActivity() != null) {
+            navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
+        } else {
+            throw new RuntimeException("Activity is null");
+        }
 
         binding = FragmentCreateBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -117,14 +127,32 @@ public class CreateFragment extends Fragment {
                 String postID = service.createPostWithRecipe(userService.getUsername(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
-                        estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
+                        Integer.parseInt(estimatedTime.getText().toString()),
+                        spinner.getSelectedItem().toString());
 
                 service.saveImageToDatabase(imageURI, imageButton, postID);
 
+                Toast.makeText(getContext(), "Post created successfully", Toast.LENGTH_SHORT).show();
 
+                //clearing the fields
+                title.setText("");
+                estimatedTime.setText("");
+                description.setText("");
+                ingredients.setText("");
+                method.setText("");
+                imageURI = null;
 
+                //Navigate back to feed (home) page after 500ms.
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        navController.navigate(R.id.navigation_home);
+                    }
+                }, 500);
             }
         });
+
+
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
