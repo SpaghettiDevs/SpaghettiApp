@@ -96,7 +96,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         if (myPosts.contains(postId)) {
             myPosts.remove(postId);
         } else {
-            myPosts.add(postId);
+            myPosts.add(0, postId);
         }
 
             postRef.update("myPosts", myPosts)
@@ -111,7 +111,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         if (savedPosts.contains(post.getPostId())) {
             savedPosts.remove(post.getPostId());
         } else {
-            savedPosts.add(post.getPostId());
+            savedPosts.add(0, post.getPostId());
         }
 
         postRef.update("savedPosts", savedPosts)

@@ -14,6 +14,7 @@ import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
@@ -44,6 +45,11 @@ public class HomeFragment extends Fragment implements ServicableFragment {
 
     @Override
     public void addDataToView(FeedPost post) {
+
+    }
+
+    @Override
+    public void addDataToView(FeedPost post, ViewHolder holder) {
 
     }
 

@@ -19,6 +19,7 @@ import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.ui.ServicableFragment;
 import com.bitebybyte.ui.home.HomeItemDecoration;
+import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
@@ -73,6 +74,11 @@ public class PostCommentsFragment extends Fragment implements ServicableFragment
         //Set the adapter and add the data there
         commentsRecycler.setAdapter(new PostCommentsAdapter(post));
         this.post = post;
+    }
+
+    @Override
+    public void addDataToView(FeedPost post, ViewHolder holder) {
+
     }
 
     @Override

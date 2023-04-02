@@ -18,6 +18,7 @@ import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
 import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
@@ -110,6 +111,11 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
             postService.updateLikes(post);
             likeAmount.setText(Integer.toString(post.getLikes().size()));
         });
+    }
+
+    @Override
+    public void addDataToView(FeedPost post, ViewHolder holder) {
+
     }
 
     @Override
