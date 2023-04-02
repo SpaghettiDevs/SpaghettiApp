@@ -119,9 +119,6 @@ public class CreateFragment extends Fragment {
                         method.getText().toString(), ingredients.getText().toString(),
                         estimatedTime.getText().toString().equals("") ? -1 : Integer.parseInt(estimatedTime.getText().toString()));
 
-                //adding the post to my post list of the user that created the post
-                userService.updateMyPosts(postID);
-
                 service.saveImageToDatabase(imageURI, imageButton, postID);
 
 

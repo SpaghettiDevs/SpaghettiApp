@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.ui.ServicableFragment;
 import com.bitebybyte.ui.saved.ViewHolder;
@@ -19,10 +20,12 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implement
 
     private List<String> postIds;
     private PostService postService;
+    private UserService userService;
 
     MyRecipesAdapter(List<String> postIds) {
         this.postIds = postIds;
         postService = new PostService();
+        userService = new UserService();
     }
 
     @NonNull
@@ -62,6 +65,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implement
         //Add delete button listener
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
+            postService.deletePost(post.getPostId());
         });
     }
 
