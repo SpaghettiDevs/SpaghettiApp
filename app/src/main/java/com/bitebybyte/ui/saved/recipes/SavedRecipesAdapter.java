@@ -34,7 +34,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
 
         return new ViewHolder(view);
     }
-    
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         postService.getPostById(postIds.get(position), this, holder);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
 import com.bitebybyte.ui.ServicableFragment;
@@ -25,6 +27,7 @@ import java.util.List;
 public class PostDetailFragment extends Fragment implements ServicableFragment {
 
     private FragmentPostDetailBinding binding;
+    private UserService userService;
 
     private TextView title;
     private TextView estimatedTime;
@@ -52,6 +55,7 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
         postService = new PostService();
+        userService = new UserService();
 
         //Find the text-inputs
         title = root.findViewById(R.id.post_detail_title);
@@ -80,7 +84,9 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         });
 
         bookmarkIcon.setOnClickListener(event -> {
-            //Handle bookmarking.
+            String msg = userService.updateSavedPosts(postId);
+            Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+            //TODO Icon changes color maybe?
         });
 
         //Add event listener for the add comment button
