@@ -140,24 +140,20 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 long daysInMilli = hoursInMilli * 24;
 
                 long elapsedDays = difference / daysInMilli;
-                difference = difference % daysInMilli;
+                difference %= daysInMilli;
 
                 long elapsedHours = difference / hoursInMilli;
-                difference = difference % hoursInMilli;
+                difference %= hoursInMilli;
 
                 long elapsedMinutes = difference / minutesInMilli;
-                difference = difference % minutesInMilli;
+                difference %= minutesInMilli;
 
                 long elapsedSeconds = difference / secondsInMilli;
 
-                String elapsedDaysS = Long.toString(elapsedDays);
-                String elapsedHoursS = Long.toString(elapsedHours);
-                String elapsedMinutesS = Long.toString(elapsedMinutes);
-                String elapsedSecondsS = Long.toString(elapsedSeconds);
-
-                return ("Posted: " + elapsedDaysS + " days " + elapsedHoursS +
-                                " h " + elapsedMinutesS + " m " + elapsedSecondsS + " s ago");
-
+                return "Posted: " + (elapsedDays > 0 ? elapsedDays + (elapsedDays == 1 ? " day" : " days") + " ago" :
+                        elapsedHours > 0 ? elapsedHours + (elapsedHours == 1 ? " hour" : " hours") + " ago" :
+                                elapsedMinutes > 0 ? elapsedMinutes + (elapsedMinutes == 1 ? " minute" : " minutes") + " ago" :
+                                        elapsedSeconds + (elapsedSeconds == 1 ? " second" : " seconds") + " ago");
         }
 
         public String createPostWithRecipe(String idOwner, String content, String title,
