@@ -45,11 +45,48 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 userService = new UserService();
         }
 
+        /**
+         * Save post to database given a local object!
+         *
+         * @param post
+         */
         public void saveToDatabase(FeedPost post) {
                 db.collection("posts")
                                 .document(post.getPostId()).set(post)
-                                .addOnSuccessListener(this)
+                                .addOnSuccessListener(unused -> {
+                                        userService.updateMyPosts(post.getPostId());
+                                        Log.d("Firebase", "Successfully added");
+                                })
                                 .addOnFailureListener(this);
+        }
+
+        /**
+         * Delete a post from the database given the postId.
+         *
+         * @param postId
+         */
+        public void deletePost(String postId) {
+                DocumentReference reference = db.collection("posts").document(postId);
+
+                reference.get()
+                        .addOnCompleteListener(task -> {
+                                if(!task.getResult().exists()) {
+                                        Log.d("Database",  "Post with id " + postId + " does not exist.");
+                                        return;
+                                }
+                                reference.delete()
+                                        .addOnSuccessListener(unused1 -> {
+                                                userService.updateMyPosts(postId);
+                                                Log.d("Database", "Successfully deleted post " + postId);
+                                        })
+                                        .addOnFailureListener(error -> {
+                                                Log.d("Database", "Failed to delete post " + postId);
+                                                Log.d("Database error", String.valueOf(error));
+                                        });
+                        })
+                        .addOnFailureListener(e -> {
+                                Log.d("Database",  "Error fetching " + postId + " does not exist.");
+                        });
         }
 
         public void addComment(FeedPost post, String commentText) {
