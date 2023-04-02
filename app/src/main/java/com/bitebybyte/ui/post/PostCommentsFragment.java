@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -54,7 +55,7 @@ public class PostCommentsFragment extends Fragment implements ServicableFragment
                 postService.addComment(post, commentInput.getText().toString());
 
                 System.out.println("Comment: " + commentInput.getText().toString());
-                // TODO Add Toast response to the user
+                Toast.makeText(this.getContext(), "Comment Posted", Toast.LENGTH_SHORT).show();
 
                 commentInput.setText("");
             }
