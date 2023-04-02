@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.ui.ServicableFragment;
 import com.bitebybyte.ui.saved.ViewHolder;
@@ -19,10 +20,12 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
 
     private List<String> postIds;
     private PostService postService;
+    private UserService userService;
 
     SavedRecipesAdapter(List<String> postIds) {
         this.postIds = postIds;
         postService = new PostService();
+        userService = new UserService();
     }
 
     @NonNull
@@ -62,6 +65,9 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
         //Add delete button listener
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
+            String msg = userService.updateSavedPosts(post.getPostId());
+            //Toast.makeText(holder.getDeletePostButton().getContext(), msg, Toast.LENGTH_SHORT);
+            //TODO this toast doesn't work. The changes apply after refreshing!
         });
     }
 
