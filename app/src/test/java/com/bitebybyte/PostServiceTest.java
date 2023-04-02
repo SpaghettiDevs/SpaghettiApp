@@ -33,16 +33,16 @@ public class PostServiceTest {
     // Testing with crate post requires to check manually what in the database!
     private void testCreatePost (String idOwner, String content, String title,
                                  String images, List<String> labels,
-                                 String methods, String ingredients, int preparationTime) {
+                                 String methods, String ingredients, int preparationTime, String preparationTimeScale) {
 
         service.createPostWithRecipe(idOwner, content, title, images,
-                labels, methods, ingredients, preparationTime);
+                labels, methods, ingredients, preparationTime, preparationTimeScale);
     }
 
     @Test
     public void createNulls() {
         this.testCreatePost("", "", "", null,
-                null, "", null, 0);
+                null, "", null, 0, "");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class PostServiceTest {
         labels.add("label 1");
         labels.add("label 2");
         this.testCreatePost("", "", "", null,
-                labels, "", null, 0);
+                labels, "", null, 0, "");
     }
 
     @Test
@@ -62,22 +62,22 @@ public class PostServiceTest {
         labels.add("label 3");
 
         this.testCreatePost("randomOwnerID", "content will have 3 labels", "random recipe", null,
-                labels, "No methods for with no ingredients", null, 0);
+                labels, "No methods for with no ingredients", null, 0, "minutes");
     }
 
     @Test
     public void createTwoPosts() {
         this.testCreatePost("USER1", "", "recipe1", null,
-                null, "", null, 5);
+                null, "", null, 5, "minutes");
         this.testCreatePost("USER1", "", "recipe2", null,
-                null, "", null, 15);
+                null, "", null, 15, "days");
     }
 
     @Test
     public void createTwoPostsTwoUsers() {
         this.testCreatePost("USER2.1", "", "recipe1", null,
-                null, "", null, 5);
+                null, "", null, 5, "minutes");
         this.testCreatePost("USER2.2", "", "recipe2", null,
-                null, "", null, 15);
+                null, "", null, 15, "days");
     }
 }

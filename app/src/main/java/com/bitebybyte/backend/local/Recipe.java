@@ -8,18 +8,27 @@ public class Recipe {
     //private List<Ingredient> ingredients;
     private String ingredients;
     private int preparationTime;
+    private String preparationTimeScale;
 
     public Recipe() {
         methods = "";
         preparationTime = 0;
         //ingredients = new ArrayList<>();
         ingredients = "";
+        preparationTimeScale = "minutes";
     }
 
     public Recipe(String methods, String ingredients, int preparationTime) {
         this.methods = methods;
         this.ingredients = ingredients;
         this.preparationTime = preparationTime;
+    }
+
+    public Recipe(String methods, String ingredients, int preparationTime, String preparationTimeScale) {
+        this.methods = methods;
+        this.ingredients = ingredients;
+        this.preparationTime = preparationTime;
+        this.preparationTimeScale = preparationTimeScale;
     }
 
     public int getPreparationTime() {
@@ -32,5 +41,9 @@ public class Recipe {
 
     public String getMethods() {
         return methods;
+    }
+
+    public String getPreparationTimeScale() {
+        return preparationTimeScale;
     }
 }
