@@ -13,6 +13,7 @@ import com.bitebybyte.backend.local.Comment;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
 import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ui.saved.ViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -189,6 +190,21 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 postRef.get().addOnSuccessListener(documentSnapshot -> {
                         Log.v("Firebase", "Post fetched successfully");
                         fragment.addDataToView(documentSnapshot.toObject(FeedPost.class));
+                });
+        }
+
+        /**
+         * Query Firebase given a postId to find a single document.
+         *
+         * @param postId
+         * @param fragment callback
+         * @param holder callback in package ui.saved ViewHolder
+         */
+        public void getPostById(String postId, ServicableFragment fragment, ViewHolder holder) {
+                DocumentReference postRef = db.collection("posts").document(postId);
+                postRef.get().addOnSuccessListener(documentSnapshot -> {
+                        Log.v("Firebase", "Post fetched successfully");
+                        fragment.addDataToView(documentSnapshot.toObject(FeedPost.class), holder);
                 });
         }
 
