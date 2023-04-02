@@ -15,8 +15,7 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
-    implements ServicableFragment {
+public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implements ServicableFragment {
 
     private List<String> postIds;
     private PostService postService;
