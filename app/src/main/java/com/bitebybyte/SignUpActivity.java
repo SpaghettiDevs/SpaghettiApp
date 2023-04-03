@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitebybyte.backend.database.UserService;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -64,10 +65,24 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(SignUpActivity.this, "SignUp Succesful", Toast.LENGTH_SHORT).show();
-                                userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
-                                startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
-                                finish();
+                                auth.signInWithEmailAndPassword(email, password);
+                                FirebaseUser user = auth.getCurrentUser();
+                                user.sendEmailVerification()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(SignUpActivity.this, "SignUp Succesful", Toast.LENGTH_SHORT).show();
+                                                    userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
+                                                    auth.signOut();
+                                                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
+                                                    finish();
+                                                } else {
+                                                    auth.signOut();
+                                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your email", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                             } else {
                                 Toast.makeText(SignUpActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }

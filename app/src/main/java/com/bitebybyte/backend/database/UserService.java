@@ -128,7 +128,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         data.put("username", username);
         data.put("myPosts", new ArrayList<>());
         data.put("savedPosts", new ArrayList<>());
-
+        
         db.collection("users")
                 .document(userId).set(data)
                 .addOnSuccessListener(this)
