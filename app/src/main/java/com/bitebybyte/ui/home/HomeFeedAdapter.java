@@ -60,7 +60,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
 
         //Load in the amount of comments
-//        holder.getPostCommentsAmount().setText(post.getComments().size());
+        holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
         //Load in the image
         postService.loadImage(holder.getPostImage(), post.getPostId());
 
