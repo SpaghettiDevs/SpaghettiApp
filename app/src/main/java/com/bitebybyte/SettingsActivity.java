@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bitebybyte.backend.database.UserService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,12 +27,14 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     private EditText emailText;
+    private EditText usernameText;
+    private Button usernameButton;
     private Button emailButton;
     private Button passwordButton;
     private Button deleteAccountButton;
 
     private FirebaseUser user;
-
+    private UserService userService;
     private String currentEmail;
 
 
@@ -42,10 +45,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userService = new UserService();
 
         if (user != null) {
             ((TextView)findViewById(R.id.textViewEmail)).setText(user.getEmail());
-            ((TextView)findViewById(R.id.textViewUsername)).setText(user.getDisplayName());
+            ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
             currentEmail = user.getEmail();
         } else {
             Toast.makeText(getApplicationContext(), "Error: current user can not be loaded", Toast.LENGTH_SHORT).show();
@@ -55,8 +59,24 @@ public class SettingsActivity extends AppCompatActivity {
 
         emailText = findViewById(R.id.change_email_text);
         emailButton = findViewById(R.id.change_email_button);
+        usernameText = findViewById(R.id.change_username_text);
+        usernameButton = findViewById(R.id.change_username_button);
         passwordButton = findViewById(R.id.reset_password);
         deleteAccountButton = findViewById(R.id.delete_account);
+
+        usernameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameText.getText().toString().trim();
+
+                if (!username.isEmpty() && username.length() <= 16) {
+                    userService.changeUsername(user.getUid(), username);
+                    ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
+                } else {
+                    usernameText.setError("Username length min = 1 and max = 16");
+                }
+            }
+        });
 
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
-                                currentEmail = user.getEmail();
+                                user.sendEmailVerification();
                                 auth.signOut();
                                 startActivity(new Intent(SettingsActivity.this, MainActivity.class));
                                 finish();
@@ -101,6 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userService.deleteUser(user.getUid());
                 user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

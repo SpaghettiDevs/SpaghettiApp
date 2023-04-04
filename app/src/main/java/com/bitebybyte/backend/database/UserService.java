@@ -1,13 +1,18 @@
 package com.bitebybyte.backend.database;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.backend.local.FeedPost;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -147,6 +152,39 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                 .document(userId).set(data)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
+    }
+
+    public void deleteUser(String userId) {
+        DocumentReference docRef = db.collection("users").document(userId);
+
+        //Delete all fields first
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("userId", FieldValue.delete());
+        updates.put("username", FieldValue.delete());
+        updates.put("myPosts", FieldValue.delete());
+        updates.put("savedPosts", FieldValue.delete());
+
+        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                db.collection("users").document(userId).delete();
+            }
+        });
+    }
+
+    public void changeUsername(String userId, String newUsername) {
+        if (newUsername.isEmpty() || newUsername.length() > 16) {
+            Log.v("", "Error: username length is empty or longer than 16 characters");
+            return;
+        }
+
+        DocumentReference docRef = db.collection("users").document(userId);
+
+        //Override old username
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("username", newUsername);
+
+        docRef.update(updates);
     }
 
     @Override
