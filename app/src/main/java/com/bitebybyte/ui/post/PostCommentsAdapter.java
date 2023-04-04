@@ -19,11 +19,13 @@ import java.util.List;
 public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapter.ViewHolder> {
 
     private List<Comment> comments;
+    private FeedPost post;
     private PostService postService;
 
     protected PostCommentsAdapter(FeedPost post) {
         comments = post.getComments();
         postService = new PostService();
+        this.post = post;
     }
 
     @NonNull
@@ -50,7 +52,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         //Add delete button listener
 
         holder.getLikeButton().setOnClickListener(v -> {
-            postService.updateLikes(comment);
+            postService.updateLikes(comments, post.getPostId(), position);
             holder.getLikesCount().setText(Integer.toString(comment.getLikes().size()));
         });
 

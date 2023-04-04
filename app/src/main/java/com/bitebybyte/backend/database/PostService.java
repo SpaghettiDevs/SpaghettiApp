@@ -184,8 +184,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          *
          * @param post
          */
-        public void updateLikes(AbstractContent post) {
-                //TODO likes don't work properly on Comments! (Solution ideas in the commit).
+        public void updateLikes(FeedPost post) {
                 DocumentReference postRef = db.collection("posts").document(post.getPostId());
                 if (post.getLikes().containsKey(auth.getCurrentUser().getUid())) {
                         post.getLikes().remove(auth.getCurrentUser().getUid());
@@ -199,6 +198,31 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                         .update("likes", post.getLikes())
                                         .addOnSuccessListener(this)
                                         .addOnFailureListener(this);
+                }
+        }
+
+        /**
+         * Updates the likes of a comment locally and in the Firebase.
+         *
+         * @param comments
+         * @param postId
+         * @param index of comment
+         */
+        public void updateLikes(List<Comment> comments, String postId, int index) {
+                DocumentReference postRef = db.collection("posts").document(postId);
+                Comment comment = comments.get(index);
+                if (comment.getLikes().containsKey(auth.getCurrentUser().getUid())) {
+                        comment.getLikes().remove(auth.getCurrentUser().getUid());
+                        postRef
+                                .update("comments", comments)
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
+                } else {
+                        comment.getLikes().put(auth.getCurrentUser().getUid(), true);
+                        postRef
+                                .update("comments", comments)
+                                .addOnSuccessListener(this)
+                                .addOnFailureListener(this);
                 }
         }
 
