@@ -44,33 +44,41 @@ public class LoginActivity extends AppCompatActivity {
                 String email = loginEmail.getText().toString().trim();
                 String password = loginPassword.getText().toString().trim();
 
+                //check if the fields are filled in correctly.
                 if (email.isEmpty()) {
                     loginEmail.setError("Email cannot be empty");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    loginEmail.setError("Please enter a valid email");
-                } else if (password.isEmpty()) {
-                    loginPassword.setError("Password cannot be empty");
-                } else {
-                    auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            if (auth.getCurrentUser().isEmailVerified()) {
-                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            } else {
-                                auth.signOut();
-                                Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    return;
                 }
+
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    loginEmail.setError("Please enter a valid email");
+                    return;
+                }
+
+                if (password.isEmpty()) {
+                    loginPassword.setError("Password cannot be empty");
+                    return;
+                }
+
+                auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        if (!auth.getCurrentUser().isEmailVerified()) {
+                            auth.signOut();
+                            Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
