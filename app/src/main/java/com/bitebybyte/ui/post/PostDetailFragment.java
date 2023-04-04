@@ -104,7 +104,7 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
     @Override
     public void addDataToView(FeedPost post) {
         title.setText(post.getTitle());
-        estimatedTime.setText(Integer.toString(post.getRecipe().getPreparationTime()));
+        estimatedTime.setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
         description.setText(post.getContent());
         ingredients.setText(post.getRecipe().getIngredients());
         method.setText(post.getRecipe().getMethods());

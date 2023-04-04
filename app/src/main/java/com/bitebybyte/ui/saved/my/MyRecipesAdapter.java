@@ -57,8 +57,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implement
     public void addDataToView(FeedPost post, ViewHolder holder) {
         holder.getPostTitle().setText(post.getTitle());
         holder.getPostAuthor().setText(post.getIdOwner());
-        holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
-
+        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
         postService.loadImage(holder.getPostImage(), post.getPostId());
         //TODO: Load user profile image from firebase if it is set
 

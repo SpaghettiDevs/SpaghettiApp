@@ -1,5 +1,6 @@
 package com.bitebybyte.ui.saved.recipes;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,16 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
 
     @Override
     public void addDataToView(FeedPost post, ViewHolder holder) {
+
+        if (post == null) {
+            Log.e("addDataToView", "Post at this positon doesn't exist (position unknown)");
+            this.deletedPost(holder);
+            return;
+        }
+
         holder.getPostTitle().setText(post.getTitle());
         holder.getPostAuthor().setText(post.getIdOwner());
-        holder.getPostCookingTime().setText(Integer.toString(post.getRecipe().getPreparationTime()));
+        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
 
         postService.loadImage(holder.getPostImage(), post.getPostId());
         //TODO: Load user profile image from firebase if it is set
@@ -69,6 +77,12 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
             //Toast.makeText(holder.getDeletePostButton().getContext(), msg, Toast.LENGTH_SHORT);
             //TODO this toast doesn't work. The changes apply after refreshing!
         });
+    }
+
+    private void deletedPost(ViewHolder holder) {
+        holder.getPostTitle().setText("Deleted post");
+        holder.getPostAuthor().setText("Button not working");
+        holder.getPostCookingTime().setText("That's sad!");
     }
 
     @Override
