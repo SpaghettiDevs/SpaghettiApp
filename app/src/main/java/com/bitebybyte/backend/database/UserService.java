@@ -94,9 +94,12 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
         if (myPosts.contains(postId)) {
             myPosts.remove(postId);
+        } else if (myPosts.size() != 0) { // add(index, element) throws an exception if index out of array bound
+                myPosts.add(0, postId); // add the new post to the to the beginning.
         } else {
-            myPosts.add(0, postId);
+            myPosts.add(postId);
         }
+
 
             postRef.update("myPosts", myPosts)
                     .addOnSuccessListener(this)
@@ -112,7 +115,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
             savedPosts.remove(postId);
             msg = "Recipe unsaved";
         } else {
-            savedPosts.add(0, postId);
+            savedPosts.add(postId);
             msg = "Recipe saved";
         }
 
