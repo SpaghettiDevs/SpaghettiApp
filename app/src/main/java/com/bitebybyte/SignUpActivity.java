@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    Toast.makeText(SignUpActivity.this, "SignUp Succesful", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
                                                     userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
                                                     auth.signOut();
                                                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
