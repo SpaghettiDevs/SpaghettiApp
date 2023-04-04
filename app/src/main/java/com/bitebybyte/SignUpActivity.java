@@ -48,47 +48,62 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = signupUsername.getText().toString().trim();
                 userService = new UserService();
 
-                //check if everything is filled in.
+                //check if everything is filled in correctly.
                 if (username.isEmpty()) {
                     signupUsername.setError("Username cannot be empty");
-                } else if (email.isEmpty()) {
-                    signupEmail.setError("Email cannot be empty");
-                } else if (password.isEmpty()) {
-                    signupPassword.setError("Password cannot be empty");
-                } else if(!userService.usernameCheck(username)) {
-                    signupUsername.setError("Username already exists");
-                } else if(username.length() > 16) {
-                    signupUsername.setError("Username is longer then 16 characters");
-                } else {
-                    //create a new user in FirebaseAuth for authentication.
-                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                auth.signInWithEmailAndPassword(email, password);
-                                FirebaseUser user = auth.getCurrentUser();
-                                user.sendEmailVerification()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
-                                                    userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
-                                                    auth.signOut();
-                                                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
-                                                    finish();
-                                                } else {
-                                                    auth.signOut();
-                                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your email", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                            } else {
-                                Toast.makeText(SignUpActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    return;
                 }
+
+                if (email.isEmpty()) {
+                    signupEmail.setError("Email cannot be empty");
+                    return;
+                }
+
+                if (password.isEmpty()) {
+                    signupPassword.setError("Password cannot be empty");
+                    return;
+                }
+
+                if(!userService.usernameCheck(username)) {
+                    signupUsername.setError("Username already exists");
+                    return;
+                }
+
+                if(username.length() > 16) {
+                    signupUsername.setError("Username is longer then 16 characters");
+                    return;
+                }
+
+                //create a new user in FirebaseAuth for authentication.
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(SignUpActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        auth.signInWithEmailAndPassword(email, password);
+                        FirebaseUser user = auth.getCurrentUser();
+                        //send verification email
+                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (!task.isSuccessful()) {
+                                    auth.signOut();
+                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your email", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
+                                userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
+                                auth.signOut();
+                                startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
+                                finish();
+
+                            }
+                        });
+                    }
+                });
             }
         });
 
