@@ -90,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (!task.isSuccessful()) {
                                     auth.signOut();
-                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your email", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your filled in email", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
