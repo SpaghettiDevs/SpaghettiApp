@@ -122,6 +122,16 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         return msg;
     }
 
+    /**
+     * Checks if the user has saved a post
+     * @param postId the post id to check
+     * @return true if the user has saved the post, false otherwise
+     */
+    public boolean userSavedPost(String postId) {
+        List<String> savedPosts = getSavedPosts();
+        return savedPosts.contains(postId);
+    }
+
     //save a new user to the database
     public void saveNewUserToDb(String username, String userId) {
         Map<String, Object> data = new HashMap<>();
