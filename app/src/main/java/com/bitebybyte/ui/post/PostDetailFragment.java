@@ -83,18 +83,15 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
             navController.navigate(action);
         });
 
-        bookmarkIcon.setOnClickListener(event -> {
-            String msg = userService.updateSavedPosts(postId);
-            Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
-            //TODO Icon changes color maybe?
-        });
-
         //Add event listener for the add comment button
         addComment.setOnClickListener(event -> {
             //Navigate to the comments page.
             NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments(postId);
             navController.navigate(action);
         });
+
+
+
         postService.getPostById(postId, this);
         return root;
 
@@ -112,11 +109,50 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         likeAmount.setText(Integer.toString(post.getLikes().size()));
         commentAmount.setText(Integer.toString(post.getComments().size()));
 
-        //Add event listeners for the icons
+        //Add event listener for the like button
         likeIcon.setOnClickListener(event -> {
+            int oldLikes = post.getLikes().size();
             postService.updateLikes(post);
+            int newLikes = post.getLikes().size();
+
+            if (oldLikes < newLikes)
+                //Update the like icon to be solid if the user has liked the post
+                likeIcon.setImageResource(R.drawable.baseline_favorite_24);
+            else
+                //Update the like icon to be outline if the user has liked the post
+                likeIcon.setImageResource(R.drawable.round_favorite_border_24);
+
             likeAmount.setText(Integer.toString(post.getLikes().size()));
         });
+
+        //Add event listener for the bookmark button
+        bookmarkIcon.setOnClickListener(event -> {
+            String msg = userService.updateSavedPosts(post.getPostId());
+            Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+            if (userService.userSavedPost(post.getPostId()))
+                //Update the bookmark icon to be solid if the user has bookmarked the post
+                bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_filled_24);
+            else
+                //Update the bookmark icon to be outline if the user has bookmarked the post
+                bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_24dp);
+        });
+
+        //Check if this user has liked the post on load
+        if (postService.hasLikedPost(post))
+            //Update the like icon to be solid if the user has liked the post
+            likeIcon.setImageResource(R.drawable.baseline_favorite_24);
+        else
+            //Update the like icon to be outline if the user has liked the post
+            likeIcon.setImageResource(R.drawable.round_favorite_border_24);
+
+        //Check if the user has bookmarked the post on load
+        if (userService.userSavedPost(post.getPostId()))
+            //Update the bookmark icon to be solid if the user has bookmarked the post
+            bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_filled_24);
+        else
+            //Update the bookmark icon to be outline if the user has bookmarked the post
+            bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_24dp);
     }
 
     @Override
