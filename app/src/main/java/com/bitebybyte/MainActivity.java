@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -117,14 +118,13 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     });
-            settingsButton =  sideBar.getHeaderView(0).findViewById(R.id.account_settings_button);
 
-            settingsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                }
+            // Open settings activity when clicking on the header of the sidebar
+            ConstraintLayout sideBarHeader = sideBar.getHeaderView(0).findViewById(R.id.sidebar_header);
+            sideBarHeader.setOnClickListener(event -> {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             });
+
         }
     }
 
