@@ -85,7 +85,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
             postedDateTime = itemView.findViewById(R.id.post_comment_date_time);
             likesCount = itemView.findViewById(R.id.post_comment_likes_amount);
             likeButton = itemView.findViewById(R.id.post_comment_likes_icon);
-            deleteButton = itemView.findViewById(R.id.deleteCommentButton);
+            deleteButton = itemView.findViewById(R.id.post_comment_delete_button);
         }
 
         public TextView getContent() {
