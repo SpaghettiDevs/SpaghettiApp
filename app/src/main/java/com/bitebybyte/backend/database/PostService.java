@@ -53,10 +53,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         public void saveToDatabase(FeedPost post) {
                 db.collection("posts")
                                 .document(post.getPostId()).set(post)
-                                .addOnSuccessListener(unused -> {
-                                        userService.updateMyPosts(post.getPostId());
-                                        Log.d("Firebase", "Successfully added");
-                                })
+                                .addOnSuccessListener(this)
                                 .addOnFailureListener(this);
         }
 
