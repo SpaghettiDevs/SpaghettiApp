@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     return;
                                 }
 
-                                Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "SignUp Successful, please verify your email", Toast.LENGTH_LONG).show();
                                 userService.saveNewUserToDb(username, auth.getUid()); //save the newly created user to the database
                                 auth.signOut();
                                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class)); //go to login when signup successful
