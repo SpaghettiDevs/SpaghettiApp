@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,7 +75,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
             String msg = userService.updateSavedPosts(post.getPostId());
-            //Toast.makeText(holder.getDeletePostButton().getContext(), msg, Toast.LENGTH_SHORT);
+            Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
             //TODO this toast doesn't work. The changes apply after refreshing!
         });
     }

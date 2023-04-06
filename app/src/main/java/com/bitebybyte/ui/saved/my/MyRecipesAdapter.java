@@ -3,6 +3,7 @@ package com.bitebybyte.ui.saved.my;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +66,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implement
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
             postService.deletePost(post.getPostId());
+            Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
         });
     }
 
