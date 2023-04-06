@@ -81,8 +81,17 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
 
     private void deletedPost(ViewHolder holder) {
         holder.getPostTitle().setText("Deleted post");
-        holder.getPostAuthor().setText("Button not working");
+        holder.getPostAuthor().setText("");
         holder.getPostCookingTime().setText("That's sad!");
+
+        holder.getDeletePostButton().setOnClickListener(v -> {
+            System.out.println("Delete button clicked");
+            String msg = userService.updateSavedPosts(holder.getAdapterPosition());
+            //Toast.makeText(holder.getDeletePostButton().getContext(), msg, Toast.LENGTH_SHORT);
+
+            //TODO refresh here or the rest of the saved recipes will bug.
+            //TODO this toast doesn't work. The changes apply after refreshing!
+        });
     }
 
     @Override
