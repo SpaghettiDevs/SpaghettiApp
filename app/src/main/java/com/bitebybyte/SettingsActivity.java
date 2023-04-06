@@ -72,6 +72,9 @@ public class SettingsActivity extends AppCompatActivity {
                 if (!username.isEmpty() && username.length() <= 16) {
                     userService.changeUsername(user.getUid(), username);
                     ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
+                    auth.signOut();
+                    startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                    finish();
                 } else {
                     usernameText.setError("Username length min = 1 and max = 16");
                 }
