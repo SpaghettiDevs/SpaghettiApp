@@ -6,12 +6,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.Comment;
 import com.bitebybyte.backend.local.FeedPost;
 
@@ -22,10 +24,12 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     private List<Comment> comments;
     private FeedPost post;
     private PostService postService;
+    private final UserService userService;
 
     protected PostCommentsAdapter(FeedPost post) {
         comments = post.getComments();
         postService = new PostService();
+        userService = new UserService();
         this.post = post;
     }
 
@@ -43,6 +47,10 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
+        if (!(userService.getUserId(comment.getIdOwner()).equals(userService.getCurrentUser()))) {
+            holder.getDeleteButton().setVisibility(View.GONE);
+        }
+
         holder.getAuthorName().setText(comment.getIdOwner());
         holder.getContent().setText(comment.getContent());
 
@@ -53,6 +61,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         //Add delete button listener
         holder.getDeleteButton().setOnClickListener(v -> {
             postService.deleteComment(comments, post.getPostId(), position);
+            Toast.makeText(holder.content.getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
         });
 
         holder.getLikeButton().setOnClickListener(v -> {
@@ -74,8 +83,8 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         private final TextView postedDateTime;
         private final TextView likesCount;
         private final ImageView likeButton;
-
         private final ImageButton deleteButton;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
