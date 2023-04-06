@@ -3,6 +3,7 @@ package com.bitebybyte.ui.post;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,9 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         holder.likesCount.setText(Integer.toString(comment.getLikes().size()));
 
         //Add delete button listener
+        holder.getDeleteButton().setOnClickListener(v -> {
+            // add functionality
+        });
 
         holder.getLikeButton().setOnClickListener(v -> {
             postService.updateLikes(comments, post.getPostId(), position);
@@ -71,6 +75,8 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         private final TextView likesCount;
         private final ImageView likeButton;
 
+        private final ImageButton deleteButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             content = itemView.findViewById(R.id.post_comment_text);
@@ -79,6 +85,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
             postedDateTime = itemView.findViewById(R.id.post_comment_date_time);
             likesCount = itemView.findViewById(R.id.post_comment_likes_amount);
             likeButton = itemView.findViewById(R.id.post_comment_likes_icon);
+            deleteButton = itemView.findViewById(R.id.deleteCommentButton);
         }
 
         public TextView getContent() {
@@ -104,6 +111,8 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
         public ImageView getLikeButton() {
             return likeButton;
         }
+
+        public ImageButton getDeleteButton() {return deleteButton;}
     }
 }
 
