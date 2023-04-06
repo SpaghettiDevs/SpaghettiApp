@@ -53,8 +53,23 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         public void saveToDatabase(FeedPost post) {
                 db.collection("posts")
                                 .document(post.getPostId()).set(post)
-                                .addOnSuccessListener(this)
+                                .addOnSuccessListener(unused -> {
+                                        userService.updateMyPosts(post.getPostId());
+                                        Log.d("Firebase", "Successfully added");
+                                })
                                 .addOnFailureListener(this);
+        }
+
+        /**
+         * Save post to database given a local object!
+         *
+         * @param post
+         */
+        public void saveCommentToDatabase(FeedPost post) {
+                db.collection("posts")
+                        .document(post.getPostId()).set(post)
+                        .addOnSuccessListener(this)
+                        .addOnFailureListener(this);
         }
 
         /**
@@ -90,7 +105,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                 String idOwner = userService.getUsername();
                 Comment comment = new Comment(idOwner, commentText);
                 post.getComments().add(comment);
-                saveToDatabase(post);
+                saveCommentToDatabase(post);
         }
 
         public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId) {
