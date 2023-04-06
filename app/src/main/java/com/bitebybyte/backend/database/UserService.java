@@ -106,11 +106,18 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                     .addOnFailureListener(this);
     }
 
+    private void updateSavedPosts(List<String> savedPosts)
+    {
+        DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        postRef.update("savedPosts", savedPosts)
+                .addOnSuccessListener(this)
+                .addOnFailureListener(this);
+    }
+
     //updating the posts the user creates
     public String updateSavedPosts(String postId) {
         String msg = "";
         List<String> savedPosts = getSavedPosts();
-        DocumentReference postRef = db.collection("users").document(auth.getCurrentUser().getUid());
         if (savedPosts.contains(postId)) {
             savedPosts.remove(postId);
             msg = "Recipe unsaved";
@@ -118,11 +125,22 @@ public class UserService implements OnSuccessListener, OnFailureListener {
             savedPosts.add(postId);
             msg = "Recipe saved";
         }
-
-        postRef.update("savedPosts", savedPosts)
-                .addOnSuccessListener(this)
-                .addOnFailureListener(this);
+        updateSavedPosts(savedPosts);
         return msg;
+    }
+
+    /**
+     * Delete SavedPost on given index.
+     *
+     * @param index
+     * @return
+     */
+    public String updateSavedPosts(int index) {
+        List<String> savedPosts = getSavedPosts();
+        savedPosts.remove(index);
+
+        updateSavedPosts(savedPosts);
+        return "Recipe unsaved";
     }
 
     /**
