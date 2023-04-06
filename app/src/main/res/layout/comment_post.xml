@@ -78,6 +78,15 @@
                 android:layout_gravity="center_vertical"
                 android:text="Today - 18:04"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <ImageButton
+                android:id="@+id/deleteCommentButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                style="@style/Widget.Material3.Button.IconButton"
+                app:srcCompat="@drawable/ic_trash_black_24dp"
+                android:contentDescription="Delete post" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
