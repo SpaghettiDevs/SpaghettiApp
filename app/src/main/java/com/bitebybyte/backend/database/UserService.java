@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -27,6 +28,10 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+    }
+
+    public String getCurrentUser() {
+        return auth.getCurrentUser().getUid();
     }
 
     //get the username from the database for the current user.
@@ -44,6 +49,26 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         else
             return "Unknown user";
 
+    }
+
+    //get the user id from the database with a username.
+    public String getUserId(String username) {
+        Map<String, Object> data =  null;
+
+        Task<QuerySnapshot> task = db.collection("users")
+            .whereEqualTo("username", username)
+            .get();
+        //wait for the query to finish, since its async.
+        while (!task.isComplete()) {}
+
+        for (QueryDocumentSnapshot document : task.getResult()) {
+            data = document.getData();
+        }
+
+        if(data != null && data.get("userId") != null)
+            return data.get("userId").toString();
+        else
+            return "Unknown user";
     }
 
     //get the posts created by the current user from the database.
