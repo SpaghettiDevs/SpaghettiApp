@@ -52,7 +52,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
 
         //Add delete button listener
         holder.getDeleteButton().setOnClickListener(v -> {
-            // add functionality
+            postService.deleteComment(comments, post.getPostId(), position);
         });
 
         holder.getLikeButton().setOnClickListener(v -> {
