@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,21 +26,29 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     private static final String collection = "users";
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    private User currentUser;
+    private static User currentUser = null;
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        getCurrentUser();
+        setCurrentUserInstance();
     }
 
-    private void getCurrentUser() {
-        String currentUserId = auth.getCurrentUser().getUid();
-        DocumentReference reference = db.collection(collection).document(currentUserId);
+    private void setCurrentUserInstance() {
+        if (currentUser == null || auth.getCurrentUser().getUid() != currentUser.getUserId()) {
+            String currentUserId = auth.getCurrentUser().getUid();
+            DocumentReference reference = db.collection(collection).document(currentUserId);
 
-        reference.get().addOnSuccessListener(documentSnapshot -> {
-            Log.v("Firebase", "Current user fetched successfully");
+            System.out.println(currentUserId);
+
+            Task<DocumentSnapshot> task = reference.get();
+
+            while(!task.isComplete()) {} // wait for the task to be completed
+
+            DocumentSnapshot documentSnapshot = task.getResult();
             currentUser = documentSnapshot.toObject(User.class);
-        });
+            Log.v("Firebase", "Current user fetched successfully");
+
+        }
     }
 
     public String getCurrentUserId() {
