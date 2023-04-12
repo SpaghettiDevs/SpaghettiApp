@@ -97,7 +97,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                                         });
                         })
                         .addOnFailureListener(e -> {
-                                Log.d("Database",  "Error fetching " + postId + " does not exist.");
+                                Log.d("Database",  "Error fetching " + postId);
                         });
         }
 

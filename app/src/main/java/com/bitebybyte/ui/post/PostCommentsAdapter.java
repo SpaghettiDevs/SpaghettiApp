@@ -47,7 +47,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
-        if (!(userService.getUserId(comment.getIdOwner()).equals(userService.getCurrentUser()))) {
+        if (!comment.getIdOwner().equals(userService.getCurrentUserId())) {
             holder.getDeleteButton().setVisibility(View.GONE);
         }
 

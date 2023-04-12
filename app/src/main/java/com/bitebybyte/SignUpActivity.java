@@ -1,13 +1,5 @@
 package com.bitebybyte;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bitebybyte.backend.database.UserService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -90,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (!task.isSuccessful()) {
                                     auth.signOut();
-                                    Toast.makeText(SignUpActivity.this, "could not send verification email, please check your filled in email", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignUpActivity.this, "Could not send verification email, please check your filled in email", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 

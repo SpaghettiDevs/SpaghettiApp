@@ -56,6 +56,9 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implement
 
     @Override
     public void addDataToView(FeedPost post, ViewHolder holder) {
+
+        //TODO what happens if this post was deleted by moderator (firebase)
+
         holder.getPostTitle().setText(post.getTitle());
         holder.getPostAuthor().setText(post.getIdOwner());
         holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
