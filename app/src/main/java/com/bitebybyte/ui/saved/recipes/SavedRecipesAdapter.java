@@ -10,15 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
-import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ServiceablePostFragment;
+import com.bitebybyte.backend.local.User;
+import com.bitebybyte.ui.home.HomeFeedAdapter;
+import com.bitebybyte.ui.post.PostCommentsAdapter;
 import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implements ServicableFragment {
+public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
+        implements ServiceablePostFragment, ServiceableUserFragment {
 
     private List<String> postIds;
     private PostService postService;
@@ -65,7 +70,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
         }
 
         holder.getPostTitle().setText(post.getTitle());
-        holder.getPostAuthor().setText(post.getIdOwner());
+        userService.getUser(post.getIdOwner(), holder, this);
         holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
 
         postService.loadImage(holder.getPostImage(), post.getPostId());
@@ -98,6 +103,26 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder> implem
     @Override
     public void getListOfPosts(List<FeedPost> posts) {
 
+    }
+
+    @Override
+    public void addUserData(User user) {
+
+    }
+
+    @Override
+    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, ViewHolder viewHolder) {
+        viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }
 

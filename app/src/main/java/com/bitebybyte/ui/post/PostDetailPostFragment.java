@@ -15,16 +15,20 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.backend.local.User;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
-import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ServiceablePostFragment;
+import com.bitebybyte.ui.home.HomeFeedAdapter;
 import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class PostDetailFragment extends Fragment implements ServicableFragment {
+public class PostDetailPostFragment extends Fragment
+        implements ServiceablePostFragment, ServiceableUserFragment {
 
     private FragmentPostDetailBinding binding;
     private UserService userService;
@@ -105,7 +109,7 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
         description.setText(post.getContent());
         ingredients.setText(post.getRecipe().getIngredients());
         method.setText(post.getRecipe().getMethods());
-        author.setText(post.getIdOwner());
+        userService.getUser(post.getIdOwner(), this);
         likeAmount.setText(Integer.toString(post.getLikes().size()));
         commentAmount.setText(Integer.toString(post.getComments().size()));
 
@@ -162,6 +166,26 @@ public class PostDetailFragment extends Fragment implements ServicableFragment {
 
     @Override
     public void getListOfPosts(List<FeedPost> posts) {
+
+    }
+
+    @Override
+    public void addUserData(User user) {
+        author.setText(user.getUsername());
+    }
+
+    @Override
+    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, ViewHolder viewHolder) {
 
     }
 }

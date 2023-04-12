@@ -13,13 +13,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.backend.local.User;
+import com.bitebybyte.ui.post.PostCommentsAdapter;
 
 import java.util.List;
 
 public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHolder>
+    implements ServiceableUserFragment
 {
     private NavController navController;
     int itemCount;
@@ -51,8 +55,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         FeedPost post = posts.get(position);
         holder.getPostTitle().setText(post.getTitle());
 
-        //Get the username
-        holder.getPostAuthor().setText(post.getIdOwner());
+        //Get the username and user image
+        userService.getUser(post.getIdOwner(), holder, this);
 
         //Creating correct date
         String completeDate = postService.dateFormat(post.getDate());
@@ -111,6 +115,26 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     public int getItemCount()
     {
         return itemCount;
+    }
+
+    @Override
+    public void addUserData(User user) {
+
+    }
+
+    @Override
+    public void addUserData(User user, ViewHolder holder) {
+        holder.getPostAuthor().setText(user.getUsername());
+    }
+
+    @Override
+    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, com.bitebybyte.ui.saved.ViewHolder viewHolder) {
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder

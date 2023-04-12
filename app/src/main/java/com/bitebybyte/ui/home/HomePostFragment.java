@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bitebybyte.R;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.local.FeedPost;
-import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements ServicableFragment {
+public class HomePostFragment extends Fragment implements ServiceablePostFragment {
 
     private RecyclerView feed;
     private PostService postService;

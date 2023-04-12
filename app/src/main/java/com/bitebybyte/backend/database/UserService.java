@@ -4,7 +4,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.local.User;
+import com.bitebybyte.ui.home.HomeFeedAdapter;
+import com.bitebybyte.ui.post.PostCommentsAdapter;
+import com.bitebybyte.ui.saved.ViewHolder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,8 +61,102 @@ public class UserService implements OnSuccessListener, OnFailureListener {
 
 
     //get the username from the database for the current user.
-    public String getUsername() {
+    public String getCurrentUsername() {
         return currentUser.getUsername();
+    }
+
+    /**
+     * Get user object given userId.
+     * This method is async and sends a callback.
+     *
+     * @param userId
+     * @param fragment the callback
+     */
+    public void getUser(String userId, ServiceableUserFragment fragment) {
+
+        db.collection(collection).document(userId)
+                .get().addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (!documentSnapshot.exists()) {
+                        Log.e("Firebase", "This user is deleted!");
+                        // TODO what happens to the posts of a user account is removed
+                        return;
+                    }
+
+                    Log.d("Firebase", "User data fetched successfully!");
+                    fragment.addUserData(documentSnapshot.toObject(User.class));
+                });
+    }
+
+    /**
+     * Get user object given userId.
+     * This method is async and sends a callback with the holder to be updated.
+     *
+     * @param userId
+     * @param holder this parameter will be updated with the user data.
+     * @param fragment the callback
+     */
+    public void getUser(String userId, HomeFeedAdapter.ViewHolder holder,
+                        ServiceableUserFragment fragment) {
+
+        db.collection(collection).document(userId)
+                .get().addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (!documentSnapshot.exists()) {
+                        Log.e("Firebase", "This user is deleted!");
+                        // TODO what happens to the posts of a user account is removed
+                        return;
+                    }
+
+                    Log.d("Firebase", "User data fetched successfully!");
+                    fragment.addUserData(documentSnapshot.toObject(User.class), holder);
+                });
+    }
+
+    /**
+     * Get user object given userId.
+     * This method is async and sends a callback with the holder to be updated.
+     *
+     * @param userId
+     * @param holder this parameter will be updated with the user data.
+     * @param fragment the callback
+     */
+    public void getUser(String userId, PostCommentsAdapter.ViewHolder holder, ServiceableUserFragment fragment) {
+        db.collection(collection).document(userId)
+                .get().addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (!documentSnapshot.exists()) {
+                        Log.e("Firebase", "This user is deleted!");
+                        // TODO what happens to the posts of a user account is removed
+                        return;
+                    }
+
+                    Log.d("Firebase", "User data fetched successfully!");
+                    fragment.addUserData(documentSnapshot.toObject(User.class), holder);
+                });
+    }
+
+    /**
+     * Get user object given userId.
+     * This method is async and sends a callback with the holder to be updated.
+     *
+     * @param userId
+     * @param holder this parameter will be updated with the user data.
+     * @param fragment the callback
+     */
+    public void getUser(String userId, ViewHolder holder, ServiceableUserFragment fragment) {
+        db.collection(collection).document(userId)
+                .get().addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (!documentSnapshot.exists()) {
+                        Log.e("Firebase", "This user is deleted!");
+                        // TODO what happens to the posts of a user account is removed
+                        return;
+                    }
+
+                    Log.d("Firebase", "User data fetched successfully!");
+                    fragment.addUserData(documentSnapshot.toObject(User.class), holder);
+                });
     }
 
     //get the user id from the database with a username.

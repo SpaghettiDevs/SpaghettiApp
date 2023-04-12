@@ -2,20 +2,12 @@ package com.bitebybyte;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
-
-import com.bitebybyte.backend.database.UserService;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +19,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.databinding.ActivityMainBinding;
-
-import com.google.firebase.FirebaseApp;
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
             //setting the username on the sidebar
             sideBarUsername = sideBar.getHeaderView(0).findViewById(R.id.user_name_sidebar);
-            sideBarUsername.setText(userService.getUsername());
+            sideBarUsername.setText(userService.getCurrentUsername());
 
             appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
 

@@ -12,14 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.database.PostService;
 import com.bitebybyte.backend.database.UserService;
 import com.bitebybyte.backend.local.Comment;
 import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.backend.local.User;
+import com.bitebybyte.ui.home.HomeFeedAdapter;
 
 import java.util.List;
 
-public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapter.ViewHolder> {
+public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapter.ViewHolder>
+    implements ServiceableUserFragment {
 
     private List<Comment> comments;
     private FeedPost post;
@@ -51,12 +55,12 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
             holder.getDeleteButton().setVisibility(View.GONE);
         }
 
-        holder.getAuthorName().setText(comment.getIdOwner());
+        userService.getUser(comment.getIdOwner(), holder, this);
         holder.getContent().setText(comment.getContent());
 
         String formattedDate = postService.dateFormat(comment.getDate());
-        holder.postedDateTime.setText(formattedDate);
-        holder.likesCount.setText(Integer.toString(comment.getLikes().size()));
+        holder.getPostedDateTime().setText(formattedDate);
+        holder.getLikesCount().setText(Integer.toString(comment.getLikes().size()));
 
         //Add delete button listener
         holder.getDeleteButton().setOnClickListener(v -> {
@@ -74,6 +78,26 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     @Override
     public int getItemCount() {
         return comments.size();
+    }
+
+    @Override
+    public void addUserData(User user) {
+
+    }
+
+    @Override
+    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+
+    }
+
+    @Override
+    public void addUserData(User user, ViewHolder viewHolder) {
+        viewHolder.getAuthorName().setText(user.getUsername());
+    }
+
+    @Override
+    public void addUserData(User user, com.bitebybyte.ui.saved.ViewHolder viewHolder) {
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

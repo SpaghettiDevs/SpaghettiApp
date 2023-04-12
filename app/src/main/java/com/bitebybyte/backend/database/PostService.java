@@ -12,7 +12,7 @@ import com.bitebybyte.backend.local.AbstractContent;
 import com.bitebybyte.backend.local.Comment;
 import com.bitebybyte.backend.local.FeedPost;
 import com.bitebybyte.backend.local.Recipe;
-import com.bitebybyte.ui.ServicableFragment;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ui.saved.ViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -102,7 +102,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         }
 
         public void addComment(FeedPost post, String commentText) {
-                String idOwner = userService.getUsername();
+                String idOwner = userService.getCurrentUserId();
                 Comment comment = new Comment(idOwner, commentText);
                 post.getComments().add(comment);
                 saveCommentToDatabase(post);
@@ -271,7 +271,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          * @param postId
          * @param fragment callback
          */
-        public void getPostById(String postId, ServicableFragment fragment) {
+        public void getPostById(String postId, ServiceablePostFragment fragment) {
                 DocumentReference postRef = db.collection("posts").document(postId);
                 postRef.get().addOnSuccessListener(documentSnapshot -> {
                         Log.v("Firebase", "Post fetched successfully");
@@ -286,7 +286,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          * @param fragment callback
          * @param holder callback in package ui.saved ViewHolder
          */
-        public void getPostById(String postId, ServicableFragment fragment, ViewHolder holder) {
+        public void getPostById(String postId, ServiceablePostFragment fragment, ViewHolder holder) {
                 DocumentReference postRef = db.collection("posts").document(postId);
                 postRef.get().addOnSuccessListener(documentSnapshot -> {
                         Log.v("Firebase", "Post fetched successfully");
@@ -299,7 +299,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          *
          * @param fragment callback
          */
-        public void getAllPosts(ServicableFragment fragment) {
+        public void getAllPosts(ServiceablePostFragment fragment) {
                 db.collection("posts")
                                 .orderBy("date", Query.Direction.DESCENDING)
                                 .get()

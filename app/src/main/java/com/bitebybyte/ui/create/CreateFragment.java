@@ -124,7 +124,7 @@ public class CreateFragment extends Fragment {
                 }
 
                 //creating a post
-                String postID = service.createPostWithRecipe(userService.getUsername(), description.getText().toString(), title.getText().toString(),
+                String postID = service.createPostWithRecipe(userService.getCurrentUserId(), description.getText().toString(), title.getText().toString(),
                         null, null,
                         method.getText().toString(), ingredients.getText().toString(),
                         Integer.parseInt(estimatedTime.getText().toString()),

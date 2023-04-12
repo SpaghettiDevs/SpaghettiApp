@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -49,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (user != null) {
             ((TextView)findViewById(R.id.textViewEmail)).setText(user.getEmail());
-            ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
+            ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getCurrentUsername());
             currentEmail = user.getEmail();
         } else {
             Toast.makeText(getApplicationContext(), "Error: current user can not be loaded", Toast.LENGTH_SHORT).show();
@@ -71,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if (!username.isEmpty() && username.length() <= 16) {
                     userService.changeUsername(user.getUid(), username);
-                    ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
+                    ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getCurrentUsername());
                     auth.signOut();
                     startActivity(new Intent(SettingsActivity.this, MainActivity.class));
                     finish();
