@@ -45,20 +45,39 @@ public class CreateFragment extends Fragment {
     private ImageButton imageButton;
     private Uri imageURI;
     private UserService userService;
+    private PostService postService;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        if (getActivity() != null) {
-            navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
-        } else {
+        if(getActivity() == null)
             throw new RuntimeException("Activity is null");
-        }
+
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main);
 
         binding = FragmentCreateBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        PostService service = new PostService();
+
+        postService = new PostService();
         userService = new UserService();
+
+        initializeUI();
+
+        submitButton.setOnClickListener(this::onSubmitButtonClick);
+
+        imageButton.setOnClickListener(this::onImageButtonClick);
+
+        return binding.getRoot();
+    }
+
+    private void initializeUI() {
+        //Find the text-inputs
+        title = binding.createPostTitleInput;
+        estimatedTime = binding.createPostEstimatedTimeEditText;
+        description = binding.createPostDescription;
+        ingredients = binding.createPostIngredientsInput;
+        method = binding.createPostMethod;
+        submitButton = binding.createPostSubmitButton;
+        imageButton = binding.createPostImageButton;
 
         // Find the spinner in the UI
         Spinner spinner = binding.spinner;
@@ -69,105 +88,131 @@ public class CreateFragment extends Fragment {
 
         //Apply it to the spinner.
         spinner.setAdapter(adapter);
-
-        //Find the text-inputs
-        title = root.findViewById(R.id.create_post_title_input);
-        estimatedTime = root.findViewById(R.id.create_post_estimated_time_edit_text);
-        description = root.findViewById(R.id.create_post_description);
-        ingredients = root.findViewById(R.id.create_post_ingredients_input);
-        method = root.findViewById(R.id.create_post_method);
-        submitButton = root.findViewById(R.id.create_post_submit_button);
-        imageButton = root.findViewById(R.id.create_post_image_button);
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("title " + title.getText());
-                System.out.println("estimated time " + estimatedTime.getText());
-                System.out.println("description " + description.getText());
-                System.out.println("method " + method.getText());
-                System.out.println("Button Pressed! ");
-
-                if (title.getText().toString().equals("Title") || title.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Filling in a title is required", Toast.LENGTH_SHORT).show();
-                    title.setError("Filling in a title is required");
-                    return;
-                }
-
-                if (description.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Filling in a description is required", Toast.LENGTH_SHORT).show();
-                    description.setError("Filling in a description is required");
-                    return;
-                }
-
-                if (ingredients.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Filling in ingredients is required", Toast.LENGTH_SHORT).show();
-                    ingredients.setError("Filling in ingredients is required");
-                    return;
-                }
-
-                if (method.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Filling in a method is required", Toast.LENGTH_SHORT).show();
-                    method.setError("Filling in a method is required");
-                    return;
-                }
-
-                if (imageURI == null) {
-                    Toast.makeText(getContext(), "Please add an image", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(estimatedTime.getText().toString().isEmpty()){
-                    Toast.makeText(getContext(), "Filling in an estimated time is required", Toast.LENGTH_SHORT).show();
-                    estimatedTime.setError("Filling in an estimated time is required");
-                    return;
-                }
-
-                //creating a post
-                String postID = service.createPostWithRecipe(userService.getCurrentUserId(), description.getText().toString(), title.getText().toString(),
-                        null, null,
-                        method.getText().toString(), ingredients.getText().toString(),
-                        Integer.parseInt(estimatedTime.getText().toString()),
-                        spinner.getSelectedItem().toString());
-
-                service.saveImageToDatabase(imageURI, imageButton, postID);
-
-                Toast.makeText(getContext(), "Post created successfully", Toast.LENGTH_SHORT).show();
-
-                //clearing the fields
-                title.setText("");
-                estimatedTime.setText("");
-                description.setText("");
-                ingredients.setText("");
-                method.setText("");
-                imageURI = null;
-
-                //Navigate back to feed (home) page after 500ms.
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        navController.navigate(R.id.navigation_home);
-                    }
-                }, 500);
-            }
-        });
-
-
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
-                startActivityForResult(intent, CAMERA_ACTIVITY_CODE);
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
-            }
-        });
-
-
-
-        return root;
     }
 
+    /**
+     * Click listener for the submit button.
+     * @param v the view that was clicked.
+     */
+    private void onSubmitButtonClick(View v) {
+        if(!inputIsValid())
+            return;
+
+        //Get the spinner from the UI bind.
+        Spinner spinner = binding.spinner;
+
+        //Create a post and get the PostID
+        String postID = postService.createPostWithRecipe(userService.getCurrentUserId(), description.getText().toString(), title.getText().toString(),
+                null, null,
+                method.getText().toString(), ingredients.getText().toString(),
+                Integer.parseInt(estimatedTime.getText().toString()),
+                spinner.getSelectedItem().toString());
+
+        //Save the image to the database
+        postService.saveImageToDatabase(imageURI, imageButton, postID);
+
+        Toast.makeText(getContext(), "Post created successfully", Toast.LENGTH_SHORT).show();
+
+        //Clear the fields
+        clearFields();
+
+        //Navigate back to feed (home) page after 500ms.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                navController.navigate(R.id.navigation_home);
+            }
+        }, 500);
+    }
+
+    /**
+     * Click listener for the image button.
+     * @param v the view that was clicked.
+     */
+    private void onImageButtonClick(View v) {
+        //Start the camera activity
+        Intent intent = new Intent(getActivity(), CameraActivity.class);
+
+        //Start the activity and wait for a result.
+        startActivityForResult(intent, CAMERA_ACTIVITY_CODE);
+
+        //Disable the animation
+        getActivity().overridePendingTransition(0, 0);
+    }
+
+    /**
+     * Checks if the input is valid.
+     * Rules:
+     * - Title is required
+     * - Description is required
+     * - Ingredients is required
+     * - Method is required
+     * - Image is required
+     * - Estimated time is required
+     * @return true if input is valid, false otherwise.
+     */
+    private boolean inputIsValid() {
+        if (title.getText().toString().equals("Title") || title.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Filling in a title is required", Toast.LENGTH_SHORT).show();
+            title.setError("Filling in a title is required");
+            return false;
+        }
+
+        if (description.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Filling in a description is required", Toast.LENGTH_SHORT).show();
+            description.setError("Filling in a description is required");
+            return false;
+        }
+
+        if (ingredients.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Filling in ingredients is required", Toast.LENGTH_SHORT).show();
+            ingredients.setError("Filling in ingredients is required");
+            return false;
+        }
+
+        if (method.getText().toString().isEmpty()) {
+            Toast.makeText(getContext(), "Filling in a method is required", Toast.LENGTH_SHORT).show();
+            method.setError("Filling in a method is required");
+            return false;
+        }
+
+        if (imageURI == null) {
+            Toast.makeText(getContext(), "Please add an image", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(estimatedTime.getText().toString().isEmpty()){
+            Toast.makeText(getContext(), "Filling in an estimated time is required", Toast.LENGTH_SHORT).show();
+            estimatedTime.setError("Filling in an estimated time is required");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Clears all the fields.
+     */
+    private void clearFields() {
+        title.setText("Title");
+        estimatedTime.setText("");
+        description.setText("");
+        ingredients.setText("");
+        method.setText("");
+        imageURI = null;
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with,
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -179,6 +224,10 @@ public class CreateFragment extends Fragment {
         }
     }
 
+    /**
+     * Called when the fragment is no longer in use. This is called after onStop() and before
+     * onDetach().
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
