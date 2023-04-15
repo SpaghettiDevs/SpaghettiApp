@@ -107,7 +107,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         postService.loadImage(holder.getPostImage(), post.getPostId());
 
         // Set delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked(holder, post));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder, post));
     }
 
     /**
