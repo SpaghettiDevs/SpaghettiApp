@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.bitebybyte.R;
 
 public class SavedViewHolder extends AbstractViewHolder {
-    protected final ImageView deletePostButton;
+    private final ImageView deletePostButton;
 
     public SavedViewHolder(@NonNull View itemView) {
         super(itemView);

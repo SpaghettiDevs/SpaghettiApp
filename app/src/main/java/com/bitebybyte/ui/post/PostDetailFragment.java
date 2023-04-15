@@ -15,13 +15,14 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ServiceableUserFragment;
-import com.bitebybyte.backend.services.PostService;
-import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
-import com.bitebybyte.ServiceablePostFragment;
+import com.bitebybyte.holders.CommentsViewHolder;
 import com.bitebybyte.holders.HomeFeedViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
 
@@ -208,7 +209,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, CommentsViewHolder viewHolder) {
 
     }
 

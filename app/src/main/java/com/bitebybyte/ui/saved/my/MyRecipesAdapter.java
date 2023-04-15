@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ServiceableUserFragment;
+import com.bitebybyte.backend.models.FeedPost;
+import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
-import com.bitebybyte.backend.models.FeedPost;
-import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.backend.models.User;
+import com.bitebybyte.holders.CommentsViewHolder;
 import com.bitebybyte.holders.HomeFeedViewHolder;
-import com.bitebybyte.ui.post.PostCommentsAdapter;
 import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
@@ -141,7 +141,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
     }
 
     @Override
-    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, CommentsViewHolder viewHolder) {
 
     }
 

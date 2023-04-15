@@ -3,9 +3,6 @@ package com.bitebybyte.ui.post;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +15,7 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
+import com.bitebybyte.holders.CommentsViewHolder;
 import com.bitebybyte.holders.HomeFeedViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
 
@@ -26,7 +24,7 @@ import java.util.List;
 /**
  * Adapter for the RecyclerView in the PostCommentsFragment
  */
-public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapter.ViewHolder>
+public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder>
     implements ServiceableUserFragment {
 
     private List<Comment> comments;
@@ -53,12 +51,12 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      */
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.comment_post, parent, false);
 
-        return new ViewHolder(view);
+        return new CommentsViewHolder(view);
     }
 
     /**
@@ -67,7 +65,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param position The position of the Comment in the list
      */
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
         hideDeleteButtonIfNotOwner(holder, comment);
@@ -93,7 +91,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder  the ViewHolder that contains the delete button
      * @param comment the Comment object to check the ownership of
      */
-    private void hideDeleteButtonIfNotOwner(ViewHolder holder, Comment comment) {
+    private void hideDeleteButtonIfNotOwner(CommentsViewHolder holder, Comment comment) {
         if (!comment.getIdOwner().equals(userService.getCurrentUserId())) {
             holder.getDeleteButton().setVisibility(View.GONE);
         }
@@ -105,7 +103,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder  the ViewHolder that will contain the user data
      * @param comment the Comment object to get the owner's ID from
      */
-    private void loadUserDataForCommentOwner(ViewHolder holder, Comment comment) {
+    private void loadUserDataForCommentOwner(CommentsViewHolder holder, Comment comment) {
         userService.getUser(comment.getIdOwner(), holder, this);
     }
 
@@ -115,7 +113,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder  the ViewHolder that contains the comment
      * @param comment the Comment object to get the content from
      */
-    private void setCommentContent(ViewHolder holder, Comment comment) {
+    private void setCommentContent(CommentsViewHolder holder, Comment comment) {
         holder.getContent().setText(comment.getContent());
     }
 
@@ -125,7 +123,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder  the ViewHolder that contains the comment
      * @param comment the Comment object to get the date from
      */
-    private void setCommentPostedDate(ViewHolder holder, Comment comment) {
+    private void setCommentPostedDate(CommentsViewHolder holder, Comment comment) {
         String formattedDate = postService.dateFormat(comment.getDate());
         holder.getPostedDateTime().setText(formattedDate);
     }
@@ -136,7 +134,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder  the ViewHolder that contains the comment
      * @param comment the Comment object to get the likes from
      */
-    private void setCommentLikesCount(ViewHolder holder, Comment comment) {
+    private void setCommentLikesCount(CommentsViewHolder holder, Comment comment) {
         int likesCount = comment.getLikes().size();
         holder.getLikesCount().setText(String.valueOf(likesCount));
     }
@@ -147,9 +145,9 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param holder   the ViewHolder that contains the delete button
      * @param position the position of the comment in the adapter's list
      */
-    private void onDeleteButtonClicked(ViewHolder holder, int position) {
+    private void onDeleteButtonClicked(CommentsViewHolder holder, int position) {
         postService.deleteComment(comments, post.getPostId(), position);
-        Toast.makeText(holder.content.getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(holder.getContent().getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
 
         //Refresh the comments list
         notifyItemRemoved(position);
@@ -162,7 +160,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param comment  the Comment object to get the likes from
      * @param position the position of the comment in the adapter's list
      */
-    private void onLikeButtonClicked(ViewHolder holder, Comment comment, int position) {
+    private void onLikeButtonClicked(CommentsViewHolder holder, Comment comment, int position) {
         postService.updateLikes(comments, post.getPostId(), position);
 
         if (postService.hasLikedContent(comment))
@@ -191,62 +189,13 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     }
 
     @Override
-    public void addUserData(User user, ViewHolder viewHolder) {
+    public void addUserData(User user, CommentsViewHolder viewHolder) {
         viewHolder.getAuthorName().setText(user.getUsername());
     }
 
     @Override
     public void addUserData(User user, SavedViewHolder viewHolder) {
 
-    }
-
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView content;
-        private final TextView authorName;
-        private final ImageView authorImage;
-        private final TextView postedDateTime;
-        private final TextView likesCount;
-        private final ImageView likeButton;
-        private final ImageButton deleteButton;
-
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            content = itemView.findViewById(R.id.post_comment_text);
-            authorName = itemView.findViewById(R.id.post_comment_author_name);
-            authorImage = itemView.findViewById(R.id.post_comment_author_picture);
-            postedDateTime = itemView.findViewById(R.id.post_comment_date_time);
-            likesCount = itemView.findViewById(R.id.post_comment_likes_amount);
-            likeButton = itemView.findViewById(R.id.post_comment_likes_icon);
-            deleteButton = itemView.findViewById(R.id.post_comment_delete_button);
-        }
-
-        public TextView getContent() {
-            return content;
-        }
-
-        public TextView getAuthorName() {
-            return authorName;
-        }
-
-        public ImageView getAuthorImage() {
-            return authorImage;
-        }
-
-        public TextView getPostedDateTime() {
-            return postedDateTime;
-        }
-
-        public TextView getLikesCount() {
-            return likesCount;
-        }
-
-        public ImageView getLikeButton() {
-            return likeButton;
-        }
-
-        public ImageButton getDeleteButton() {return deleteButton;}
     }
 }
 

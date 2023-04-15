@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 
 import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.models.User;
+import com.bitebybyte.holders.CommentsViewHolder;
 import com.bitebybyte.holders.HomeFeedViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
-import com.bitebybyte.ui.post.PostCommentsAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -149,7 +149,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * @param holder   this parameter will be updated with the user data.
      * @param fragment the callback
      */
-    public void getUser(String userId, PostCommentsAdapter.ViewHolder holder, ServiceableUserFragment fragment) {
+    public void getUser(String userId, CommentsViewHolder holder, ServiceableUserFragment fragment) {
         db.collection(collection).document(userId)
                 .get().addOnCompleteListener(task -> {
                     DocumentSnapshot documentSnapshot = task.getResult();

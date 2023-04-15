@@ -16,9 +16,9 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
+import com.bitebybyte.holders.CommentsViewHolder;
 import com.bitebybyte.holders.HomeFeedViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
-import com.bitebybyte.ui.post.PostCommentsAdapter;
 
 import java.util.List;
 
@@ -173,7 +173,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
     }
 
     @Override
-    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, CommentsViewHolder viewHolder) {
 
     }
 
