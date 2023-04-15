@@ -79,18 +79,18 @@ public class PostDetailFragment extends Fragment
 
         //Find the add comment edit text
         addComment = root.findViewById(R.id.post_detail_comment_input);
-        String postId = PostDetailPostFragmentArgs.fromBundle(getArguments()).getPostId();
+        String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
 
         commentIcon.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = PostDetailPostFragmentDirections.actionPostDetailToPostComments(postId);
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments(postId);
             navController.navigate(action);
         });
 
         //Add event listener for the add comment button
         addComment.setOnClickListener(event -> {
             //Navigate to the comments page.
-            NavDirections action = PostDetailPostFragmentDirections.actionPostDetailToPostComments(postId);
+            NavDirections action = PostDetailFragmentDirections.actionPostDetailToPostComments(postId);
             navController.navigate(action);
         });
 
