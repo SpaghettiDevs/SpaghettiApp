@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -31,27 +32,40 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private static User currentUser = null;
+
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
         setCurrentUserInstance();
     }
 
+    /**
+     * Sets the currentUser instance to the currently logged-in user.
+     * This method retrieves the user data from Firestore and sets it to the currentUser instance.
+     * The method uses a listener to execute code when the Firestore task is completed.
+     */
     private void setCurrentUserInstance() {
-        if (currentUser == null || auth.getCurrentUser().getUid() != currentUser.getUserId()) {
+        FirebaseUser currentAuthenticatedUser = auth.getCurrentUser();
+
+        if (currentUser == null && currentAuthenticatedUser == null) {
+            Log.v("Firebase", "No user is currently logged in");
+            return;
+        }
+
+        if (currentUser == null || !currentAuthenticatedUser.getUid().equals(currentUser.getUserId())) {
             String currentUserId = auth.getCurrentUser().getUid();
             DocumentReference reference = db.collection(collection).document(currentUserId);
 
-            System.out.println(currentUserId);
-
-            Task<DocumentSnapshot> task = reference.get();
-
-            while(!task.isComplete()) {} // wait for the task to be completed
-
-            DocumentSnapshot documentSnapshot = task.getResult();
-            currentUser = documentSnapshot.toObject(User.class);
-            Log.v("Firebase", "Current user fetched successfully");
-
+            reference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    currentUser = documentSnapshot.toObject(User.class);
+                    Log.v("Firebase", "Current user fetched successfully");
+                } else {
+                    Log.v("Firebase", "Failed to fetch current user");
+                }
+            });
         }
     }
 
@@ -79,7 +93,8 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (!documentSnapshot.exists()) {
                         Log.e("Firebase", "This user is deleted!");
-                        // TODO what happens to the posts of a user account is removed
+                        // TODO: Q: what happens to the posts of a user account is removed
+                        //TODO: A: They also get deleted - Tristan
                         return;
                     }
 
