@@ -15,16 +15,16 @@ import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.backend.models.User;
-import com.bitebybyte.ui.home.HomeFeedAdapter;
+import com.bitebybyte.holders.HomeFeedViewHolder;
 import com.bitebybyte.ui.post.PostCommentsAdapter;
-import com.bitebybyte.holders.ViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
 /**
  * Adapter for displaying a list of user's saved recipes.
  */
-public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
+public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private final List<String> postIds;
@@ -43,16 +43,16 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SavedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_saved, parent, false);
 
-        return new ViewHolder(view);
+        return new SavedViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
         postService.getPostById(postIds.get(position), this, holder);
     }
 
@@ -67,7 +67,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, SavedViewHolder holder) {
         if (post == null) {
             // Display message for deleted post
             deletedPost(holder);
@@ -97,7 +97,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
      * Displays a message to the user.
      * @param holder the view holder for the deleted post
      */
-    private void onDeleteButtonClicked(ViewHolder holder) {
+    private void onDeleteButtonClicked(SavedViewHolder holder) {
         System.out.println("Delete button clicked");
         // Remove post from saved recipes and display message
         userService.removeSavedPost(holder.getAdapterPosition());
@@ -114,7 +114,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
      *
      * @param holder the view holder for the deleted post
      */
-    private void deletedPost(ViewHolder holder) {
+    private void deletedPost(SavedViewHolder holder) {
         // Display message for deleted post
         holder.getPostTitle().setText("Deleted post");
         holder.getPostAuthor().setText("");
@@ -142,7 +142,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     }
 
     @Override
-    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
 
     }
 
@@ -152,7 +152,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     }
 
     @Override
-    public void addUserData(User user, ViewHolder viewHolder) {
+    public void addUserData(User user, SavedViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }

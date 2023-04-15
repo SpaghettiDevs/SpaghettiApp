@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-public class CommentsViewHolder extends ViewHolder{
+public class CommentsViewHolder extends SavedViewHolder {
     public CommentsViewHolder(@NonNull View itemView) {
         super(itemView);
     }

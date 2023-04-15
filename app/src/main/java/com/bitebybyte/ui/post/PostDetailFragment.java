@@ -22,8 +22,8 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
 import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.ui.home.HomeFeedAdapter;
-import com.bitebybyte.holders.ViewHolder;
+import com.bitebybyte.holders.HomeFeedViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
@@ -188,7 +188,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, SavedViewHolder holder) {
 
     }
 
@@ -203,7 +203,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
 
     }
 
@@ -213,7 +213,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addUserData(User user, ViewHolder viewHolder) {
+    public void addUserData(User user, SavedViewHolder viewHolder) {
 
     }
 }

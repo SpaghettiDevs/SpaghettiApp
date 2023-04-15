@@ -19,7 +19,7 @@ import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ui.home.HomeItemDecoration;
-import com.bitebybyte.holders.ViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
@@ -114,7 +114,7 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, SavedViewHolder holder) {
 
     }
 

@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.ServiceableUserFragment;
-import com.bitebybyte.backend.services.PostService;
-import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.backend.models.Comment;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
-import com.bitebybyte.ui.home.HomeFeedAdapter;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.services.UserService;
+import com.bitebybyte.holders.HomeFeedViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
@@ -185,7 +186,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     }
 
     @Override
-    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
+    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
 
     }
 
@@ -195,7 +196,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     }
 
     @Override
-    public void addUserData(User user, com.bitebybyte.holders.ViewHolder viewHolder) {
+    public void addUserData(User user, SavedViewHolder viewHolder) {
 
     }
 
