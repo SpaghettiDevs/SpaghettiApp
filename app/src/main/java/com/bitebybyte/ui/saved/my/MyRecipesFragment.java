@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
-import com.bitebybyte.backend.database.UserService;
+import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.ui.home.HomeItemDecoration;
 
 public class MyRecipesFragment extends Fragment {

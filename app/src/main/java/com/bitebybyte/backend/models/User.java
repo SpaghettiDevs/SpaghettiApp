@@ -1,4 +1,4 @@
-package com.bitebybyte.backend.local;
+package com.bitebybyte.backend.models;
 
 import java.util.ArrayList;
 import java.util.List;

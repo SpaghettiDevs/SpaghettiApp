@@ -24,8 +24,8 @@ import androidx.navigation.Navigation;
 
 import com.bitebybyte.CameraActivity;
 import com.bitebybyte.R;
-import com.bitebybyte.backend.database.PostService;
-import com.bitebybyte.backend.database.UserService;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.FragmentCreateBinding;
 
 public class CreateFragment extends Fragment {

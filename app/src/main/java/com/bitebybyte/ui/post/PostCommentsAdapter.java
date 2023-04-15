@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
 import com.bitebybyte.ServiceableUserFragment;
-import com.bitebybyte.backend.database.PostService;
-import com.bitebybyte.backend.database.UserService;
-import com.bitebybyte.backend.local.Comment;
-import com.bitebybyte.backend.local.FeedPost;
-import com.bitebybyte.backend.local.User;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.services.UserService;
+import com.bitebybyte.backend.models.Comment;
+import com.bitebybyte.backend.models.FeedPost;
+import com.bitebybyte.backend.models.User;
 import com.bitebybyte.ui.home.HomeFeedAdapter;
 
 import java.util.List;

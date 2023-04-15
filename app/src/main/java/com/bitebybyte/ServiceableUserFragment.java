@@ -1,6 +1,6 @@
 package com.bitebybyte;
 
-import com.bitebybyte.backend.local.User;
+import com.bitebybyte.backend.models.User;
 import com.bitebybyte.ui.home.HomeFeedAdapter;
 import com.bitebybyte.ui.post.PostCommentsAdapter;
 import com.bitebybyte.ui.saved.ViewHolder;

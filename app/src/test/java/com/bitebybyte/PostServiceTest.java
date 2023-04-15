@@ -2,13 +2,7 @@ package com.bitebybyte;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import android.media.Image;
-
-import com.bitebybyte.backend.database.PostService;
-import com.bitebybyte.backend.local.Ingredient;
-import com.google.firebase.FirebaseApp;
+import com.bitebybyte.backend.services.PostService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
-import com.bitebybyte.backend.database.PostService;
-import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ui.saved.ViewHolder;
 

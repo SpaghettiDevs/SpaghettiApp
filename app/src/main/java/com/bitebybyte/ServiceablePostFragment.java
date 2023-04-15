@@ -1,6 +1,6 @@
 package com.bitebybyte;
 
-import com.bitebybyte.backend.local.FeedPost;
+import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;

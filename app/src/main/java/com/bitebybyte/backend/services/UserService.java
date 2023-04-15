@@ -1,15 +1,14 @@
-package com.bitebybyte.backend.database;
+package com.bitebybyte.backend.services;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.bitebybyte.ServiceableUserFragment;
-import com.bitebybyte.backend.local.User;
+import com.bitebybyte.backend.models.User;
 import com.bitebybyte.ui.home.HomeFeedAdapter;
 import com.bitebybyte.ui.post.PostCommentsAdapter;
 import com.bitebybyte.ui.saved.ViewHolder;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
