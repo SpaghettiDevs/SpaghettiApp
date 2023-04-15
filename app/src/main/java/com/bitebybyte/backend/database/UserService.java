@@ -36,6 +36,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
         if (auth.getCurrentUser() != null) {
             setCurrentUserInstance();
         }
@@ -45,37 +46,50 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Sets the currentUser instance to the currently logged-in user.
      * This method retrieves the user data from Firestore and sets it to the currentUser instance.
      * The method uses a listener to execute code when the Firestore task is completed.
+     *
+     * Should only be called when the user is logged in.
      */
     private void setCurrentUserInstance() {
         FirebaseUser currentAuthenticatedUser = auth.getCurrentUser();
 
-        if (currentUser == null && currentAuthenticatedUser == null) {
+        if (currentAuthenticatedUser == null) {
             Log.v("Firebase", "No user is currently logged in");
             return;
         }
 
-        if (currentUser == null || !currentAuthenticatedUser.getUid().equals(currentUser.getUserId())) {
+        if (UserService.currentUser == null || !currentAuthenticatedUser.getUid().equals(UserService.currentUser.getUserId())) {
             String currentUserId = auth.getCurrentUser().getUid();
             DocumentReference reference = db.collection(collection).document(currentUserId);
 
-            reference.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    currentUser = documentSnapshot.toObject(User.class);
-                    Log.v("Firebase", "Current user fetched successfully");
-                } else {
-                    Log.v("Firebase", "Failed to fetch current user");
-                }
-            });
+            Task<DocumentSnapshot> task = reference.get();
+
+            // This while loop is used to wait for the task to complete.
+            // Normally we would use a listener, but we want this code to block as it's needed for the app to work.
+            while(!task.isComplete()) {
+                // wait for task to complete
+            }
+
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                UserService.currentUser = documentSnapshot.toObject(User.class);
+                Log.v("Firebase", "Current user fetched successfully");
+            } else {
+                Log.v("Firebase", "Failed to fetch current user");
+            }
         }
     }
 
+    /**
+     * Get the user-id of the currently logged in user.
+     */
     public String getCurrentUserId() {
         return currentUser.getUserId();
     }
 
 
-    //get the username from the database for the current user.
+    /**
+     * Get the username of the currently logged in user.
+     */
     public String getCurrentUsername() {
         return currentUser.getUsername();
     }
@@ -108,7 +122,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Get user object given userId.
      * This method is async and sends a callback with the holder to be updated.
      *
-     * @param userId
+     * @param userId the user id
      * @param holder this parameter will be updated with the user data.
      * @param fragment the callback
      */

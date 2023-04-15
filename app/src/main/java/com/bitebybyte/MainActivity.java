@@ -50,73 +50,78 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser == null)
-        {
+
+        //If the user is not logged in, redirect them to the login page
+        if(currentUser == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else {
-            binding = ActivityMainBinding.inflate(getLayoutInflater());
-            setContentView(binding.getRoot());
-
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            bottomNavigationView = findViewById(R.id.bottom_nav_view);
-            sideBar = findViewById(R.id.side_bar);
-            drawerLayout = findViewById(R.id.drawer_layout);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
-
-            navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
-            //setting the email on the sidebar
-            sideBarEmail = sideBar.getHeaderView(0).findViewById(R.id.user_email_sidebar);
-            sideBarEmail.setText(currentUser.getEmail());
-
-            //setting the username on the sidebar
-            sideBarUsername = sideBar.getHeaderView(0).findViewById(R.id.user_name_sidebar);
-            sideBarUsername.setText(userService.getCurrentUsername());
-
-            appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
-
-            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(sideBar, navController);
-            NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-            // Disable the bottom navigation bar according to the argument "showBottomBar"
-            navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
-                boolean showBottomBar = true; // show bottomBar by default
-
-                // Update showBottomBar if it is specified in the navigation graph
-                if (arguments != null && arguments.containsKey("showBottomBar"))
-                {
-                    showBottomBar = arguments.getBoolean("showBottomBar");
-                }
-                bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
-            });
-
-            // Remove hamburger icon when on a top level fragment
-            navController.addOnDestinationChangedListener(
-                    (navController, destination, arguments) -> {
-                        int id = destination.getId();
-
-                        if (id == R.id.navigation_home ||
-                            id == R.id.navigation_create ||
-                            id == R.id.navigation_saved)
-                        {
-                            toolbar.setNavigationIcon(null);
-                        }
-
-                    });
-            settingsButton =  sideBar.getHeaderView(0).findViewById(R.id.account_settings_button);
-
-            settingsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                }
-            });
+            finish();
+            return;
         }
+
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        sideBar = findViewById(R.id.side_bar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+
+        //setting the email on the sidebar
+        sideBarEmail = sideBar.getHeaderView(0).findViewById(R.id.user_email_sidebar);
+        sideBarEmail.setText(currentUser.getEmail());
+
+        //setting the username on the sidebar
+        sideBarUsername = sideBar.getHeaderView(0).findViewById(R.id.user_name_sidebar);
+        sideBarUsername.setText(userService.getCurrentUsername());
+
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_create, R.id.navigation_saved).setOpenableLayout(drawerLayout).build();
+
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(sideBar, navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        // Disable the bottom navigation bar according to the argument "showBottomBar"
+        navController.addOnDestinationChangedListener((navController, destination, arguments) -> {
+            boolean showBottomBar = true; // show bottomBar by default
+
+            // Update showBottomBar if it is specified in the navigation graph
+            if (arguments != null && arguments.containsKey("showBottomBar"))
+            {
+                showBottomBar = arguments.getBoolean("showBottomBar");
+            }
+            bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
+        });
+
+        // Remove hamburger icon when on a top level fragment
+        navController.addOnDestinationChangedListener(
+                (navController, destination, arguments) -> {
+                    int id = destination.getId();
+
+                    if (id == R.id.navigation_home ||
+                        id == R.id.navigation_create ||
+                        id == R.id.navigation_saved)
+                    {
+                        toolbar.setNavigationIcon(null);
+                    }
+
+                });
+        settingsButton =  sideBar.getHeaderView(0).findViewById(R.id.account_settings_button);
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
     }
 
     @Override
