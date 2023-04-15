@@ -123,6 +123,21 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
     }
+    
+    /**
+     * Handle the search query from the user.
+     * 
+     * @post query gets passed to the backend
+     */
+    private void handleSearchQuery() {
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            // TODO: pass the query to the backend
+
+        }
+    }
 
     /**
      * Disables the bottom navigation bar according to the argument "showBottomBar".
