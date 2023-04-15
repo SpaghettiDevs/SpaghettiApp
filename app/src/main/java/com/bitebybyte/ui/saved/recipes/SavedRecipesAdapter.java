@@ -103,7 +103,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
         userService.removeSavedPost(holder.getAdapterPosition());
 
         //Notify the adapter that the data has changed
-        notifyItemChanged(holder.getAdapterPosition());
+        notifyItemRemoved(holder.getAdapterPosition());
 
         //TODO this toast doesn't work. The changes apply after refreshing!
         Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
@@ -127,7 +127,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
             userService.removeSavedPost(holder.getAdapterPosition());
 
             //Notify the adapter that the data has changed
-            notifyItemChanged(holder.getAdapterPosition());
+            notifyItemRemoved(holder.getAdapterPosition());
         });
     }
 
