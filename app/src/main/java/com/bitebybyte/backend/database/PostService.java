@@ -272,6 +272,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
          * @param fragment callback
          */
         public void getPostById(String postId, ServiceablePostFragment fragment) {
+                //TODO: @Sali consider renaming this to inflatePostById as you don't return anything but you do add data to the view
                 DocumentReference postRef = db.collection("posts").document(postId);
                 postRef.get().addOnSuccessListener(documentSnapshot -> {
                         Log.v("Firebase", "Post fetched successfully");
