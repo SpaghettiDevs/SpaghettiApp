@@ -19,7 +19,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -46,7 +45,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Sets the currentUser instance to the currently logged-in user.
      * This method retrieves the user data from Firestore and sets it to the currentUser instance.
      * The method uses a listener to execute code when the Firestore task is completed.
-     *
+     * <p>
      * Should only be called when the user is logged in.
      */
     private void setCurrentUserInstance() {
@@ -65,7 +64,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
 
             // This while loop is used to wait for the task to complete.
             // Normally we would use a listener, but we want this code to block as it's needed for the app to work.
-            while(!task.isComplete()) {
+            while (!task.isComplete()) {
                 // wait for task to complete
             }
 
@@ -98,7 +97,7 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Get user object given userId.
      * This method is async and sends a callback.
      *
-     * @param userId
+     * @param userId   the user id of the user to be fetched
      * @param fragment the callback
      */
     public void getUser(String userId, ServiceableUserFragment fragment) {
@@ -122,8 +121,8 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Get user object given userId.
      * This method is async and sends a callback with the holder to be updated.
      *
-     * @param userId the user id
-     * @param holder this parameter will be updated with the user data.
+     * @param userId   the user id of the user to be fetched
+     * @param holder   this parameter will be updated with the user data.
      * @param fragment the callback
      */
     public void getUser(String userId, HomeFeedAdapter.ViewHolder holder,
@@ -147,8 +146,8 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Get user object given userId.
      * This method is async and sends a callback with the holder to be updated.
      *
-     * @param userId
-     * @param holder this parameter will be updated with the user data.
+     * @param userId   the user id of the user to be fetched
+     * @param holder   this parameter will be updated with the user data.
      * @param fragment the callback
      */
     public void getUser(String userId, PostCommentsAdapter.ViewHolder holder, ServiceableUserFragment fragment) {
@@ -170,8 +169,8 @@ public class UserService implements OnSuccessListener, OnFailureListener {
      * Get user object given userId.
      * This method is async and sends a callback with the holder to be updated.
      *
-     * @param userId
-     * @param holder this parameter will be updated with the user data.
+     * @param userId   the user id of the user to be fetched
+     * @param holder   this parameter will be updated with the user data.
      * @param fragment the callback
      */
     public void getUser(String userId, ViewHolder holder, ServiceableUserFragment fragment) {
@@ -189,33 +188,20 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                 });
     }
 
-    //get the user id from the database with a username.
-    //This method is outdated!
-    public String getUserId(String username) {
-        Map<String, Object> data =  null;
-        Log.e("Local", "This method is outdated");
-        Task<QuerySnapshot> task = db.collection("users")
-            .whereEqualTo("username", username)
-            .get();
-        //wait for the query to finish, since its async.
-        while (!task.isComplete()) {}
-
-        for (QueryDocumentSnapshot document : task.getResult()) {
-            data = document.getData();
-        }
-
-        if(data != null && data.get("userId") != null)
-            return data.get("userId").toString();
-        else
-            return "Unknown user";
-    }
-
-    //get the posts created by the current user from the database.
+    /**
+     * Get the posts the current user has created.
+     *
+     * @return a list of post ids
+     */
     public List<String> getMyPosts() {
         return currentUser.getMyPosts();
     }
 
-    //get the saved posts of the current user from the database.
+    /**
+     * Get the posts the current user has saved.
+     *
+     * @return a list of post ids
+     */
     public List<String> getSavedPosts() {
         return currentUser.getSavedPosts();
     }
@@ -223,40 +209,61 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     /**
      * Checks whether username exists in the database
      *
-     * @param username
+     * @param username the username to be checked
      * @return true if username does not exists in database. False otherwise
      */
-    public boolean usernameCheck(String username) {
-        //query that looks through the users collection and checks the username field
+    public boolean checkIfUsernameInUse(String username) {
+        //Query that looks through the users collection and checks the username field
         Task<QuerySnapshot> task = db.collection(collection)
                 .whereEqualTo("username", username)
                 .get();
 
-        //wait for the query to finish, since its async.
-        while (!task.isComplete()) {}
+        //We have to wait for the task to complete
+        while (!task.isComplete()) {
+            // wait for task to complete
+        }
 
         return task.getResult().isEmpty();
     }
 
-    //updating the posts the user creates
+    /**
+     * Updates the list of posts created by the current user.
+     * If the post already exists in the list, it is removed.
+     * If the list is not empty, the new post is added to the beginning of the list.
+     * If the list is empty, the new post is added to the list.
+     *
+     * @param postId the ID of the post to be added or removed from the list of the user's posts
+     */
     public void updateMyPosts(String postId) {
+        // retrieve the list of posts that the user has created
         List<String> myPosts = getMyPosts();
+
+        // get a reference to the user's document in the Firestore database
         DocumentReference postsRef = db.collection(collection).document(currentUser.getUserId());
+
         if (myPosts.contains(postId)) {
+            // if the post already exists in the list, remove it
             myPosts.remove(postId);
-        } else if (myPosts.size() != 0) { // add(index, element) throws an exception if index out of array bound
-                myPosts.add(0, postId); // add the new post to the to the beginning.
+        } else if (myPosts.size() != 0) {
+            // if the list is not empty, add the new post to the beginning of the list
+            myPosts.add(0, postId);
         } else {
+            // if the list is empty, add the new post to the list
             myPosts.add(postId);
         }
 
+        // update the "myPosts" field of the user's document in the Firestore database with the new list of posts
         postsRef.update("myPosts", myPosts)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }
 
-    private void updateSavedPosts(List<String> savedPosts)
-    {
+    /**
+     * Update the saved posts list of the current user.
+     *
+     * @param savedPosts the new list of saved posts
+     */
+    private void updateSavedPosts(List<String> savedPosts) {
         DocumentReference postsRef = db.collection(collection).document(currentUser.getUserId());
         postsRef.update("savedPosts", savedPosts)
                 .addOnSuccessListener(this)
@@ -266,35 +273,40 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     /**
      * Update saved posts given postId.
      *
-     * @param postId
+     * @param postId the post id to be added or removed from the list of saved posts
      * @return action message (saved / unsaved).
      */
-    public String updateSavedPosts(String postId) {
-        String msg = "";
+    public boolean updateSavedPosts(String postId) {
+        boolean saved = false;
+
         List<String> savedPosts = getSavedPosts();
+
+        //The post is already saved, so we remove it from the list
         if (savedPosts.contains(postId)) {
             savedPosts.remove(postId);
-            msg = "Recipe unsaved";
+            //The post is not saved, so we add it to the list
         } else {
             savedPosts.add(postId);
-            msg = "Recipe saved";
+            saved = true;
         }
+
+        //Update the saved posts list
         updateSavedPosts(savedPosts);
-        return msg;
+
+        return saved;
     }
 
     /**
      * Delete SavedPost on given index.
      *
-     * @param index
-     * @return
+     * @param index the index of the post to be deleted
      */
-    public String updateSavedPosts(int index) {
+    public void removeSavedPost(int index) {
         List<String> savedPosts = getSavedPosts();
         savedPosts.remove(index);
 
+        //Update the saved posts list
         updateSavedPosts(savedPosts);
-        return "Recipe unsaved";
     }
 
     /**
@@ -308,44 +320,63 @@ public class UserService implements OnSuccessListener, OnFailureListener {
         return savedPosts.contains(postId);
     }
 
-    //save a new user to the database
+    /**
+     * Save new user to database.
+     *
+     * @param username the username of the new user
+     * @param userId   the user id of the new user
+     */
     public void saveNewUserToDb(String username, String userId) {
         User user = new User(username, userId);
-        
+
         db.collection(collection)
                 .document(userId).set(user)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }
 
+    /**
+     * Delete user from database.
+     *
+     * @param userId the user id of the user to be deleted
+     */
     public void deleteUser(String userId) {
         DocumentReference docRef = db.collection(collection).document(userId);
 
         //Delete all fields first
-        Map<String,Object> updates = new HashMap<>();
+        Map<String, Object> updates = new HashMap<>();
         updates.put("userId", FieldValue.delete());
         updates.put("username", FieldValue.delete());
         updates.put("myPosts", FieldValue.delete());
         updates.put("savedPosts", FieldValue.delete());
 
-        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                db.collection("users").document(userId).delete();
-            }
-        });
+        docRef.update(updates).addOnCompleteListener(completedTask -> {
+            db.collection("users").document(userId).delete();
+        }).addOnFailureListener(this);
     }
 
-    public void changeUsername(String userId, String newUsername) {
-        if (newUsername.isEmpty() || newUsername.length() > 16) {
-            Log.e("", "Error: username length is empty or longer than 16 characters");
-            return;
+    /**
+     * Change the username of the user.
+     * @pre Username is not already in use
+     * @pre Username length is between 1 and 16 characters
+     * @post Username is changed
+     * @param userId the user id of the user
+     * @param newUsername the new username
+     */
+    public void changeUsername(String userId, String newUsername) throws IllegalArgumentException {
+
+        if(!checkIfUsernameInUse(newUsername)) {
+            throw new IllegalArgumentException("Username is already in use");
+        }
+
+        if(newUsername.length() < 1 || newUsername.length() > 16) {
+            throw new IllegalArgumentException("Username must be between 1 and 16 characters");
         }
 
         DocumentReference docRef = db.collection(collection).document(userId);
 
         //Override old username
-        Map<String,Object> updates = new HashMap<>();
+        Map<String, Object> updates = new HashMap<>();
         updates.put("username", newUsername);
 
         docRef.update(updates);

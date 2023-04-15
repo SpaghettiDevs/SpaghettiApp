@@ -131,15 +131,18 @@ public class PostDetailFragment extends Fragment
     }
 
     private void onBookmarkButtonPressed(View view) {
-        String msg = userService.updateSavedPosts(post.getPostId());
-        Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+        boolean didSave = userService.updateSavedPosts(post.getPostId());
 
-        if (userService.userSavedPost(post.getPostId()))
+        if(didSave) {
             //Update the bookmark icon to be solid if the user has bookmarked the post
             bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_filled_24);
-        else
+            Toast.makeText(this.getContext(), "Post saved", Toast.LENGTH_SHORT).show();
+        } else {
             //Update the bookmark icon to be outline if the user has bookmarked the post
             bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_24dp);
+            Toast.makeText(this.getContext(), "Post unsaved", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void onCommentButtonPressed(View view) {

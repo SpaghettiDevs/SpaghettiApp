@@ -1,6 +1,5 @@
 package com.bitebybyte.ui.saved.recipes;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +100,8 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     private void onDeleteButtonClicked(ViewHolder holder) {
         System.out.println("Delete button clicked");
         // Remove post from saved recipes and display message
-        String msg = userService.updateSavedPosts(holder.getAdapterPosition());
+        userService.removeSavedPost(holder.getAdapterPosition());
+
         //Notify the adapter that the data has changed
         notifyItemChanged(holder.getAdapterPosition());
 
@@ -124,7 +124,8 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
             // Remove post from saved recipes and display message
-            String msg = userService.updateSavedPosts(holder.getAdapterPosition());
+            userService.removeSavedPost(holder.getAdapterPosition());
+
             //Notify the adapter that the data has changed
             notifyItemChanged(holder.getAdapterPosition());
         });

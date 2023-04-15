@@ -102,11 +102,19 @@ public class SettingsActivity extends AppCompatActivity {
             return;
         }
 
-        userService.changeUsername(user.getUid(), username);
-        ((TextView) findViewById(R.id.textViewUsername)).setText(userService.getCurrentUsername());
-        auth.signOut();
-        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-        finish();
+        try {
+            userService.changeUsername(user.getUid(), username);
+            TextView usernameText = findViewById(R.id.textViewUsername);
+
+            usernameText.setText(userService.getCurrentUsername());
+
+            // Sign out the user and redirect to the main activity
+            auth.signOut();
+            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            finish();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
