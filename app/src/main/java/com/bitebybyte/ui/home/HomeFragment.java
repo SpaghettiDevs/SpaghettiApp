@@ -18,7 +18,7 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class HomePostFragment extends Fragment implements ServiceablePostFragment {
+public class HomeFragment extends Fragment implements ServiceablePostFragment {
 
     private RecyclerView feed;
     private PostService postService;

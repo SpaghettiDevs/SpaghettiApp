@@ -23,7 +23,7 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class PostCommentsPostFragment extends Fragment implements ServiceablePostFragment {
+public class PostCommentsFragment extends Fragment implements ServiceablePostFragment {
     private RecyclerView commentsRecycler;
     private PostService postService;
     private FeedPost post;

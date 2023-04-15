@@ -27,7 +27,7 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
-public class PostDetailPostFragment extends Fragment
+public class PostDetailFragment extends Fragment
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private FragmentPostDetailBinding binding;

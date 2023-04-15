@@ -34,7 +34,9 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     public UserService() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        setCurrentUserInstance();
+        if (auth.getCurrentUser() != null) {
+            setCurrentUserInstance();
+        }
     }
 
     private void setCurrentUserInstance() {
