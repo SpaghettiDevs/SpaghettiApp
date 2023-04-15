@@ -8,7 +8,7 @@ import com.bitebybyte.ServiceableUserFragment;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.ui.home.HomeFeedAdapter;
 import com.bitebybyte.ui.post.PostCommentsAdapter;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.ViewHolder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;

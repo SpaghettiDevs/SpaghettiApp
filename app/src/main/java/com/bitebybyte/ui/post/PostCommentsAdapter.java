@@ -195,7 +195,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     }
 
     @Override
-    public void addUserData(User user, com.bitebybyte.ui.saved.ViewHolder viewHolder) {
+    public void addUserData(User user, com.bitebybyte.holders.ViewHolder viewHolder) {
 
     }
 

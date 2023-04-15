@@ -1,4 +1,4 @@
-package com.bitebybyte.ui.saved;
+package com.bitebybyte.holders;
 
 import android.view.View;
 import android.widget.ImageView;

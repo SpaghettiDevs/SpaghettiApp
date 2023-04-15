@@ -178,7 +178,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     }
 
     @Override
-    public void addUserData(User user, com.bitebybyte.ui.saved.ViewHolder viewHolder) {
+    public void addUserData(User user, com.bitebybyte.holders.ViewHolder viewHolder) {
 
     }
 

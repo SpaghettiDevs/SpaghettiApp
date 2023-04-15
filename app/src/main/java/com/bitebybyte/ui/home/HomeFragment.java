@@ -14,7 +14,7 @@ import com.bitebybyte.R;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.ViewHolder;
 
 import java.util.List;
 

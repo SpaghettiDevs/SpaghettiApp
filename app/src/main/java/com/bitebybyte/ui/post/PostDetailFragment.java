@@ -23,7 +23,7 @@ import com.bitebybyte.backend.models.User;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ui.home.HomeFeedAdapter;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.ViewHolder;
 
 import java.util.List;
 
