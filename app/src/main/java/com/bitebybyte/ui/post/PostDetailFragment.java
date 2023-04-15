@@ -41,12 +41,10 @@ public class PostDetailFragment extends Fragment
     private TextView author;
     private TextView likeAmount;
     private TextView commentAmount;
-    private ImageView authorImage;
     private ImageView likeIcon;
     private ImageView commentIcon;
     private ImageView bookmarkIcon;
     private TextView addComment;
-
     private NavController navController;
 
     private PostService postService;
@@ -106,7 +104,6 @@ public class PostDetailFragment extends Fragment
         commentAmount = view.findViewById(R.id.post_detail_comment_amount);
 
         //Find the image-inputs
-        authorImage = view.findViewById(R.id.post_detail_author_picture);
         likeIcon = view.findViewById(R.id.post_detail_likes_icon);
         commentIcon = view.findViewById(R.id.post_detail_comment_icon);
         bookmarkIcon = view.findViewById(R.id.post_detail_bookmark_icon);
