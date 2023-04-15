@@ -1,7 +1,7 @@
 package com.bitebybyte;
 
 import com.bitebybyte.backend.models.FeedPost;
-import com.bitebybyte.holders.SavedViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface ServiceablePostFragment {
 
     void addDataToView(FeedPost post);
 
-    void addDataToView(FeedPost post, SavedViewHolder holder);
+    void addDataToView(FeedPost post, AbstractViewHolder holder);
 
     void getListOfPosts(List<FeedPost> posts);
 }

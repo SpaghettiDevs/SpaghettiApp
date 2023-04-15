@@ -22,9 +22,7 @@ import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
-import com.bitebybyte.holders.CommentsViewHolder;
-import com.bitebybyte.holders.HomeFeedViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 
 import java.util.List;
 
@@ -83,7 +81,7 @@ public class PostDetailFragment extends Fragment
         commentIcon.setOnClickListener(this::onCommentButtonPressed);
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
-        postService.getPostById(postId, this);
+        postService.inflatePostById(postId, this);
 
         return root;
     }
@@ -189,7 +187,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addDataToView(FeedPost post, SavedViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
 
     }
 
@@ -204,17 +202,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, CommentsViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, SavedViewHolder viewHolder) {
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
 
     }
 }

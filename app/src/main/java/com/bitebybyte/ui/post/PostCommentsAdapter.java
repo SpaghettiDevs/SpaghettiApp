@@ -15,9 +15,8 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
+import com.bitebybyte.holders.AbstractViewHolder;
 import com.bitebybyte.holders.CommentsViewHolder;
-import com.bitebybyte.holders.HomeFeedViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
@@ -184,19 +183,10 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
     }
 
     @Override
-    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
-
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
+        viewHolder.getPostAuthor().setText(user.getUsername());
     }
 
-    @Override
-    public void addUserData(User user, CommentsViewHolder viewHolder) {
-        viewHolder.getAuthorName().setText(user.getUsername());
-    }
-
-    @Override
-    public void addUserData(User user, SavedViewHolder viewHolder) {
-
-    }
 }
 
 

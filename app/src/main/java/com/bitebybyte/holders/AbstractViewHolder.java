@@ -14,6 +14,7 @@ public abstract class AbstractViewHolder extends RecyclerView.ViewHolder{
     protected TextView postCookingTime;
     protected ImageView postImage;
     protected ImageView postAuthorImage;
+    protected ImageView deletePostButton;
 
     public AbstractViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -37,5 +38,9 @@ public abstract class AbstractViewHolder extends RecyclerView.ViewHolder{
 
     public ImageView getPostAuthorImage() {
         return postAuthorImage;
+    }
+
+    public ImageView getDeletePostButton() {
+        return deletePostButton;
     }
 }

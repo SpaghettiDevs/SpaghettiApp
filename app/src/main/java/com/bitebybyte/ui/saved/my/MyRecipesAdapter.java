@@ -15,8 +15,7 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
-import com.bitebybyte.holders.CommentsViewHolder;
-import com.bitebybyte.holders.HomeFeedViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
@@ -66,7 +65,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      */
     @Override
     public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
-        postService.getPostById(postIds.get(position), this, holder);
+        postService.inflatePostById(postIds.get(position), this, holder);
     }
 
     /**
@@ -92,7 +91,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      * @param holder The ViewHolder that should be updated to represent the contents of the item at the given position in the data set
      */
     @Override
-    public void addDataToView(FeedPost post, SavedViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
         // TODO: Handle case where post has been deleted by moderator in Firebase
         //  -- Then the post doesn't exist so we don't even get here right? -Tristan
         holder.getPostTitle().setText(post.getTitle());
@@ -136,17 +135,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
     }
 
     @Override
-    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, CommentsViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, SavedViewHolder viewHolder) {
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }

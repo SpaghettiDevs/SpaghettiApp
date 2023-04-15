@@ -15,8 +15,7 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
-import com.bitebybyte.holders.CommentsViewHolder;
-import com.bitebybyte.holders.HomeFeedViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
-        postService.getPostById(postIds.get(position), this, holder);
+        postService.inflatePostById(postIds.get(position), this, holder);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
     }
 
     @Override
-    public void addDataToView(FeedPost post, SavedViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
         if (post == null) {
             // Display message for deleted post
             deletedPost(holder);
@@ -88,7 +87,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         //TODO: Load user profile image from firebase if it is set
 
         // Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked(holder));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder));
     }
 
     /**
@@ -114,7 +113,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      *
      * @param holder the view holder for the deleted post
      */
-    private void deletedPost(SavedViewHolder holder) {
+    private void deletedPost(AbstractViewHolder holder) {
         // Display message for deleted post
         holder.getPostTitle().setText("Deleted post");
         holder.getPostAuthor().setText("");
@@ -142,17 +141,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
     }
 
     @Override
-    public void addUserData(User user, HomeFeedViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, CommentsViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, SavedViewHolder viewHolder) {
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }
