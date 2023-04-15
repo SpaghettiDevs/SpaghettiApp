@@ -149,7 +149,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     private void setLikeButtonAppearance(ViewHolder holder, FeedPost post) {
         holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
 
-        if (postService.hasLikedPost(post)) {
+        if (postService.hasLikedContent(post)) {
             holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
         } else {
             holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);

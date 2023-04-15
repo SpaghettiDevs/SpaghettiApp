@@ -171,7 +171,7 @@ public class PostDetailFragment extends Fragment
         bookmarkIcon.setOnClickListener(this::onBookmarkButtonPressed);
 
         //Check if this user has liked the post on load
-        if (postService.hasLikedPost(post))
+        if (postService.hasLikedContent(post))
             //Update the like icon to be solid if the user has liked the post
             likeIcon.setImageResource(R.drawable.baseline_favorite_24);
         else

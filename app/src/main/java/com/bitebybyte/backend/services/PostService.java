@@ -392,20 +392,22 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      */
     public void deleteComment(List<Comment> comments, String postId, int index) {
         DocumentReference postRef = db.collection("posts").document(postId);
-        comments.remove(index);
+        if (index < comments.size()) {
+            comments.remove(index);
+        }
         postRef.update("comments", comments)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
     }
 
     /**
-     * Checks if the current user has liked the post.
+     * Checks if the current user has liked the content (post / comment).
      *
-     * @param post The post to check.
+     * @param content The content to check.
      * @return True if the current user has liked the post, false otherwise.
      */
-    public boolean hasLikedPost(AbstractContent post) {
-        return post.getLikes().containsKey(auth.getCurrentUser().getUid());
+    public boolean hasLikedContent(AbstractContent content) {
+        return content.getLikes().containsKey(auth.getCurrentUser().getUid());
     }
 
 

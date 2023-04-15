@@ -77,6 +77,13 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
 
         holder.getDeleteButton().setOnClickListener(v -> onDeleteButtonClicked(holder, position));
         holder.getLikeButton().setOnClickListener(v -> onLikeButtonClicked(holder, comment, position));
+
+        if (postService.hasLikedContent(comment))
+            //Update the like icon to be solid if the user has liked the post
+            holder.getLikeButton().setImageResource(R.drawable.baseline_favorite_24);
+        else
+            //Update the like icon to be outline if the user has liked the post
+            holder.getLikeButton().setImageResource(R.drawable.round_favorite_border_24);
     }
 
     /**
@@ -155,18 +162,16 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param position the position of the comment in the adapter's list
      */
     private void onLikeButtonClicked(ViewHolder holder, Comment comment, int position) {
-        int oldLikes = comment.getLikes().size();
         postService.updateLikes(comments, post.getPostId(), position);
-        int newLikes = comment.getLikes().size();
 
-        if (oldLikes < newLikes)
+        if (postService.hasLikedContent(comment))
             //Update the like icon to be solid if the user has liked the post
             holder.getLikeButton().setImageResource(R.drawable.baseline_favorite_24);
         else
             //Update the like icon to be outline if the user has liked the post
             holder.getLikeButton().setImageResource(R.drawable.round_favorite_border_24);
 
-        holder.getLikesCount().setText(String.valueOf(newLikes));
+        setCommentLikesCount(holder, comment);
     }
 
     @Override
