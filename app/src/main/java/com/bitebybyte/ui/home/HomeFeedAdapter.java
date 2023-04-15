@@ -53,64 +53,109 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         FeedPost post = posts.get(position);
+
+        // Set the post title
         holder.getPostTitle().setText(post.getTitle());
 
-        //Get the username and user image
-        userService.getUser(post.getIdOwner(), holder, this);
+        // Get the username and user image
+        loadUserData(holder, post);
 
-        //Creating correct date
-        String completeDate = postService.dateFormat(post.getDate());
-        holder.getPostTimeStamp().setText(completeDate);
-        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
+        // Set the post timestamp and cooking time
+        setPostDetails(holder, post);
 
-        //Load in the amount of comments
-        holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
-        //Load in the image
-        postService.loadImage(holder.getPostImage(), post.getPostId());
+        // Load the post image and set the number of comments
+        setPostImageAndComments(holder, post);
 
-        //set the likes when the post is loaded
-        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+        // Set the number of likes and the like button's appearance
+        setLikeButtonAppearance(holder, post);
 
-        //check if this user has liked the post
-        if (postService.hasLikedPost(post))
+        // Update the likes when someone presses the like button
+        holder.getPostLikeButton().setOnClickListener(event -> onLikeButtonClicked(holder, post));
+
+        // Navigate to the post detail page when the user clicks on the post title or image
+        holder.getPostTitle().setOnClickListener(event -> navigateToPostDetail(post.getPostId()));
+        holder.getPostImage().setOnClickListener(event -> navigateToPostDetail(post.getPostId()));
+    }
+
+
+    /**
+     * Navigate to the post detail page for the given post.
+     * @param postId The ID of the post to navigate to
+     */
+    private void navigateToPostDetail(String postId) {
+        NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail(postId);
+        navController.navigate(action);
+    }
+
+    /**
+     * Set the number of likes and the like button's appearance for the given post.
+     * @param holder The ViewHolder to be updated
+     * @param post The post to set the like button appearance for
+     */
+    private void onLikeButtonClicked(ViewHolder holder, FeedPost post) {
+        int oldLikes = post.getLikes().size();
+        postService.updateLikes(post);
+        int newLikes = post.getLikes().size();
+
+        holder.getPostLikesAmount().setText(newLikes);
+
+        if (oldLikes < newLikes)
             //Update the like icon to be solid if the user has liked the post
             holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
         else
             //Update the like icon to be outline if the user has liked the post
             holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);
-
-        //update the likes when someone presses the like button
-        holder.getPostLikeButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int oldLikes = post.getLikes().size();
-                postService.updateLikes(post);
-                int newLikes = post.getLikes().size();
-
-                holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
-
-                if (oldLikes < newLikes)
-                    //Update the like icon to be solid if the user has liked the post
-                    holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
-                else
-                    //Update the like icon to be outline if the user has liked the post
-                    holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);
-            }
-        });
-
-        holder.getPostTitle().setOnClickListener(event -> {
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail(post.getPostId());
-            navController.navigate(action);
-        });
-
-        holder.getPostImage().setOnClickListener(event -> {
-            NavDirections action = HomeFragmentDirections.actionNavigationHomeToPostDetail(post.getPostId());
-            navController.navigate(action);
-        });
     }
 
-    // For now, display 25 posts in the recycler view
+    /**
+     * Load the user data for the given post.
+     *
+     * @param holder The ViewHolder to be updated
+     * @param post   The post to load the user data for
+     */
+    private void loadUserData(ViewHolder holder, FeedPost post) {
+        userService.getUser(post.getIdOwner(), holder, this);
+    }
+
+    /**
+     * Set the post details (timestamp and cooking time) for the given post.
+     *
+     * @param holder The ViewHolder to be updated
+     * @param post   The post to set the details for
+     */
+    private void setPostDetails(ViewHolder holder, FeedPost post) {
+        String completeDate = postService.dateFormat(post.getDate());
+        holder.getPostTimeStamp().setText(completeDate);
+        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
+    }
+
+    /**
+     * Load the post image and set the number of comments for the given post.
+     *
+     * @param holder The ViewHolder to be updated
+     * @param post   The post to set the image and comments for
+     */
+    private void setPostImageAndComments(ViewHolder holder, FeedPost post) {
+        holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
+        postService.loadImage(holder.getPostImage(), post.getPostId());
+    }
+
+    /**
+     * Set the number of likes and the like button's appearance for the given post.
+     *
+     * @param holder The ViewHolder to be updated
+     * @param post   The post to set the likes and like button for
+     */
+    private void setLikeButtonAppearance(ViewHolder holder, FeedPost post) {
+        holder.getPostLikesAmount().setText(Integer.toString(post.getLikes().size()));
+
+        if (postService.hasLikedPost(post)) {
+            holder.getPostLikeButton().setImageResource(R.drawable.baseline_favorite_24);
+        } else {
+            holder.getPostLikeButton().setImageResource(R.drawable.round_favorite_border_24);
+        }
+    }
+
     @Override
     public int getItemCount()
     {

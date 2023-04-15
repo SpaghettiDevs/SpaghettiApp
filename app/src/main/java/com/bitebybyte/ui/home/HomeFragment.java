@@ -18,25 +18,39 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
+/**
+ * This class represents the Home Fragment, which displays the user's feed of posts
+ * and allows the user to interact with the posts by liking them or clicking on them
+ */
 public class HomeFragment extends Fragment implements ServiceablePostFragment {
 
     private RecyclerView feed;
     private PostService postService;
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        // store the fragment_home.xml as a view
+
+    /**
+     * Creates the view of the Home Fragment and sets up the recycler view and post service
+     * @param inflater The layout inflater to inflate the fragment_home.xml
+     * @param container The view group of the container that holds this fragment
+     * @param savedInstanceState The saved instance state of the fragment
+     * @return The view of the Home Fragment
+     */
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Store the fragment_home.xml as a view
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Create a new Post Service to handle the posts
         postService = new PostService();
 
+        // Find the recycler view for the feed and set it up
         feed = view.findViewById(R.id.home_feed);
         feed.setHasFixedSize(true);
-
-        // display the posts linearly
         feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
+        // Get all the posts and add them to the recycler view
         postService.getAllPosts(this);
-        
-        // use ItemDecoration to get consistent margins inbetween items
+
+        // Add item decoration to the recycler view to get consistent margins between items
         HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
         feed.addItemDecoration(decoration);
 
