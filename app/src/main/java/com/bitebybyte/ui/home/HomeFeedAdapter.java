@@ -97,7 +97,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedAdapter.ViewHo
         postService.updateLikes(post);
         int newLikes = post.getLikes().size();
 
-        holder.getPostLikesAmount().setText(newLikes);
+        holder.getPostLikesAmount().setText(String.valueOf(newLikes));
 
         if (oldLikes < newLikes)
             //Update the like icon to be solid if the user has liked the post

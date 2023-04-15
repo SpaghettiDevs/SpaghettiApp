@@ -105,6 +105,12 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         // Clear the input field and show a message
         commentInput.setText("");
         Toast.makeText(this.getContext(), "Comment Posted", Toast.LENGTH_SHORT).show();
+
+        // Close the keyboard
+        commentInput.clearFocus();
+
+        //Notify the adapter that the data has changed
+        commentsRecycler.getAdapter().notifyItemInserted(post.getComments().size() - 1);
     }
 
     @Override

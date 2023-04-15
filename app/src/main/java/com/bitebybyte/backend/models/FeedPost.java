@@ -11,10 +11,20 @@ import java.util.List;
 public class FeedPost extends AbstractContent{
     private final String images; //Currently only one image
     private final List<String> labels;
-    private final String title;
-    private final Recipe recipe;
+    private String title;
+    private Recipe recipe;
     private List<Comment> comments;
 
+
+    /**
+     * No-arg constructor for Firebase
+     */
+    public FeedPost() {
+        super();
+        labels = new ArrayList<>();
+        images = this.postId; /// Design decision. Post and image associated with post are strongly coupled!!
+        comments = new ArrayList<>();
+    }
 
     /**
 

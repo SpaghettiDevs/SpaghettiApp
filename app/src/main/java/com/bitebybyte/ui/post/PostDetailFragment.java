@@ -127,7 +127,7 @@ public class PostDetailFragment extends Fragment
             //Update the like icon to be outline if the user has liked the post
             likeIcon.setImageResource(R.drawable.round_favorite_border_24);
 
-        likeAmount.setText(newLikes);
+        likeAmount.setText(String.valueOf(newLikes));
     }
 
     private void onBookmarkButtonPressed(View view) {

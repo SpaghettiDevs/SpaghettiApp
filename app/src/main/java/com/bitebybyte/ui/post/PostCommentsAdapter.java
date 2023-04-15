@@ -130,7 +130,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      */
     private void setCommentLikesCount(ViewHolder holder, Comment comment) {
         int likesCount = comment.getLikes().size();
-        holder.getLikesCount().setText(likesCount);
+        holder.getLikesCount().setText(String.valueOf(likesCount));
     }
 
     /**
@@ -142,6 +142,9 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     private void onDeleteButtonClicked(ViewHolder holder, int position) {
         postService.deleteComment(comments, post.getPostId(), position);
         Toast.makeText(holder.content.getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
+
+        //Refresh the comments list
+        notifyItemRemoved(position);
     }
 
     /**
@@ -152,9 +155,18 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
      * @param position the position of the comment in the adapter's list
      */
     private void onLikeButtonClicked(ViewHolder holder, Comment comment, int position) {
+        int oldLikes = comment.getLikes().size();
         postService.updateLikes(comments, post.getPostId(), position);
-        int likesCount = comment.getLikes().size();
-        holder.getLikesCount().setText(likesCount);
+        int newLikes = comment.getLikes().size();
+
+        if (oldLikes < newLikes)
+            //Update the like icon to be solid if the user has liked the post
+            holder.getLikeButton().setImageResource(R.drawable.baseline_favorite_24);
+        else
+            //Update the like icon to be outline if the user has liked the post
+            holder.getLikeButton().setImageResource(R.drawable.round_favorite_border_24);
+
+        holder.getLikesCount().setText(String.valueOf(newLikes));
     }
 
     @Override
@@ -181,6 +193,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsAdapte
     public void addUserData(User user, com.bitebybyte.ui.saved.ViewHolder viewHolder) {
 
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView content;

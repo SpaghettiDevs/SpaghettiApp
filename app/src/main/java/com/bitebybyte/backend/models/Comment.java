@@ -14,7 +14,14 @@ public class Comment extends AbstractContent{
     List<Comment> comments;
 
     /**
+     * No-arg constructor for Firebase
+     */
+    public Comment() {
+        super();
+        comments = new ArrayList<>();
+    }
 
+    /**
      Constructs a new Comment object with the specified values for all properties.
      @param idOwner the ID of the user who created the comment
      @param content the content of the comment

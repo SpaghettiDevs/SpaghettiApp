@@ -19,6 +19,7 @@ public abstract class AbstractContent {
 
     /**
      * Constructs a new AbstractContent object with default values for all properties.
+     * Required for Firebase.
      */
     public AbstractContent() {
     }

@@ -206,7 +206,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         // Get the formatted string representing the elapsed time
         String elapsed = getElapsed(difference);
         // Return the final formatted string
-        return "Posted: " + elapsed + " ago";
+        return "" + elapsed + " ago";
     }
 
     /**
