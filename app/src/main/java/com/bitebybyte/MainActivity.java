@@ -34,10 +34,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseAuth        auth;
+    private FirebaseAuth auth;
     private UserService userService;
-    private Toolbar             toolbar;
-    private NavController        navController;
+    private Toolbar toolbar;
+    private NavController navController;
     private BottomNavigationView bottomNavigationView;
 
     private DrawerLayout drawerLayout;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Initializes the activity and sets up the UI components.
+     *
      * @param savedInstanceState Saved instance state
      */
     @Override
@@ -114,18 +115,15 @@ public class MainActivity extends AppCompatActivity {
      * Sets up the settings button.
      */
     private void setupSettingsButton() {
-        ImageButton settingsButton = sideBar.getHeaderView(0).findViewById(R.id.account_settings_button);
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
+        View headerView = sideBar.getHeaderView(0);
+        headerView.setOnClickListener(event -> {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
     }
 
     /**
      * Disables the bottom navigation bar according to the argument "showBottomBar".
+     *
      * @param navController Navigation controller for the activity
      */
     private void disableBottomBar(NavController navController) {
@@ -133,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
             boolean showBottomBar = true; // show bottomBar by default
 
             // Update showBottomBar if it is specified in the navigation graph
-            if (arguments != null && arguments.containsKey("showBottomBar"))
-            {
+            if (arguments != null && arguments.containsKey("showBottomBar")) {
                 showBottomBar = arguments.getBoolean("showBottomBar");
             }
             bottomNavigationView.setVisibility(showBottomBar ? View.VISIBLE : View.GONE);
@@ -143,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Removes the hamburger icon when on a top level fragment.
+     *
      * @param navController Navigation controller for the activity
      */
     private void removeHamburgerIcon(NavController navController) {
@@ -152,8 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (id == R.id.navigation_home ||
                             id == R.id.navigation_create ||
-                            id == R.id.navigation_saved)
-                    {
+                            id == R.id.navigation_saved) {
                         toolbar.setNavigationIcon(null);
                     }
 
@@ -162,18 +159,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        if (item.getItemId() == R.id.app_bar_settings)
-        {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.app_bar_settings) {
             drawerLayout.openDrawer(GravityCompat.END);
         }
         return super.onOptionsItemSelected(item);
