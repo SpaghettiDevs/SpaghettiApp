@@ -21,61 +21,108 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying a list of user's saved recipes.
+ */
 public class MyRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
-    private List<String> postIds;
-    private PostService postService;
-    private UserService userService;
+    private final List<String> postIds;
+    private final PostService postService;
+    private final UserService userService;
 
+    /**
+     * Constructor for MyRecipesAdapter.
+     *
+     * @param postIds List of post IDs to be displayed in the adapter
+     */
     MyRecipesAdapter(List<String> postIds) {
         this.postIds = postIds;
         postService = new PostService();
         userService = new UserService();
     }
 
+    /**
+     * Inflates the layout for each list item in the adapter.
+     *
+     * @param parent   The ViewGroup into which the new View will be added
+     * @param viewType The type of the new view
+     * @return The new ViewHolder
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_saved, parent, false);
 
         return new ViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in the data set
+     * @param position The position of the item within the adapter's data set
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         postService.getPostById(postIds.get(position), this, holder);
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The total number of items in this adapter
+     */
     @Override
     public int getItemCount() {
         return postIds.size();
     }
 
+
     @Override
     public void addDataToView(FeedPost post) {
-
+        //Not used yet
     }
 
+    /**
+     * Adds data to the ViewHolder for the given post.
+     *
+     * @param post   The FeedPost object to be added to the view
+     * @param holder The ViewHolder that should be updated to represent the contents of the item at the given position in the data set
+     */
     @Override
     public void addDataToView(FeedPost post, ViewHolder holder) {
-
-        //TODO what happens if this post was deleted by moderator (firebase)
-
+        // TODO: Handle case where post has been deleted by moderator in Firebase
+        //  -- Then the post doesn't exist so we don't even get here right? -Tristan
         holder.getPostTitle().setText(post.getTitle());
         userService.getUser(post.getIdOwner(), holder, this);
-        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
-        postService.loadImage(holder.getPostImage(), post.getPostId());
-        //TODO: Load user profile image from firebase if it is set
 
-        //Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> {
-            System.out.println("Delete button clicked");
-            postService.deletePost(post.getPostId());
-            Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
-        });
+        // Set the preparation time test
+        int preparationTime = post.getRecipe().getPreparationTime();
+        String preparationTimeScale = post.getRecipe().getPreparationTimeScale();
+
+        holder.getPostCookingTime().setText(String.format("%d %s", preparationTime, preparationTimeScale));
+
+        // Load post image
+        postService.loadImage(holder.getPostImage(), post.getPostId());
+
+        // Set delete button listener
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked(holder, post));
+    }
+
+    /**
+     * Called when the delete button is clicked for a post in the adapter.
+     * Deletes the post from the database and displays a toast message.
+     * @param holder The ViewHolder for the post being deleted
+     * @param post   The FeedPost object for the post being deleted
+     */
+    private void onDeleteButtonClicked(ViewHolder holder, FeedPost post) {
+        postService.deletePost(post.getPostId());
+        Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
+
+        //Notifies the adapter that the data has changed
+        notifyItemRemoved(holder.getAdapterPosition());
     }
 
     @Override

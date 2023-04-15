@@ -22,13 +22,20 @@ import com.bitebybyte.ui.saved.ViewHolder;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying a list of user's saved recipes.
+ */
 public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
-    private List<String> postIds;
-    private PostService postService;
-    private UserService userService;
+    private final List<String> postIds;
+    private final PostService postService;
+    private final UserService userService;
 
+    /**
+     * Constructor for SavedRecipesAdapter.
+     * @param postIds List of post IDs to be displayed in the adapter
+     */
     SavedRecipesAdapter(List<String> postIds) {
         this.postIds = postIds;
         postService = new PostService();
@@ -62,41 +69,64 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
 
     @Override
     public void addDataToView(FeedPost post, ViewHolder holder) {
-
         if (post == null) {
-            Log.e("addDataToView", "Post at this positon doesn't exist (position unknown)");
-            this.deletedPost(holder);
+            // Display message for deleted post
+            deletedPost(holder);
             return;
         }
 
+        // Display post data
         holder.getPostTitle().setText(post.getTitle());
         userService.getUser(post.getIdOwner(), holder, this);
-        holder.getPostCookingTime().setText(String.format("%d %s", post.getRecipe().getPreparationTime(), post.getRecipe().getPreparationTimeScale()));
+
+        int cookingTime = post.getRecipe().getPreparationTime();
+        String cookingTimeScale = post.getRecipe().getPreparationTimeScale();
+
+        holder.getPostCookingTime().setText(String.format("%d %s", cookingTime, cookingTimeScale));
 
         postService.loadImage(holder.getPostImage(), post.getPostId());
+
         //TODO: Load user profile image from firebase if it is set
 
-        //Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> {
-            System.out.println("Delete button clicked");
-            String msg = userService.updateSavedPosts(post.getPostId());
-            Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
-            //TODO this toast doesn't work. The changes apply after refreshing!
-        });
+        // Add delete button listener
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked(holder));
     }
 
+    /**
+     * Handles the delete button click.
+     * Removes the post from the saved recipes list.
+     * Displays a message to the user.
+     * @param holder the view holder for the deleted post
+     */
+    private void onDeleteButtonClicked(ViewHolder holder) {
+        System.out.println("Delete button clicked");
+        // Remove post from saved recipes and display message
+        String msg = userService.updateSavedPosts(holder.getAdapterPosition());
+        //Notify the adapter that the data has changed
+        notifyItemChanged(holder.getAdapterPosition());
+
+        //TODO this toast doesn't work. The changes apply after refreshing!
+        Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Displays message for deleted post.
+     *
+     * @param holder the view holder for the deleted post
+     */
     private void deletedPost(ViewHolder holder) {
+        // Display message for deleted post
         holder.getPostTitle().setText("Deleted post");
         holder.getPostAuthor().setText("");
         holder.getPostCookingTime().setText("That's sad!");
 
+        // Add delete button listener
         holder.getDeletePostButton().setOnClickListener(v -> {
             System.out.println("Delete button clicked");
+            // Remove post from saved recipes and display message
             String msg = userService.updateSavedPosts(holder.getAdapterPosition());
-            //Toast.makeText(holder.getDeletePostButton().getContext(), msg, Toast.LENGTH_SHORT);
-
-            //TODO refresh here or the rest of the saved recipes will bug.
-            //TODO this toast doesn't work. The changes apply after refreshing!
+            //Notify the adapter that the data has changed
+            notifyItemChanged(holder.getAdapterPosition());
         });
     }
 
