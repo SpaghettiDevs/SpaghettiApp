@@ -11,16 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bitebybyte.backend.database.UserService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.bitebybyte.backend.services.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -47,94 +43,185 @@ public class SettingsActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         userService = new UserService();
 
+        setupUI();
+        fillInUI();
+        setupListeners();
+    }
+
+    /**
+     * Fills in the UI with the current user's information
+     * If the user is null, the activity is finished.
+     */
+    private void fillInUI () {
         if (user != null) {
-            ((TextView)findViewById(R.id.textViewEmail)).setText(user.getEmail());
-            ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
+            ((TextView) findViewById(R.id.textViewEmail)).setText(user.getEmail());
+            ((TextView) findViewById(R.id.textViewUsername)).setText(userService.getCurrentUsername());
             currentEmail = user.getEmail();
         } else {
             Toast.makeText(getApplicationContext(), "Error: current user can not be loaded", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
 
 
+    /**
+     * Sets up the UI
+     */
+    private void setupUI() {
         emailText = findViewById(R.id.change_email_text);
         emailButton = findViewById(R.id.change_email_button);
         usernameText = findViewById(R.id.change_username_text);
         usernameButton = findViewById(R.id.change_username_button);
         passwordButton = findViewById(R.id.reset_password);
         deleteAccountButton = findViewById(R.id.delete_account);
+    }
 
-        usernameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameText.getText().toString().trim();
+    /**
+     * Sets up the listeners
+     */
+    private void setupListeners() {
+        usernameButton.setOnClickListener(this::onUsernameButtonClicked);
+        emailButton.setOnClickListener(this::onEmailButtonClicked);
+        passwordButton.setOnClickListener(this::onPasswordButtonClicked);
+        deleteAccountButton.setOnClickListener(this::onDeleteButtonClicked);
+    }
 
-                if (!username.isEmpty() && username.length() <= 16) {
-                    userService.changeUsername(user.getUid(), username);
-                    ((TextView)findViewById(R.id.textViewUsername)).setText(userService.getUsername());
-                    auth.signOut();
-                    startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    usernameText.setError("Username length min = 1 and max = 16");
-                }
+    /**
+     * On click handler for the change username button
+     * Changes the username of the user
+     * Signs the user out and redirects to the main activity.
+     * @param v the view that was clicked
+     */
+    private void onUsernameButtonClicked(View v) {
+        String username = usernameText.getText().toString().trim();
+
+        if(!usernameIsValid(username)) {
+            return;
+        }
+
+        try {
+            userService.changeUsername(user.getUid(), username);
+            TextView usernameText = findViewById(R.id.textViewUsername);
+
+            usernameText.setText(userService.getCurrentUsername());
+
+            // Sign out the user and redirect to the main activity
+            auth.signOut();
+            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            finish();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Checks if the username is valid
+     * Rules:
+     * - Username must be between 1 and 16 characters long
+     * - Username must not be empty
+     * @param username the username to check
+     * @return true if the username is valid, false otherwise
+     */
+    private boolean usernameIsValid(String username) {
+        if (username.isEmpty()) {
+            usernameText.setError("Username cannot be empty");
+            return false;
+        }
+
+        if(username.length() > 16) {
+            usernameText.setError("Username must be in between 1 and 16 characters long");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * On click handler for the change email button
+     * Changes the email of the user
+     * Sends a verification email to the new email
+     * Signs the user out and redirects to the main activity
+     *
+     * @param v the view that was clicked
+     */
+    private void onEmailButtonClicked(View v) {
+        String email = emailText.getText().toString().trim();
+
+        if (!emailIsValid(email)) {
+            return;
+        }
+
+        user.updateEmail(email).addOnCompleteListener(completedTask -> {
+            if (completedTask.isSuccessful()) {
+                user.sendEmailVerification();
+                auth.signOut();
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                finish();
             }
         });
+    }
 
-        emailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailText.getText().toString().trim();
+    /**
+     * Checks if the email is valid
+     * Rules:
+     * - Email must be between 1 and 32 characters long
+     * - Email must not be empty
+     * - Email must contain an @
+     * - Email must contain a .
+     * @param email the email to check
+     * @return true if the email is valid, false otherwise
+     */
+    private boolean emailIsValid(String email) {
+        if (email.isEmpty()) {
+            emailText.setError("Email cannot be empty");
+            return false;
+        }
 
-                if(!email.isEmpty()) {
-                    user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                user.sendEmailVerification();
-                                auth.signOut();
-                                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-                                finish();
-                            }
-                        }
-                    });
-                } else {
-                    emailText.setError("Email cannot be empty");
-                    return;
-                }
+        if (!email.contains("@")) {
+            emailText.setError("Email must contain an @");
+            return false;
+        }
+
+        if (!email.contains(".")) {
+            emailText.setError("Email must contain a .");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * On click handler for the reset password button
+     * Sends a password reset email to the user
+     * Signs the user out and redirects to the main activity
+     *
+     * @param v the view that was clicked
+     */
+    private void onPasswordButtonClicked(View v) {
+        auth.sendPasswordResetEmail(currentEmail).addOnCompleteListener(completedTask -> {
+            if (completedTask.isSuccessful()) {
+                auth.signOut();
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                finish();
             }
         });
+    }
 
-        passwordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.sendPasswordResetEmail(currentEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            auth.signOut();
-                            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    }
-                });
-            }
-        });
-
-        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userService.deleteUser(user.getUid());
-                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            auth.signOut();
-                            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    }
-                });
+    /**
+     * On click handler for the delete account button
+     * Deletes the user from the database and the authentication
+     * Signs the user out and redirects to the main activity
+     *
+     * @param v the view that was clicked
+     */
+    private void onDeleteButtonClicked(View v) {
+        userService.deleteUser(user.getUid());
+        user.delete().addOnCompleteListener(completedTask -> {
+            if (completedTask.isSuccessful()) {
+                auth.signOut();
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                finish();
             }
         });
     }
