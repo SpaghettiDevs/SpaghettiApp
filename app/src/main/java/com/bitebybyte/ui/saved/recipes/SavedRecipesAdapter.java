@@ -9,22 +9,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ServiceableUserFragment;
+import com.bitebybyte.backend.models.FeedPost;
+import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
-import com.bitebybyte.backend.models.FeedPost;
-import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.backend.models.User;
-import com.bitebybyte.ui.home.HomeFeedAdapter;
-import com.bitebybyte.ui.post.PostCommentsAdapter;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 
 import java.util.List;
 
 /**
  * Adapter for displaying a list of user's saved recipes.
  */
-public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
+public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private final List<String> postIds;
@@ -43,17 +42,17 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SavedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_saved, parent, false);
 
-        return new ViewHolder(view);
+        return new SavedViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        postService.getPostById(postIds.get(position), this, holder);
+    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+        postService.inflatePostById(postIds.get(position), this, holder);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
         if (post == null) {
             // Display message for deleted post
             deletedPost(holder);
@@ -88,7 +87,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
         //TODO: Load user profile image from firebase if it is set
 
         // Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked(holder));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder));
     }
 
     /**
@@ -97,7 +96,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
      * Displays a message to the user.
      * @param holder the view holder for the deleted post
      */
-    private void onDeleteButtonClicked(ViewHolder holder) {
+    private void onDeleteButtonClicked(SavedViewHolder holder) {
         System.out.println("Delete button clicked");
         // Remove post from saved recipes and display message
         userService.removeSavedPost(holder.getAdapterPosition());
@@ -114,7 +113,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
      *
      * @param holder the view holder for the deleted post
      */
-    private void deletedPost(ViewHolder holder) {
+    private void deletedPost(AbstractViewHolder holder) {
         // Display message for deleted post
         holder.getPostTitle().setText("Deleted post");
         holder.getPostAuthor().setText("");
@@ -142,17 +141,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<ViewHolder>
     }
 
     @Override
-    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, ViewHolder viewHolder) {
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }

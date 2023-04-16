@@ -14,7 +14,7 @@ import com.bitebybyte.R;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements ServiceablePostFragment {
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
 
     }
 

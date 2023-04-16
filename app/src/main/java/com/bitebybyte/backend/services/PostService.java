@@ -13,7 +13,8 @@ import com.bitebybyte.backend.models.Comment;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.Recipe;
 import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
+import com.bitebybyte.holders.SavedViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -418,8 +419,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param postId   of post to find
      * @param fragment callback
      */
-    public void getPostById(String postId, ServiceablePostFragment fragment) {
-        //TODO: @Sali consider renaming this to inflatePostById as you don't return anything but you do add data to the view
+    public void inflatePostById(String postId, ServiceablePostFragment fragment) {
         DocumentReference postRef = db.collection("posts").document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");
@@ -432,9 +432,9 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      *
      * @param postId   of post to find
      * @param fragment callback
-     * @param holder   callback in package ui.saved ViewHolder
+     * @param holder   callback to AbstractViewHolder
      */
-    public void getPostById(String postId, ServiceablePostFragment fragment, ViewHolder holder) {
+    public void inflatePostById(String postId, ServiceablePostFragment fragment, AbstractViewHolder holder) {
         DocumentReference postRef = db.collection("posts").document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");

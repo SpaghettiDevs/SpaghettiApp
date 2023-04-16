@@ -15,15 +15,14 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.bitebybyte.R;
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.ServiceableUserFragment;
-import com.bitebybyte.backend.services.PostService;
-import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.User;
+import com.bitebybyte.backend.services.PostService;
+import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.FragmentPostDetailBinding;
-import com.bitebybyte.ServiceablePostFragment;
-import com.bitebybyte.ui.home.HomeFeedAdapter;
-import com.bitebybyte.ui.saved.ViewHolder;
+import com.bitebybyte.holders.AbstractViewHolder;
 
 import java.util.List;
 
@@ -82,7 +81,7 @@ public class PostDetailFragment extends Fragment
         commentIcon.setOnClickListener(this::onCommentButtonPressed);
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
-        postService.getPostById(postId, this);
+        postService.inflatePostById(postId, this);
 
         return root;
     }
@@ -188,7 +187,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addDataToView(FeedPost post, ViewHolder holder) {
+    public void addDataToView(FeedPost post, AbstractViewHolder holder) {
 
     }
 
@@ -203,17 +202,7 @@ public class PostDetailFragment extends Fragment
     }
 
     @Override
-    public void addUserData(User user, HomeFeedAdapter.ViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, PostCommentsAdapter.ViewHolder viewHolder) {
-
-    }
-
-    @Override
-    public void addUserData(User user, ViewHolder viewHolder) {
+    public void addUserData(User user, AbstractViewHolder viewHolder) {
 
     }
 }
