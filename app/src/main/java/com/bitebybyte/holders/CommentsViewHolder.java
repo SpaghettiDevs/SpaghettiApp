@@ -9,6 +9,10 @@ import androidx.annotation.NonNull;
 
 import com.bitebybyte.R;
 
+/**
+ * A class representing a view holder for comments.
+ * Extends the AbstractViewHolder class, which provides basic properties and methods for the holders.
+ */
 public class CommentsViewHolder extends AbstractViewHolder {
     private final TextView content;
     private final TextView postedDateTime;
@@ -16,7 +20,11 @@ public class CommentsViewHolder extends AbstractViewHolder {
     private final ImageView likeButton;
     private final ImageButton deleteButton;
 
-
+    /**
+     * Connects the view with the comments UI.
+     *
+     * @param itemView view to connect with recycler view
+     */
     public CommentsViewHolder(@NonNull View itemView) {
         super(itemView);
         content = itemView.findViewById(R.id.post_comment_text);
@@ -27,6 +35,10 @@ public class CommentsViewHolder extends AbstractViewHolder {
         likeButton = itemView.findViewById(R.id.post_comment_likes_icon);
         deleteButton = itemView.findViewById(R.id.post_comment_delete_button);
     }
+
+    /**
+     *  The methods below are getter methods.
+     */
 
     public TextView getContent() {
         return content;
@@ -52,5 +64,7 @@ public class CommentsViewHolder extends AbstractViewHolder {
         return likeButton;
     }
 
-    public ImageButton getDeleteButton() {return deleteButton;}
+    public ImageButton getDeleteButton() {
+        return deleteButton;
+    }
 }

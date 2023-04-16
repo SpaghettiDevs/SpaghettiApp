@@ -8,12 +8,21 @@ import androidx.annotation.NonNull;
 
 import com.bitebybyte.R;
 
+/**
+ * A class representing a view holder for home feed posts.
+ * Extends the AbstractViewHolder class, which provides basic properties and methods for the holders.
+ */
 public class HomeFeedViewHolder extends AbstractViewHolder {
     private final TextView postTimeStamp;
     private final TextView  postLikesAmount;
     private final TextView  postCommentsAmount;
     private final ImageView postLikeButton;
 
+    /**
+     * Connects the view with the home feed post UI.
+     *
+     * @param itemView view to connect with recycler view
+     */
     public HomeFeedViewHolder(@NonNull View itemView) {
         super(itemView);
         postTitle          = itemView.findViewById(R.id.postTitleTextView);
@@ -28,6 +37,10 @@ public class HomeFeedViewHolder extends AbstractViewHolder {
         postImage                = itemView.findViewById(R.id.postImageView);
 
     }
+
+    /**
+     *  The methods below are getter methods.
+     */
 
     public TextView getPostTimeStamp() {
         return postTimeStamp;
