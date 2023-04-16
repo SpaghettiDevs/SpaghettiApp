@@ -3,7 +3,11 @@ package com.bitebybyte;
 
 import static android.app.PendingIntent.getActivity;
 
+import static com.bitebybyte.CameraActivity.URI_ID_CODE;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final int CAMERA_ACTIVITY_CODE = 101;
 
     private FirebaseAuth auth;
 
@@ -218,7 +224,14 @@ public class SettingsActivity extends AppCompatActivity {
      * @param v the view that was clicked
      */
     private void onProfilePictureButtonClicked(View v) {
-        Toast.makeText(getApplicationContext(), "Good morning", Toast.LENGTH_SHORT).show();
+        //Start the camera activity
+        Intent intent = new Intent(this, CameraActivity.class);
+
+        //Start the activity and wait for a result.
+        startActivityForResult(intent, CAMERA_ACTIVITY_CODE);
+
+        //Disable the animation
+        this.overridePendingTransition(0, 0);
     }
 
     /**
@@ -237,5 +250,27 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with,
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_ACTIVITY_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(this, data.getStringExtra(URI_ID_CODE), Toast.LENGTH_SHORT).show();
+                //imageURI = Uri.parse(data.getStringExtra(URI_ID_CODE));
+                //imageButton.setImageURI(imageURI);
+            }
+        }
     }
 }
