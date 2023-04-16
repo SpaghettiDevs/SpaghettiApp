@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button usernameButton;
     private Button emailButton;
     private Button passwordButton;
+    private Button profilePictureButton;
     private Button deleteAccountButton;
 
     private FirebaseUser user;
@@ -73,6 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.change_username_text);
         usernameButton = findViewById(R.id.change_username_button);
         passwordButton = findViewById(R.id.reset_password);
+        profilePictureButton = findViewById(R.id.change_profile_picture);
         deleteAccountButton = findViewById(R.id.delete_account);
     }
 
@@ -83,6 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
         usernameButton.setOnClickListener(this::onUsernameButtonClicked);
         emailButton.setOnClickListener(this::onEmailButtonClicked);
         passwordButton.setOnClickListener(this::onPasswordButtonClicked);
+        profilePictureButton.setOnClickListener(this::onProfilePictureButtonClicked);
         deleteAccountButton.setOnClickListener(this::onDeleteButtonClicked);
     }
 
@@ -206,6 +209,16 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /**
+     * On click handler for changing the users profile picture
+     * Opens the camera activity, (on completion the photo will be send to the backend)
+     *
+     * @param v the view that was clicked
+     */
+    private void onProfilePictureButtonClicked(View v) {
+        Toast.makeText(getApplicationContext(), "Good morning", Toast.LENGTH_SHORT).show();
     }
 
     /**
