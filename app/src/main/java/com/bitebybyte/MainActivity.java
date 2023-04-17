@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             // TODO: pass the query to the backend
+           navController.navigate(R.id.action_navigation_home_to_navigation_search);
 
         }
     }
