@@ -2,6 +2,7 @@ package com.bitebybyte.ui.post;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -82,6 +83,9 @@ public class PostDetailFragment extends Fragment
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
         postService.inflatePostById(postId, this);
+
+        setHasOptionsMenu(true);
+
 
         return root;
     }
@@ -205,4 +209,19 @@ public class PostDetailFragment extends Fragment
     public void addUserData(User user, AbstractViewHolder viewHolder) {
 
     }
+
+    /**
+     * Hide the search icon when this fragment gets loaded.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.app_bar_search).setVisible(false);
+    }
+
 }
