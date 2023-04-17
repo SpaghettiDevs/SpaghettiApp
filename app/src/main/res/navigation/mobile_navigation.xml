@@ -12,6 +12,9 @@
         tools:layout="@layout/fragment_home">
         <action android:id="@+id/action_navigation_home_to_post_detail"
             app:destination="@id/post_detail" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_search"
+            app:destination="@id/navigation_search" />
     </fragment>
 
     <fragment
@@ -55,6 +58,13 @@
         android:name="com.bitebybyte.ui.saved.SavedFragment"
         android:label="@string/navigation_saved"
         tools:layout="@layout/fragment_saved" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.bitebybyte.ui.search.SearchFragment"
+        android:label="Search results"
+        tools:layout="@layout/fragment_search_results"
+        />
 
 
 </navigation>
