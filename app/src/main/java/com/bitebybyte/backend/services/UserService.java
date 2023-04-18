@@ -91,6 +91,13 @@ public class UserService implements OnSuccessListener, OnFailureListener {
     }
 
     /**
+     * Gets a boolean indicating whether the current user is a moderator.
+     *
+     * @return currentUser.getIsModerator()
+     */
+    public boolean isCurrentUserModerator() {return currentUser.getIsModerator(); }
+
+    /**
      * Get user object given userId.
      * This method is async and sends a callback.
      *
