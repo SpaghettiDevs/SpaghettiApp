@@ -32,10 +32,8 @@ public class SavedRecipesFragment extends Fragment {
         //Display linearly
         savedRecipes.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        //Set the adapter
         savedRecipes.setAdapter(new SavedRecipesAdapter(userService.getSavedPosts()));
 
-        // use ItemDecoration to get consistent margins inbetween items
         savedRecipes.addItemDecoration(new ItemDecoration());
 
         return view;

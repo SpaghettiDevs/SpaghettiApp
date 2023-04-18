@@ -51,7 +51,6 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         commentsRecycler.setHasFixedSize(true);
         commentsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        // Use ItemDecoration to get consistent margins between items
         commentsRecycler.addItemDecoration(new ItemDecoration());
 
         //Inflate the view with the post data

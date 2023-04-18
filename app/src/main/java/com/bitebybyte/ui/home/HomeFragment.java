@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment implements ServiceablePostFragment {
         // Get all the posts and add them to the recycler view
         postService.getAllPosts(this);
 
-        // Add item decoration to the recycler view to get consistent margins between items
         feed.addItemDecoration(new ItemDecoration());
 
         setHasOptionsMenu(true);

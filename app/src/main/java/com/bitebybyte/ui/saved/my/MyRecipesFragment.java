@@ -32,10 +32,8 @@ public class MyRecipesFragment extends Fragment {
         //Display linearly
         myRecipes.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        //Set the adapter
         myRecipes.setAdapter(new MyRecipesAdapter(userService.getMyPosts()));
 
-        // use ItemDecoration to get consistent margins inbetween items
         myRecipes.addItemDecoration(new ItemDecoration());
 
         return view;
