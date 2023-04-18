@@ -15,6 +15,11 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
         this.columns = columns;
     }
 
+    public ItemDecoration() {
+        this.margin = 32;
+        this.columns = 1;
+    }
+
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
                                @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

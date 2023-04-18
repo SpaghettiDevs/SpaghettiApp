@@ -34,8 +34,7 @@ public class SearchFragment extends Fragment
 
         searchResults.setAdapter(new SearchAdapter());
 
-        ItemDecoration decoration = new ItemDecoration(32, 1);
-        searchResults.addItemDecoration(decoration);
+        searchResults.addItemDecoration(new ItemDecoration());
 
         return view;
     }

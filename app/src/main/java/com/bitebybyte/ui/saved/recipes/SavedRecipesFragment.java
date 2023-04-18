@@ -36,8 +36,7 @@ public class SavedRecipesFragment extends Fragment {
         savedRecipes.setAdapter(new SavedRecipesAdapter(userService.getSavedPosts()));
 
         // use ItemDecoration to get consistent margins inbetween items
-        ItemDecoration decoration = new ItemDecoration(32, 1);
-        savedRecipes.addItemDecoration(decoration);
+        savedRecipes.addItemDecoration(new ItemDecoration());
 
         return view;
     }
