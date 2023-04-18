@@ -15,7 +15,7 @@ public class RecipeTest {
     private final Recipe instance = new Recipe(methods, ingredients, preparationTime, preparationTimeScale);
 
 
-    /* Test for checking that the method is not null when instantiated. */
+    /* Test for checking that the methods is not null when instantiated. */
     @Test
     public void getMethodNullTest() {
         assertNotNull(instance.getMethods());
