@@ -14,7 +14,6 @@ import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.Recipe;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

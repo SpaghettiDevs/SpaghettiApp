@@ -16,14 +16,14 @@ import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
+import com.bitebybyte.holders.CompactViewHolder;
 
 import java.util.List;
 
 /**
  * Adapter for displaying a list of user's saved recipes.
  */
-public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
+public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private final List<String> postIds;
@@ -50,11 +50,11 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      */
     @NonNull
     @Override
-    public SavedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CompactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_saved, parent, false);
 
-        return new SavedViewHolder(view);
+        return new CompactViewHolder(view);
     }
 
     /**
@@ -64,7 +64,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      * @param position The position of the item within the adapter's data set
      */
     @Override
-    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
         postService.inflatePostById(postIds.get(position), this, holder);
     }
 
@@ -107,7 +107,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         postService.loadImage(holder.getPostImage(), post.getPostId());
 
         // Set delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder, post));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((CompactViewHolder) holder, post));
     }
 
     /**
@@ -116,7 +116,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      * @param holder The ViewHolder for the post being deleted
      * @param post   The FeedPost object for the post being deleted
      */
-    private void onDeleteButtonClicked(SavedViewHolder holder, FeedPost post) {
+    private void onDeleteButtonClicked(CompactViewHolder holder, FeedPost post) {
         postService.deletePost(post.getPostId());
         Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
 

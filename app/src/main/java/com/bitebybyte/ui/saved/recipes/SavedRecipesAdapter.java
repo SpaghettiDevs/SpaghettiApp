@@ -16,14 +16,14 @@ import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
+import com.bitebybyte.holders.CompactViewHolder;
 
 import java.util.List;
 
 /**
  * Adapter for displaying a list of user's saved recipes.
  */
-public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
+public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private final List<String> postIds;
@@ -42,16 +42,16 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
     @NonNull
     @Override
-    public SavedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CompactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_saved, parent, false);
 
-        return new SavedViewHolder(view);
+        return new CompactViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
         postService.inflatePostById(postIds.get(position), this, holder);
     }
 
@@ -87,7 +87,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         //TODO: Load user profile image from firebase if it is set
 
         // Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((CompactViewHolder) holder));
     }
 
     /**
@@ -96,7 +96,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
      * Displays a message to the user.
      * @param holder the view holder for the deleted post
      */
-    private void onDeleteButtonClicked(SavedViewHolder holder) {
+    private void onDeleteButtonClicked(CompactViewHolder holder) {
         System.out.println("Delete button clicked");
         // Remove post from saved recipes and display message
         userService.removeSavedPost(holder.getAdapterPosition());
