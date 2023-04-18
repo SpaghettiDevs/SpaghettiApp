@@ -52,7 +52,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     @Override
     public CompactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_saved, parent, false);
+                .inflate(R.layout.post_compact, parent, false);
 
         return new CompactViewHolder(view);
     }

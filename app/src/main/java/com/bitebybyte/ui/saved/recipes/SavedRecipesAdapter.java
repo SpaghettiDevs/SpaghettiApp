@@ -45,7 +45,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     public CompactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_saved, parent, false);
+                .inflate(R.layout.post_compact, parent, false);
 
         return new CompactViewHolder(view);
     }
