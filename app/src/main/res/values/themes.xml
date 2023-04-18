@@ -15,6 +15,7 @@
         <item name="colorAccent">@color/gray_blue_500</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar.PrimaryColor</item>
         <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
     </style>
     <style name="PrimaryButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_rounded</item>
@@ -49,5 +50,6 @@
     <style name="ThemeOverlay.AppCompat.ActionBar.PrimaryColor">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>
     </style>
 </resources>
