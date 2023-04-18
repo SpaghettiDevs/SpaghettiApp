@@ -41,7 +41,7 @@ public class CommentTest {
     /* Test for checking that the comments list is not null when instantiated. */
     @Test
     public void getCommentsNullTest() {
-       //there is no getter for the commments arraylist in the comment class
+       //there is no getter for the comments arraylist in the comment class
     }
 
     /* Test for checking if the getContent returns the same content as instantiated with. */
