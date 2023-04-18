@@ -90,7 +90,7 @@ public class FeedPostTest {
         assertEquals(recipe, instance.getRecipe());
     }
 
-    /* Test for checking if getComments returns the expected value. */
+    /* Test for checking if getComments returns the expected value (empty list in this case). */
     @Test
     public void getCommentsTest() {
         assertEquals(0, instance.getComments().size());
