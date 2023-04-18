@@ -6,11 +6,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeItemDecoration extends RecyclerView.ItemDecoration {
+public class ItemDecoration extends RecyclerView.ItemDecoration {
     private final int columns;
     private final int margin;
 
-    public HomeItemDecoration(int margin, int columns) {
+    public ItemDecoration(int margin, int columns) {
         this.margin = margin;
         this.columns = columns;
     }

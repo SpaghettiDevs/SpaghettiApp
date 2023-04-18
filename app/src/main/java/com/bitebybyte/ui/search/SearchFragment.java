@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bitebybyte.R;
-import com.bitebybyte.ui.home.HomeItemDecoration;
+import com.bitebybyte.ui.home.ItemDecoration;
 
 /**
  * Fragment that displays the search results from a search action.
@@ -34,7 +34,7 @@ public class SearchFragment extends Fragment
 
         searchResults.setAdapter(new SearchAdapter());
 
-        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
+        ItemDecoration decoration = new ItemDecoration(32, 1);
         searchResults.addItemDecoration(decoration);
 
         return view;
