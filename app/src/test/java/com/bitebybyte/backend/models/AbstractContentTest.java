@@ -28,9 +28,7 @@ public class AbstractContentTest {
 
     /* Test for checking that the Date is not null when instantiated. */
     @Test
-    public void getDateNullTest() {
-        assertNotNull(instance.getDate());
-    }
+    public void getDateNullTest() { assertNotNull(instance.getDate()); }
 
     /* Test for checking that the likes counter is not null when instantiated. */
     @Test
