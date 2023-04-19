@@ -60,12 +60,13 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     /**
      * Called by RecyclerView to display the data at the specified position.
      *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in the data set
+     * @param holder   The ViewHolder which should be updated to represent the
+     *                 contents of the item at the given position in the data set
      * @param position The position of the item within the adapter's data set
      */
     @Override
-    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
-        postService.inflatePostById(postIds.get(position), this, holder);
+    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+        postService.inflatePostById(postIds.get(position), this, holder, "posts");
     }
 
     /**
@@ -78,22 +79,22 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         return postIds.size();
     }
 
-
     @Override
     public void addDataToView(FeedPost post) {
-        //Not used yet
+        // Not used yet
     }
 
     /**
      * Adds data to the ViewHolder for the given post.
      *
      * @param post   The FeedPost object to be added to the view
-     * @param holder The ViewHolder that should be updated to represent the contents of the item at the given position in the data set
+     * @param holder The ViewHolder that should be updated to represent the contents
+     *               of the item at the given position in the data set
      */
     @Override
     public void addDataToView(FeedPost post, AbstractViewHolder holder) {
         // TODO: Handle case where post has been deleted by moderator in Firebase
-        //  -- Then the post doesn't exist so we don't even get here right? -Tristan
+        // -- Then the post doesn't exist so we don't even get here right? -Tristan
         holder.getPostTitle().setText(post.getTitle());
         userService.getUser(post.getIdOwner(), holder, this);
 
@@ -113,14 +114,15 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     /**
      * Called when the delete button is clicked for a post in the adapter.
      * Deletes the post from the database and displays a toast message.
+     * 
      * @param holder The ViewHolder for the post being deleted
      * @param post   The FeedPost object for the post being deleted
      */
-    private void onDeleteButtonClicked(CompactViewHolder holder, FeedPost post) {
-        postService.deletePost(post.getPostId());
+    private void onDeleteButtonClicked(SavedViewHolder holder, FeedPost post) {
+        postService.deletePost(post.getPostId(), "posts");
         Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
 
-        //Notifies the adapter that the data has changed
+        // Notifies the adapter that the data has changed
         notifyItemRemoved(holder.getAdapterPosition());
     }
 
@@ -139,5 +141,3 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }
-
-

@@ -110,7 +110,8 @@ public class CreateFragment extends Fragment {
                 null, null,
                 method.getText().toString(), ingredients.getText().toString(),
                 Integer.parseInt(estimatedTime.getText().toString()),
-                spinner.getSelectedItem().toString());
+                spinner.getSelectedItem().toString(),
+                "posts");
 
         //Save the image to the database
         postService.saveImageToDatabase(imageURI, imageButton, postID, "images/");

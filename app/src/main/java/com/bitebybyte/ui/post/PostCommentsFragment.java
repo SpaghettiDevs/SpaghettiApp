@@ -54,7 +54,7 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         commentsRecycler.addItemDecoration(new ItemDecoration());
 
         //Inflate the view with the post data
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
 
         // Initialize the comment input field and send button
         initializeCommentInput(view);

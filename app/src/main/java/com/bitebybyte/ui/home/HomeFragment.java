@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment implements ServiceablePostFragment {
         feed.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         // Get all the posts and add them to the recycler view
-        postService.getAllPosts(this);
+        postService.getAllPosts(this, "posts");
 
         feed.addItemDecoration(new ItemDecoration());
 

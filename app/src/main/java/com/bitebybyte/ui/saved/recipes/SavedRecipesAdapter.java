@@ -32,6 +32,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
 
     /**
      * Constructor for SavedRecipesAdapter.
+     * 
      * @param postIds List of post IDs to be displayed in the adapter
      */
     SavedRecipesAdapter(List<String> postIds) {
@@ -51,8 +52,8 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
-        postService.inflatePostById(postIds.get(position), this, holder);
+    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+        postService.inflatePostById(postIds.get(position), this, holder, "posts");
     }
 
     @Override
@@ -84,7 +85,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
 
         postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
 
-        //TODO: Load user profile image from firebase if it is set
+        // TODO: Load user profile image from firebase if it is set
 
         // Add delete button listener
         holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((CompactViewHolder) holder));
@@ -94,6 +95,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
      * Handles the delete button click.
      * Removes the post from the saved recipes list.
      * Displays a message to the user.
+     * 
      * @param holder the view holder for the deleted post
      */
     private void onDeleteButtonClicked(CompactViewHolder holder) {
@@ -101,10 +103,10 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         // Remove post from saved recipes and display message
         userService.removeSavedPost(holder.getAdapterPosition());
 
-        //Notify the adapter that the data has changed
+        // Notify the adapter that the data has changed
         notifyItemRemoved(holder.getAdapterPosition());
 
-        //TODO this toast doesn't work. The changes apply after refreshing!
+        // TODO this toast doesn't work. The changes apply after refreshing!
         Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
     }
 
@@ -125,7 +127,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
             // Remove post from saved recipes and display message
             userService.removeSavedPost(holder.getAdapterPosition());
 
-            //Notify the adapter that the data has changed
+            // Notify the adapter that the data has changed
             notifyItemRemoved(holder.getAdapterPosition());
         });
     }
@@ -145,5 +147,3 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         viewHolder.getPostAuthor().setText(user.getUsername());
     }
 }
-
-

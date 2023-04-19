@@ -52,10 +52,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     /**
      * Save post to database given a local object.
      *
-     * @param post the post to save
+     * @param post     the post to save
+     * @param location to which collection the post needs to be saved to
      */
-    public void saveToDatabase(FeedPost post) {
-        db.collection("posts")
+    public void saveToDatabase(FeedPost post, String location) {
+        db.collection(location)
                 .document(post.getPostId()).set(post)
                 .addOnSuccessListener(unused -> {
                     userService.updateMyPosts(post.getPostId());
@@ -67,10 +68,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     /**
      * Save post to database given a local object.
      *
-     * @param post the post to save
+     * @param post     the post to save
+     * @param location to which collection the post needs to be saved to
      */
-    public void saveCommentToDatabase(FeedPost post) {
-        db.collection("posts")
+    public void saveCommentToDatabase(FeedPost post, String location) {
+        db.collection(location)
                 .document(post.getPostId()).set(post)
                 .addOnSuccessListener(this)
                 .addOnFailureListener(this);
@@ -79,10 +81,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     /**
      * Delete a post from the database given the postId.
      *
-     * @param postId the id of the post to delete
+     * @param postId   the id of the post to delete
+     * @param location which collection the post is in
      */
-    public void deletePost(String postId) {
-        DocumentReference reference = db.collection("posts").document(postId);
+    public void deletePost(String postId, String location) {
+        DocumentReference reference = db.collection(location).document(postId);
         deletePostIfExists(reference, postId);
     }
 
@@ -90,7 +93,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Deletes a post from the database if it exists.
      *
      * @param reference a {@link DocumentReference} object for the post to delete
-     * @param postId the id of the post to delete
+     * @param postId    the id of the post to delete
      */
     private void deletePostIfExists(DocumentReference reference, String postId) {
         // Check if the post exists
@@ -104,7 +107,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             // If the post exists, delete it
             reference.delete()
                     .addOnSuccessListener(unused1 -> {
-                        // If the deletion is successful, update the user's posts and log a success message
+                        // If the deletion is successful, update the user's posts and log a success
+                        // message
                         userService.updateMyPosts(postId);
                         Log.d("Database", "Successfully deleted post " + postId);
                     })
@@ -114,29 +118,33 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                         Log.d("Database error", String.valueOf(error));
                     });
         }).addOnFailureListener(e -> {
-            // If there is an error while checking for the post, log an error message with the details of the error
+            // If there is an error while checking for the post, log an error message with
+            // the details of the error
             Log.d("Database", "Error fetching " + postId);
         });
     }
 
     /**
-
-     Adds a new comment to a post and saves it to the database.
-     @param post the post to add the comment to
-     @param commentText the text of the comment to add
+     * 
+     * Adds a new comment to a post and saves it to the database.
+     * 
+     * @param post        the post to add the comment to
+     * @param commentText the text of the comment to add
      */
     public void addComment(FeedPost post, String commentText) {
         String idOwner = userService.getCurrentUserId();
         Comment comment = new Comment(idOwner, commentText);
         post.getComments().add(comment); // Add the new comment to the post's comments list
-        saveCommentToDatabase(post); // Save the updated post to the database
+        saveCommentToDatabase(post, "posts"); // Save the updated post to the database
     }
 
     /**
-     * Saves the given image to Firebase Storage with the given postId as the filename.
+     * Saves the given image to Firebase Storage with the given postId as the
+     * filename.
      *
      * @param imageUri the URI of the image to save
-     * @param postId the postId to use as the filename
+     * @param postId   the postId to use as the filename
+     * @param location place of image in the storage
      */
     public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId, String location) {
         StorageReference storageReference = dbStore.getReference(location + postId);
@@ -152,10 +160,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     }
 
     /**
-     * Saves the given image to Firebase Storage with the given postId as the filename,
+     * Saves the given image to Firebase Storage with the given postId as the
+     * filename,
      * when the app does not have permission to access the imageUri directly.
      *
-     * @param imageView the ImageView containing the image to save
+     * @param imageView        the ImageView containing the image to save
      * @param storageReference the StorageReference to use for saving the image
      */
     private void saveImageToStorageWithoutPermissions(ImageView imageView, StorageReference storageReference) {
@@ -175,15 +184,16 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Loads an image from Firebase Storage into an ImageView using Glide.
      *
      * @param imageView the ImageView to load the image into
-     * @param postId the ID of the post whose image is being loaded
-     * @param location folder to store images (can be "images/" or "pfPictures/")
+     * @param postId    the ID of the post whose image is being loaded
+     * @param location  place of the image in the storage
      */
     public void loadImage(ImageView imageView, String postId, String location) {
         StorageReference storageReference = dbStore.getReference(location + postId);
 
         // Try to load the image from Firebase Storage.
         storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-            // If the image was loaded successfully, use Glide to load it into the ImageView.
+            // If the image was loaded successfully, use Glide to load it into the
+            // ImageView.
             Glide.with(imageView.getContext()).load(uri).into(imageView);
         }).addOnFailureListener(exception -> {
             // If an error occurred while loading the image, load a default image instead.
@@ -194,7 +204,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     }
 
     /**
-     * Formats the given date as a string that represents how long ago it was posted.
+     * Formats the given date as a string that represents how long ago it was
+     * posted.
      *
      * @param date the date to format
      * @return a string representing how long ago the given date was posted
@@ -268,26 +279,31 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param idOwner             the ID of the user who is creating the post
      * @param content             the content of the post
      * @param title               the title of the post
-     * @param images              a comma-separated string of image URLs for the post
+     * @param images              a comma-separated string of image URLs for the
+     *                            post
      * @param labels              a list of labels for the post
-     * @param methods             a string containing the preparation methods for the recipe
+     * @param methods             a string containing the preparation methods for
+     *                            the recipe
      * @param ingredients         a string containing the ingredients for the recipe
      * @param preparationTime     the preparation time for the recipe
-     * @param preparationTimeUnit the unit of time for the preparation time (e.g. "minutes", "hours")
+     * @param preparationTimeUnit the unit of time for the preparation time (e.g.
+     *                            "minutes", "hours")
+     * @param location            which collection to save to in the database
      * @return the ID of the newly-created post
      */
     public String createPostWithRecipe(String idOwner,
-                                       String content,
-                                       String title,
-                                       String images,
-                                       List<String> labels,
-                                       String methods,
-                                       String ingredients,
-                                       int preparationTime,
-                                       String preparationTimeUnit) {
+            String content,
+            String title,
+            String images,
+            List<String> labels,
+            String methods,
+            String ingredients,
+            int preparationTime,
+            String preparationTimeUnit,
+            String location) {
 
         Recipe recipe = createRecipe(methods, ingredients, preparationTime, preparationTimeUnit);
-        return createPost(idOwner, content, title, images, labels, recipe);
+        return createPost(idOwner, content, title, images, labels, recipe, location);
 
     }
 
@@ -295,25 +311,28 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Creates a new post with the given parameters and saves it to the database.
      * Returns the ID of the newly-created post.
      *
-     * @param idOwner the ID of the user who is creating the post
-     * @param content the content of the post
-     * @param title   the title of the post
-     * @param images  a comma-separated string of image URLs for the post
-     * @param labels  a list of labels for the post
-     * @param recipe  a Recipe object containing the recipe details for the post (can be null if no recipe is included)
+     * @param idOwner  the ID of the user who is creating the post
+     * @param content  the content of the post
+     * @param title    the title of the post
+     * @param images   a comma-separated string of image URLs for the post
+     * @param labels   a list of labels for the post
+     * @param recipe   a Recipe object containing the recipe details for the post
+     *                 (can be null if no recipe is included)
+     * @param location which collection to save to in the database
      * @return the ID of the newly-created post
      */
     public String createPost(String idOwner,
-                             String content,
-                             String title,
-                             String images,
-                             List<String> labels,
-                             Recipe recipe) {
+            String content,
+            String title,
+            String images,
+            List<String> labels,
+            Recipe recipe,
+            String location) {
 
         FeedPost post = new FeedPost(idOwner, content, title,
                 images, labels, recipe);
 
-        this.saveToDatabase(post);
+        this.saveToDatabase(post, location);
         return post.getPostId();
     }
 
@@ -321,28 +340,32 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Creates a new Recipe object with the given parameters.
      *
      * @param methods             a string containing the methods used in the recipe
-     * @param ingredients         a string containing the ingredients used in the recipe
+     * @param ingredients         a string containing the ingredients used in the
+     *                            recipe
      * @param preparationTime     the amount of time required to prepare the recipe
-     * @param preparationTimeUnit the unit of time used to measure preparation time (e.g. "minutes", "hours")
+     * @param preparationTimeUnit the unit of time used to measure preparation time
+     *                            (e.g. "minutes", "hours")
      * @return a new Recipe object with the given parameters
      */
     public Recipe createRecipe(String methods,
-                               String ingredients,
-                               int preparationTime,
-                               String preparationTimeUnit) {
+            String ingredients,
+            int preparationTime,
+            String preparationTimeUnit) {
         return new Recipe(methods, ingredients, preparationTime, preparationTimeUnit);
     }
 
     /**
      * Updates the likes locally and in the Firebase.
      *
-     * @param post post to update
+     * @param post     post to update
+     * @param location which collection the document is in
      */
-    public void updateLikes(FeedPost post) {
-        DocumentReference postRef = db.collection("posts").document(post.getPostId());
+    public void updateLikes(FeedPost post, String location) {
+        DocumentReference postRef = db.collection(location).document(post.getPostId());
 
         FirebaseUser user = auth.getCurrentUser();
-        if(user == null) return;
+        if (user == null)
+            return;
 
         boolean userHasLikedPost = post.getLikes().containsKey(user.getUid());
 
@@ -365,9 +388,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param comments list of comments to update
      * @param postId   id of post to update comment from
      * @param index    of comment
+     * @param location collection of post of comment
      */
-    public void updateLikes(List<Comment> comments, String postId, int index) {
-        DocumentReference postRef = db.collection("posts").document(postId);
+    public void updateLikes(List<Comment> comments, String postId, int index, String location) {
+        DocumentReference postRef = db.collection(location).document(postId);
         Comment comment = comments.get(index);
         if (comment.getLikes().containsKey(auth.getCurrentUser().getUid())) {
             comment.getLikes().remove(auth.getCurrentUser().getUid());
@@ -390,9 +414,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param comments list of comments to delete from
      * @param postId   id of post to delete comment from
      * @param index    of comment to delete
+     * @param location collection of post of comment
      */
-    public void deleteComment(List<Comment> comments, String postId, int index) {
-        DocumentReference postRef = db.collection("posts").document(postId);
+    public void deleteComment(List<Comment> comments, String postId, int index, String location) {
+        DocumentReference postRef = db.collection(location).document(postId);
         if (index < comments.size()) {
             comments.remove(index);
         }
@@ -411,16 +436,15 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         return content.getLikes().containsKey(auth.getCurrentUser().getUid());
     }
 
-
-
     /**
      * Query Firebase given a postId to find a single document.
      *
      * @param postId   of post to find
      * @param fragment callback
+     * @param location collection of post
      */
-    public void inflatePostById(String postId, ServiceablePostFragment fragment) {
-        DocumentReference postRef = db.collection("posts").document(postId);
+    public void inflatePostById(String postId, ServiceablePostFragment fragment, String location) {
+        DocumentReference postRef = db.collection(location).document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");
             fragment.addDataToView(documentSnapshot.toObject(FeedPost.class));
@@ -433,9 +457,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param postId   of post to find
      * @param fragment callback
      * @param holder   callback to AbstractViewHolder
+     * @param location collection of post
      */
-    public void inflatePostById(String postId, ServiceablePostFragment fragment, AbstractViewHolder holder) {
-        DocumentReference postRef = db.collection("posts").document(postId);
+    public void inflatePostById(String postId, ServiceablePostFragment fragment, AbstractViewHolder holder,
+            String location) {
+        DocumentReference postRef = db.collection(location).document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");
             fragment.addDataToView(documentSnapshot.toObject(FeedPost.class), holder);
@@ -446,9 +472,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Query Firebase to get all posts in descending order by time published.
      *
      * @param fragment callback
+     * @param location collection of posts
      */
-    public void getAllPosts(ServiceablePostFragment fragment) {
-        db.collection("posts")
+    public void getAllPosts(ServiceablePostFragment fragment, String location) {
+        db.collection(location)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -485,7 +512,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
     /**
      * Search for posts that have titles matching with a query string.
      *
-     * @param query titles to search for
+     * @param query    titles to search for
      * @param fragment callback
      */
     public void searchByTitle(String query, ServiceablePostFragment fragment) {

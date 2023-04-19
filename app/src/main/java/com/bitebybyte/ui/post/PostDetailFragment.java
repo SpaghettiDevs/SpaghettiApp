@@ -85,7 +85,7 @@ public class PostDetailFragment extends Fragment
 
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
 
         setHasOptionsMenu(true);
 
@@ -131,7 +131,7 @@ public class PostDetailFragment extends Fragment
      */
     private void onLikeButtonPressed(View view) {
         int oldLikes = post.getLikes().size();
-        postService.updateLikes(post);
+        postService.updateLikes(post, "posts");
         int newLikes = post.getLikes().size();
 
         if (oldLikes < newLikes)

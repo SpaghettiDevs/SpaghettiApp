@@ -149,7 +149,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
      * @param position the position of the comment in the adapter's list
      */
     private void onDeleteButtonClicked(CommentsViewHolder holder, int position) {
-        postService.deleteComment(comments, post.getPostId(), position);
+        postService.deleteComment(comments, post.getPostId(), position, "posts");
         Toast.makeText(holder.getContent().getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
 
         //Refresh the comments list
@@ -164,7 +164,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
      * @param position the position of the comment in the adapter's list
      */
     private void onLikeButtonClicked(CommentsViewHolder holder, Comment comment, int position) {
-        postService.updateLikes(comments, post.getPostId(), position);
+        postService.updateLikes(comments, post.getPostId(), position, "posts");
 
         if (postService.hasLikedContent(comment))
             //Update the like icon to be solid if the user has liked the post
