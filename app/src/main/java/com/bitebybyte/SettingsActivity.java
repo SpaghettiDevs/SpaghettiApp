@@ -7,6 +7,7 @@ import static com.bitebybyte.CameraActivity.URI_ID_CODE;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageButton;
 
+import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -33,12 +36,14 @@ public class SettingsActivity extends AppCompatActivity {
     private Button usernameButton;
     private Button emailButton;
     private Button passwordButton;
-    private Button profilePictureButton;
+    private ImageButton profilePictureButton;
     private Button deleteAccountButton;
 
     private FirebaseUser user;
     private UserService userService;
+    private PostService postService;
     private String currentEmail;
+    private Uri imageURI;
 
 
     @Override
@@ -48,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        postService = new PostService();
         userService = new UserService();
 
         setupUI();
@@ -64,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textViewEmail)).setText(user.getEmail());
             ((TextView) findViewById(R.id.textViewUsername)).setText(userService.getCurrentUsername());
             currentEmail = user.getEmail();
+            postService.loadImage(profilePictureButton, userService.getCurrentUserId(), "pfPictures/");
         } else {
             Toast.makeText(getApplicationContext(), "Error: current user can not be loaded", Toast.LENGTH_SHORT).show();
             finish();
@@ -80,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.change_username_text);
         usernameButton = findViewById(R.id.change_username_button);
         passwordButton = findViewById(R.id.reset_password);
-        profilePictureButton = findViewById(R.id.change_profile_picture);
+        profilePictureButton = findViewById(R.id.profile_picture_button);
         deleteAccountButton = findViewById(R.id.delete_account);
     }
 
@@ -267,9 +274,15 @@ public class SettingsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, data.getStringExtra(URI_ID_CODE), Toast.LENGTH_SHORT).show();
-                //imageURI = Uri.parse(data.getStringExtra(URI_ID_CODE));
-                //imageButton.setImageURI(imageURI);
+                imageURI = Uri.parse(data.getStringExtra(URI_ID_CODE));
+
+                String userID = userService.getCurrentUserId();
+
+                //Save the image to the database
+                postService.saveImageToDatabase(imageURI, profilePictureButton, userID, "pfPictures/");
+                auth.signOut();
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                finish();
             }
         }
     }

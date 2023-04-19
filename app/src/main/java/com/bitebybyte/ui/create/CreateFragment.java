@@ -109,7 +109,7 @@ public class CreateFragment extends Fragment {
                 spinner.getSelectedItem().toString());
 
         //Save the image to the database
-        postService.saveImageToDatabase(imageURI, imageButton, postID);
+        postService.saveImageToDatabase(imageURI, imageButton, postID, "images/");
 
         Toast.makeText(getContext(), "Post created successfully", Toast.LENGTH_SHORT).show();
 

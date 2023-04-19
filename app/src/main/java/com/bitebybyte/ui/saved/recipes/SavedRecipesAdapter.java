@@ -82,7 +82,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
         holder.getPostCookingTime().setText(String.format("%d %s", cookingTime, cookingTimeScale));
 
-        postService.loadImage(holder.getPostImage(), post.getPostId());
+        postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
 
         //TODO: Load user profile image from firebase if it is set
 

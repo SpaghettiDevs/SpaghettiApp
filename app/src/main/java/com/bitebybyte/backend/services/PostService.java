@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -132,15 +133,14 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         saveCommentToDatabase(post); // Save the updated post to the database
     }
 
-
     /**
      * Saves the given image to Firebase Storage with the given postId as the filename.
      *
      * @param imageUri the URI of the image to save
      * @param postId the postId to use as the filename
      */
-    public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId) {
-        StorageReference storageReference = dbStore.getReference("images/" + postId);
+    public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId, String location) {
+        StorageReference storageReference = dbStore.getReference(location + postId);
         try {
             storageReference.putFile(imageUri)
                     .addOnSuccessListener(this)
@@ -178,8 +178,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param imageView the ImageView to load the image into
      * @param postId the ID of the post whose image is being loaded
      */
-    public void loadImage(ImageView imageView, String postId) {
-        StorageReference storageReference = dbStore.getReference("images/" + postId);
+    public void loadImage(ImageView imageView, String postId, String location) {
+        StorageReference storageReference = dbStore.getReference(location + postId);
 
         // Try to load the image from Firebase Storage.
         storageReference.getDownloadUrl().addOnSuccessListener(uri -> {

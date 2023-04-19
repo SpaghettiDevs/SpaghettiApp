@@ -104,7 +104,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         holder.getPostCookingTime().setText(String.format("%d %s", preparationTime, preparationTimeScale));
 
         // Load post image
-        postService.loadImage(holder.getPostImage(), post.getPostId());
+        postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
 
         // Set delete button listener
         holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder, post));
