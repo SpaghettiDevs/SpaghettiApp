@@ -1,6 +1,10 @@
-package com.bitebybyte.backend.models;
+package com.bitebybyte;
 
 import static org.junit.Assert.*;
+
+import com.bitebybyte.backend.models.FeedPost;
+import com.bitebybyte.backend.models.Recipe;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1,6 +1,10 @@
-package com.bitebybyte.backend.models;
+package com.bitebybyte;
 
 import static org.junit.Assert.*;
+
+import com.bitebybyte.backend.models.AbstractContent;
+import com.bitebybyte.backend.models.Comment;
+
 import org.junit.Test;
 
 public class CommentTest {
