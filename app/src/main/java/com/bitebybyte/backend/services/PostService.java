@@ -142,11 +142,15 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param post        the post to add the comment to
      * @param commentText the text of the comment to add
      */
-    public void addComment(FeedPost post, String commentText) {
+    public void addComment(FeedPost post, String commentText, String location) {
+        if (commentText == null || post == null) {
+            throw new IllegalArgumentException("comment text or post cannot be null");
+        }
+
         String idOwner = userService.getCurrentUserId();
         Comment comment = new Comment(idOwner, commentText);
         post.getComments().add(comment); // Add the new comment to the post's comments list
-        saveCommentToDatabase(post, "posts"); // Save the updated post to the database
+        saveCommentToDatabase(post, location); // Save the updated post to the database
     }
 
     /**

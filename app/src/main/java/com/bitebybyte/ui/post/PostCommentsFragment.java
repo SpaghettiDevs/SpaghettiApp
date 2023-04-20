@@ -98,7 +98,11 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         }
 
         // Add the comment to the post
-        postService.addComment(post, commentInput.getText().toString());
+        try {
+            postService.addComment(post, commentInput.getText().toString(), "posts");
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this.getContext(), "comment text cannot be null", Toast.LENGTH_SHORT).show();
+        }
 
         // Clear the input field and show a message
         commentInput.setText("");
