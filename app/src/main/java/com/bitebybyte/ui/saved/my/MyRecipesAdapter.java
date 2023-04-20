@@ -119,8 +119,13 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
      * @param post   The FeedPost object for the post being deleted
      */
     private void onDeleteButtonClicked(SavedViewHolder holder, FeedPost post) {
-        postService.deletePost(post.getPostId(), "posts");
-        Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
+        try {
+            postService.deletePost(post.getPostId(), "posts");
+            Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(holder.getDeletePostButton().getContext(), "Post doesn't exist, try refreshing the page",
+                    Toast.LENGTH_SHORT).show();
+        }
 
         // Notifies the adapter that the data has changed
         notifyItemRemoved(holder.getAdapterPosition());

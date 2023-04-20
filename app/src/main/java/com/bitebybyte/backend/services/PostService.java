@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,7 +60,9 @@ public class PostService implements OnSuccessListener, OnFailureListener {
         db.collection(location)
                 .document(post.getPostId()).set(post)
                 .addOnSuccessListener(unused -> {
-                    userService.updateMyPosts(post.getPostId());
+                    if (location.equals("posts")) {
+                        userService.updateMyPosts(post.getPostId());
+                    }
                     Log.d("Firebase", "Successfully added");
                 })
                 .addOnFailureListener(this);
@@ -86,30 +89,15 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      */
     public void deletePost(String postId, String location) {
         DocumentReference reference = db.collection(location).document(postId);
-        deletePostIfExists(reference, postId);
-    }
-
-    /**
-     * Deletes a post from the database if it exists.
-     *
-     * @param reference a {@link DocumentReference} object for the post to delete
-     * @param postId    the id of the post to delete
-     */
-    private void deletePostIfExists(DocumentReference reference, String postId) {
-        // Check if the post exists
-        reference.get().addOnCompleteListener(task -> {
-            if (!task.getResult().exists()) {
-                // If the post does not exist, log a message and return
-                Log.d("Database", "Post with id " + postId + " does not exist.");
-                return;
-            }
-
+        if (postExists(reference, postId)) {
             // If the post exists, delete it
             reference.delete()
                     .addOnSuccessListener(unused1 -> {
                         // If the deletion is successful, update the user's posts and log a success
                         // message
-                        userService.updateMyPosts(postId);
+                        if (location.equals("posts")) {
+                            userService.updateMyPosts(postId);
+                        }
                         Log.d("Database", "Successfully deleted post " + postId);
                     })
                     .addOnFailureListener(error -> {
@@ -117,11 +105,34 @@ public class PostService implements OnSuccessListener, OnFailureListener {
                         Log.d("Database", "Failed to delete post " + postId);
                         Log.d("Database error", String.valueOf(error));
                     });
-        }).addOnFailureListener(e -> {
+        } else {
+            throw new IllegalArgumentException("post doesn't exist at reference location");
+        }
+    }
+
+    /**
+     * checks if a posts exist in firebase
+     *
+     * @param reference a {@link DocumentReference} object for the post
+     * @param postId    the id of the post
+     */
+    private boolean postExists(DocumentReference reference, String postId) {
+        Task<DocumentSnapshot> task = reference.get().addOnFailureListener(e -> {
             // If there is an error while checking for the post, log an error message with
             // the details of the error
             Log.d("Database", "Error fetching " + postId);
         });
+
+        while (!task.isComplete()) {
+        }
+
+        if (!task.getResult().exists()) {
+            // If the post does not exist, log a message
+            Log.d("Database", "Post with id " + postId + " does not exist.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
