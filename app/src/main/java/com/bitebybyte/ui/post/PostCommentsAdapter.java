@@ -67,7 +67,11 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
-        hideDeleteButtonIfNotOwner(holder, comment);
+        // always show the delete button if the current user is a moderator
+        if (!userService.isCurrentUserModerator()) {
+            hideDeleteButtonIfNotOwner(holder, comment);
+        }
+
         loadUserDataForCommentOwner(holder, comment);
         setCommentContent(holder, comment);
         setCommentPostedDate(holder, comment);
