@@ -264,14 +264,14 @@ public class PostServiceTest {
     /*normal case of adding a comment*/
     @Test
     public void addingCommentTest1() {
-        //creating post to update likes on
+        //creating post to add a comment to
         FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
         db.collection("test-posts").document(post.getPostId()).set(post);
 
         //using the method under test
         postService.addComment(post, "comment testing", "test-posts");
 
-        // Query the database to verify that the post was liked
+        // Query the database to verify that the post has a comment
         Task<QuerySnapshot> task = db.collection("test-posts")
                 .whereEqualTo("postId", post.getPostId())
                 .get();
@@ -291,14 +291,14 @@ public class PostServiceTest {
     /*trying to add a comment with and nothing in it*/
     @Test
     public void addingCommentTest2() {
-        //creating post to update likes on
+        //creating post to add a comment
         FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
         db.collection("test-posts").document(post.getPostId()).set(post);
 
         //using the method under test
         postService.addComment(post, "", "test-posts");
 
-        // Query the database to verify that the post was liked
+        // Query the database to verify that the post has a comment
         Task<QuerySnapshot> task = db.collection("test-posts")
                 .whereEqualTo("postId", post.getPostId())
                 .get();
@@ -332,19 +332,66 @@ public class PostServiceTest {
     /////////////////////////////////////////////////
 
     ////////////// deleting comments ////////////////
+
+    /*normal case of deleting a comment*/
+    @Test
+    public void deletingCommentsTest1() {
+        //creating post to add a comment
+        FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //adding the comment to the post
+        postService.addComment(post, "", "test-posts");
+
+        // Query the database to verify that the post has a comment
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertEquals("", retrievedPost.getComments().get(0).getContent());
+        }
+
+        resetTestEnvironment();
+    }
+
+    /*trying to delete a comment that does not exist*/
+    @Test
+    public void deletingCommentsTest2() {
+
+    }
     /////////////////////////////////////////////////
 
     /////////// updating comment likes //////////////
-    /////////////////////////////////////////////////
 
-    /////////////// uploading image /////////////////
+    /*updating the likes when the comment wasn't already liked*/
+    @Test
+    public void updatingCommentLikesTest1() {}
+
+    /*updating the likes when the comment was already liked*/
+    @Test
+    public void updatingCommentLikesTest2() {}
     /////////////////////////////////////////////////
 
     /////////////// date formatting /////////////////
-    /////////////////////////////////////////////////
 
-    ////////////// (optional) testing date desceinding when getting all posts ////////////
-    ////////////////////////////////////////////////
+    /* normal case */
+    @Test
+    public void DateFormattingTest1() {
+
+    }
+
+    /*edge case*/
+    @Test
+    public void DateFormattingTest2() {
+
+    }
+    /////////////////////////////////////////////////
 
     //////////// private helper methods /////////////
 
