@@ -8,11 +8,11 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.backend.models.AbstractContent;
 import com.bitebybyte.backend.models.Comment;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.Recipe;
-import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.holders.AbstractViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -479,6 +479,26 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             }
         }
         return posts;
+    }
+
+    /**
+     * Search for posts that have titles matching with a query string.
+     *
+     * @param query titles to search for
+     * @param fragment callback
+     */
+    public void searchByTitle(String query, ServiceablePostFragment fragment) {
+        db.collection("posts")
+                .whereEqualTo("title", query)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<FeedPost> posts = createListOfFeedPosts(task);
+                        fragment.getListOfPosts(posts);
+                    } else {
+                        handleDocumentRetrievalError(task);
+                    }
+                });
     }
 
     /**
