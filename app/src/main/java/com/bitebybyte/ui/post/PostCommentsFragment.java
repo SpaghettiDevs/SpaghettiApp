@@ -19,7 +19,7 @@ import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.ui.home.HomeItemDecoration;
+import com.bitebybyte.ui.home.ItemDecoration;
 
 import java.util.List;
 
@@ -51,9 +51,7 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         commentsRecycler.setHasFixedSize(true);
         commentsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        // Use ItemDecoration to get consistent margins between items
-        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
-        commentsRecycler.addItemDecoration(decoration);
+        commentsRecycler.addItemDecoration(new ItemDecoration());
 
         //Inflate the view with the post data
         postService.inflatePostById(postId, this);

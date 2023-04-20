@@ -2,6 +2,7 @@ package com.bitebybyte.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -50,9 +51,9 @@ public class HomeFragment extends Fragment implements ServiceablePostFragment {
         // Get all the posts and add them to the recycler view
         postService.getAllPosts(this);
 
-        // Add item decoration to the recycler view to get consistent margins between items
-        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
-        feed.addItemDecoration(decoration);
+        feed.addItemDecoration(new ItemDecoration());
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -70,5 +71,19 @@ public class HomeFragment extends Fragment implements ServiceablePostFragment {
     @Override
     public void getListOfPosts(List<FeedPost> posts) {
         feed.setAdapter(new HomeFeedAdapter(posts));
+    }
+
+    /**
+     * Show the search icon when this fragment gets loaded.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.app_bar_search).setVisible(true);
     }
 }

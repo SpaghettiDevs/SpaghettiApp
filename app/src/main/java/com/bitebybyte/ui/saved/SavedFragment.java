@@ -2,6 +2,7 @@ package com.bitebybyte.ui.saved;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,8 +53,26 @@ public class SavedFragment extends Fragment {
         // Connect the TabLayout and ViewPager
         connectTabLayoutAndViewPager();
 
+        setHasOptionsMenu(true);
+
+
         return view;
     }
+
+    /**
+     * Hide the search icon when this fragment gets loaded.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.app_bar_search).setVisible(false);
+    }
+
 
     /**
      * Connects the TabLayout and ViewPager
