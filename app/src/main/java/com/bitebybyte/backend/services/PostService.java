@@ -329,6 +329,11 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             Recipe recipe,
             String location) {
 
+        if (idOwner == null || content == null || title == null || images == null
+                || labels == null || recipe == null || location == null) {
+            throw new IllegalArgumentException("values cannot be null");
+        }
+
         FeedPost post = new FeedPost(idOwner, content, title,
                 images, labels, recipe);
 
@@ -351,6 +356,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             String ingredients,
             int preparationTime,
             String preparationTimeUnit) {
+        if (methods == null || ingredients == null || preparationTimeUnit == null) {
+            throw new IllegalArgumentException("values cannot be null");
+        }
+
         return new Recipe(methods, ingredients, preparationTime, preparationTimeUnit);
     }
 
