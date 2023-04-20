@@ -25,6 +25,18 @@
             app:srcCompat="@android:drawable/ic_menu_myplaces"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <ImageButton
+            android:id="@+id/post_detail_delete_button"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Delete post"
+            app:layout_constraintBottom_toBottomOf="@+id/post_detail_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/post_detail_title"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_trash_black_24dp" />
+
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
