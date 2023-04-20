@@ -2,6 +2,7 @@ package com.bitebybyte;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.bitebybyte.backend.models.Comment;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.Recipe;
 import com.bitebybyte.backend.services.PostService;
@@ -20,7 +21,11 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Executable;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -371,25 +376,127 @@ public class PostServiceTest {
 
     /*updating the likes when the comment wasn't already liked*/
     @Test
-    public void updatingCommentLikesTest1() {}
+    public void updatingCommentLikesTest1() {
+        List<Comment> commentList = new ArrayList<>();
+        //creating post
+        FeedPost post = new FeedPost("like-person", "like", "liking", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //adding comment to post
+        postService.addComment(post, "comment testing", "test-posts");
+        commentList.add(post.getComments().get(0));
+
+        //using the method under test
+        postService.updateLikes(commentList, post.getPostId(), 0, "test-posts");
+
+        // Query the database to verify that the comment was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertTrue(retrievedPost.getComments().get(0).getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        resetTestEnvironment();
+    }
 
     /*updating the likes when the comment was already liked*/
     @Test
-    public void updatingCommentLikesTest2() {}
+    public void updatingCommentLikesTest2() {
+        List<Comment> commentList = new ArrayList<>();
+        //creating post
+        FeedPost post = new FeedPost("like-person", "like", "liking", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //adding comment to post
+        postService.addComment(post, "comment testing", "test-posts");
+        commentList.add(post.getComments().get(0));
+
+        //liking the comment
+        postService.updateLikes(commentList, post.getPostId(), 0, "test-posts");
+
+        // Query the database to verify that the comment was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertTrue(retrievedPost.getComments().get(0).getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        //disliking the comment
+        postService.updateLikes(commentList, post.getPostId(), 0, "test-posts");
+
+        // Query the database to verify that the comment was liked
+        Task<QuerySnapshot> task2 = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task2.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertFalse(retrievedPost.getComments().get(0).getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        resetTestEnvironment();
+    }
     /////////////////////////////////////////////////
 
     /////////////// date formatting /////////////////
 
-    /* normal case */
+    /* test for "..... days ago" */
+    /*need to update date or the expected value since more time has passed*/
     @Test
     public void DateFormattingTest1() {
-
+        Date date = Date.from(LocalDate.of( 2023 , 4 , 20 )
+                            .atStartOfDay(ZoneId.of( "Europe/Amsterdam" )).toInstant());
+        String dateFormat = postService.dateFormat(date);
+        assertEquals("1 day ago", dateFormat);
     }
 
-    /*edge case*/
+    /* test for "..... hours ago" */
+    /*need to update date or the expected value since more time has passed*/
     @Test
     public void DateFormattingTest2() {
+        Date date = Date.from(LocalDate.of( 2023 , 4 , 20 )
+                            .atTime(23, 0, 0).toInstant(ZoneOffset.ofHours(2)));
+        String dateFormat = postService.dateFormat(date);
+        assertEquals("1 hour ago", dateFormat);
+    }
 
+    /* test for "..... minutes ago" */
+    /*need to update date or the expected value since more time has passed*/
+    @Test
+    public void DateFormattingTest3() {
+        Date date = Date.from(LocalDate.of( 2023 , 4 , 21 )
+                .atTime(0, 39, 0).toInstant(ZoneOffset.ofHours(2)));
+        String dateFormat = postService.dateFormat(date);
+        assertEquals("2 minutes ago", dateFormat);
+    }
+
+    /* test for "..... seconds ago" */
+    /*need to update date or the expected value since more time has passed*/
+    /*almost impossible to test correctly (because of timing)*/
+   // @Test
+    public void DateFormattingTest4() {
+        Date date = Date.from(LocalDate.of( 2023 , 4 , 20 )
+                .atTime(23, 0, 0).toInstant(ZoneOffset.ofHours(2)));
+        String dateFormat = postService.dateFormat(date);
+        assertEquals("40 seconds ago", dateFormat);
     }
     /////////////////////////////////////////////////
 
