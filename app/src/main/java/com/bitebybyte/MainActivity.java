@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,12 +17,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.ActivityMainBinding;
+import com.bitebybyte.ui.home.HomeFragmentDirections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupUI(currentUser);
         setupNavController();
+        handleSearchQuery();
         disableBottomBar(navController);
         removeHamburgerIcon(navController);
         setupSettingsButton();
@@ -134,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            // TODO: pass the query to the backend
-           navController.navigate(R.id.action_navigation_home_to_navigation_search);
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToNavigationSearch(query);
+            navController.navigate(action);
 
         }
     }
