@@ -139,10 +139,6 @@ public class UserService implements OnSuccessListener, OnFailureListener {
                 });
     }
 
-    public void getUserProfilePicture(String userId) {
-
-    }
-
     /**
      * Get the posts the current user has created.
      *
