@@ -176,7 +176,6 @@ public class PostServiceTest {
     /* try deleting a post that doesn't exist */
     @Test
     public void DeletingPostTest2() {
-        //TO DO this throws the correct error, but for some reason the assert throws can't see it
         assertThrows(IllegalArgumentException.class, () -> {
             //call the delete method from postService
                 postService.deletePost("not a real post", "test-posts");
@@ -189,19 +188,147 @@ public class PostServiceTest {
     /////////////// updating likes //////////////////
 
     /*testing when the user has not liked the post yet*/
-    //@Test
+    @Test
     public void updatingLikesTest1() {
+        //creating post to update likes on
+        FeedPost post = new FeedPost("like-person", "like", "liking", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
 
+        //using the method under test
+        postService.updateLikes(post, "test-posts");
+
+        // Query the database to verify that the post was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertTrue(retrievedPost.getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        resetTestEnvironment();
     }
 
     /*testing when the user has liked the post*/
-    //@Test
+    @Test
     public void updatingLikesTest2() {
+        //creating post to update likes on
+        FeedPost post = new FeedPost("like-person", "like", "liking", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
 
+        //liking the post
+        postService.updateLikes(post, "test-posts");
+
+        // Query the database to verify that the post was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertTrue(retrievedPost.getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        //disliking the post
+        postService.updateLikes(post, "test-posts");
+
+        // Query the database to verify that the post was disliked
+        Task<QuerySnapshot> task2 = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task2.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertFalse(retrievedPost.getLikes().containsKey(auth.getCurrentUser().getUid()));
+        }
+
+        resetTestEnvironment();
     }
     /////////////////////////////////////////////////
 
     ////////////// adding comments //////////////////
+
+    /*normal case of adding a comment*/
+    @Test
+    public void addingCommentTest1() {
+        //creating post to update likes on
+        FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //using the method under test
+        postService.addComment(post, "comment testing", "test-posts");
+
+        // Query the database to verify that the post was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertEquals("comment testing", retrievedPost.getComments().get(0).getContent());
+        }
+
+        resetTestEnvironment();
+    }
+
+    /*trying to add a comment with and nothing in it*/
+    @Test
+    public void addingCommentTest2() {
+        //creating post to update likes on
+        FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //using the method under test
+        postService.addComment(post, "", "test-posts");
+
+        // Query the database to verify that the post was liked
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {}
+
+        //checking if all the fields have the right value
+        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+            FeedPost retrievedPost = documentSnapshot.toObject(FeedPost.class);
+            assertEquals("", retrievedPost.getComments().get(0).getContent());
+        }
+
+        resetTestEnvironment();
+    }
+
+    /*trying to add a comment with a null value*/
+    @Test
+    public void addingCommentTest3() {
+        //creating post to update likes on
+        FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            //call the add comment method
+            postService.addComment(post, null, "test-posts");
+        });
+
+        resetTestEnvironment();
+    }
     /////////////////////////////////////////////////
 
     ////////////// deleting comments ////////////////
