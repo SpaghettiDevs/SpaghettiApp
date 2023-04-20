@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -30,7 +31,6 @@ public class PostServiceTest {
     private FirebaseAuth auth;
     private UserService userService;
     private PostService postService;
-    List<String> postsCreated;
 
     @Before
     public void setUp() {
@@ -39,7 +39,6 @@ public class PostServiceTest {
         auth = FirebaseAuth.getInstance();
         userService = new UserService();
         postService = new PostService();
-        postsCreated = new ArrayList<>();
     }
 
     /////////////// creating posts //////////////////
@@ -49,7 +48,6 @@ public class PostServiceTest {
     public void CreatingPostTest1() {
         //creating a post with empty values
         String postId = postService.createPost("", "", "", "", new ArrayList<>(), new Recipe(), "test-posts");
-        postsCreated.add(postId);
 
         // Query the database to verify that the post was saved
         Task<QuerySnapshot> task = db.collection("test-posts")
@@ -59,7 +57,8 @@ public class PostServiceTest {
                 });
 
         //waiting for the query to complete
-        while (!task.isComplete()){}
+        while (!task.isComplete()) {
+        }
 
         //checking if all the fields have the right value
         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -88,12 +87,13 @@ public class PostServiceTest {
         String content = "cooking potato";
         String title = "potato";
         String images = "";
-        List<String> labels = new ArrayList<String>() {{add("cooking");}};
+        List<String> labels = new ArrayList<String>() {{
+            add("cooking");
+        }};
         Recipe recipe = new Recipe("methods", "potato", 6, "minutes");
 
         //creating a post
         String postId = postService.createPost(idOwner, content, title, images, labels, recipe, "test-posts");
-        postsCreated.add(postId);
 
         // Query the database to verify that the post was saved
         Task<QuerySnapshot> task = db.collection("test-posts")
@@ -103,7 +103,8 @@ public class PostServiceTest {
                 });
 
         //waiting for the query to complete
-        while (!task.isComplete()){}
+        while (!task.isComplete()) {
+        }
 
         //checking if all the fields have the right value
         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -132,23 +133,72 @@ public class PostServiceTest {
         String content = "cooking potato";
         String title = null;
         String images = "";
-        List<String> labels = new ArrayList<String>() {{add("cooking");}};
+        List<String> labels = new ArrayList<String>() {{
+            add("cooking");
+        }};
         Recipe recipe = new Recipe("methods", null, 6, "minutes");
 
         assertThrows(IllegalArgumentException.class, () -> {
-                //creating a post
-                postService.createPost(idOwner, content, title, images, labels, recipe, "test-posts");
+            //creating a post
+            postService.createPost(idOwner, content, title, images, labels, recipe, "test-posts");
         });
+
+        resetTestEnvironment();
     }
     /////////////////////////////////////////////////
 
-    ////////////// updating a post //////////////////
-    /////////////////////////////////////////////////
-
     /////////////// deleting a post /////////////////
+
+    /* normal case test for deleting a post */
+    @Test
+    public void DeletingPostTest1() {
+        //creating a post for deletion
+        FeedPost post = new FeedPost("", "", "", "", new ArrayList<>(), new Recipe());
+        db.collection("test-posts").document(post.getPostId()).set(post);
+
+        //call the delete method from postService
+        postService.deletePost(post.getPostId(), "test-posts");
+
+        // Query the database to verify that the post was saved
+        Task<QuerySnapshot> task = db.collection("test-posts")
+                .whereEqualTo("postId", post.getPostId())
+                .get();
+
+        //waiting for the query to complete
+        while (!task.isComplete()) {
+        }
+
+        assertEquals(true, task.getResult().isEmpty());
+
+        resetTestEnvironment();
+    }
+
+    /* try deleting a post that doesn't exist */
+    @Test
+    public void DeletingPostTest2() {
+        //TO DO this throws the correct error, but for some reason the assert throws can't see it
+        assertThrows(IllegalArgumentException.class, () -> {
+            //call the delete method from postService
+                postService.deletePost("not a real post", "test-posts");
+
+        });
+        resetTestEnvironment();
+    }
     /////////////////////////////////////////////////
 
     /////////////// updating likes //////////////////
+
+    /*testing when the user has not liked the post yet*/
+    //@Test
+    public void updatingLikesTest1() {
+
+    }
+
+    /*testing when the user has liked the post*/
+    //@Test
+    public void updatingLikesTest2() {
+
+    }
     /////////////////////////////////////////////////
 
     ////////////// adding comments //////////////////
@@ -172,11 +222,22 @@ public class PostServiceTest {
     //////////// private helper methods /////////////
 
     private void resetTestEnvironment() {
-        for (String postId : postsCreated) {
-            Task<Void> task = db.collection("test-posts").document(postId).delete();
-            while (!task.isComplete()){}
-            postsCreated.remove(postId);
+        List<String> allPosts = new ArrayList<>();
+        Task<QuerySnapshot> task = db.collection("test-posts").get();
+
+        //wait for query to finish
+        while (!task.isComplete()) {
         }
+
+        for (QueryDocumentSnapshot doc : task.getResult()) {
+            FeedPost post = doc.toObject(FeedPost.class);
+            allPosts.add(post.getPostId());
+        }
+
+        for (String postId : allPosts) {
+            Task<Void> task2 = db.collection("test-posts").document(postId).delete();
+            while (!task2.isComplete()) {}
+        }
+        /////////////////////////////////////////////////
     }
-    /////////////////////////////////////////////////
 }
