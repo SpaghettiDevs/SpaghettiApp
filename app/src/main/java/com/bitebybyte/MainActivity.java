@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
         //setting the username on the sidebar
         TextView sideBarUsername = sideBar.getHeaderView(0).findViewById(R.id.user_name_sidebar);
         sideBarUsername.setText(userService.getCurrentUsername());
+
+        ImageView sideBarProfilePicture = sideBar.getHeaderView(0).findViewById(R.id.profile_picture_sidebar);
+        PostService postService = new PostService();
+        postService.loadImage(sideBarProfilePicture, userService.getCurrentUserId(), "pfPictures/");
     }
 
     /**

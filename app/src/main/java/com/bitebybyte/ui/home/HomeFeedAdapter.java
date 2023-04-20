@@ -136,7 +136,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
      */
     private void setPostImageAndComments(HomeFeedViewHolder holder, FeedPost post) {
         holder.getPostCommentsAmount().setText(Integer.toString(post.getComments().size()));
-        postService.loadImage(holder.getPostImage(), post.getPostId());
+        postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
     }
 
     /**

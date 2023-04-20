@@ -20,25 +20,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/textViewUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:layout_marginBottom="5dp"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            <ImageButton
+                android:id="@+id/profile_picture_button"
+                style="@style/CameraButton"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                android:text="Add profile picture"
+                android:textSize="20sp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-        <TextView
-            android:id="@+id/textViewEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:layout_marginBottom="5dp"
-            android:textSize="25sp"
-            android:textColor="@color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:gravity="bottom">
+
+                <TextView
+                    android:id="@+id/textViewUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/textViewEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Email"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="25dp"
+                    android:autoSizeMinTextSize="10dp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,7 +139,6 @@
             android:text="Reset password"
             android:textSize="18sp"
             app:cornerRadius="20dp" />
-
     </LinearLayout>
 
     <Button
