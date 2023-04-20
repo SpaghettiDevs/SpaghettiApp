@@ -73,8 +73,8 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
         setCommentPostedDate(holder, comment);
         setCommentLikesCount(holder, comment);
 
-        holder.getDeleteButton().setOnClickListener(v -> onDeleteButtonClicked(holder, position));
-        holder.getLikeButton().setOnClickListener(v -> onLikeButtonClicked(holder, comment, position));
+        holder.getDeleteButton().setOnClickListener(v -> onDeleteButtonClicked(holder, holder.getAdapterPosition()));
+        holder.getLikeButton().setOnClickListener(v -> onLikeButtonClicked(holder, comment, holder.getAdapterPosition()));
 
         if (postService.hasLikedContent(comment))
             //Update the like icon to be solid if the user has liked the post
