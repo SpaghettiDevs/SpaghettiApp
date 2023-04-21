@@ -28,11 +28,17 @@ public class User {
     private String username;
 
     /**
+     * If a user is a moderator or not.
+     */
+    private boolean isModerator;
+
+    /**
      * Creates a new user with empty lists of posts.
      */
     public User() {
         myPosts = new ArrayList<>();
         savedPosts = new ArrayList<>();
+        isModerator = false;
     }
 
     /**
@@ -82,4 +88,11 @@ public class User {
     public List<String> getMyPosts() {
         return myPosts;
     }
+
+    /**
+     * Returns a boolean indicating whether the user is a moderator.
+     *
+     * @return isModerator
+     */
+    public boolean getIsModerator() { return isModerator; }
 }
