@@ -68,9 +68,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
         // Set the number of likes and the like button's appearance
         setLikeButtonAppearance(holder, post);
 
-        // Set author profile picture
-        setProfilePicture(holder, post);
-
         // Update the likes when someone presses the like button
         holder.getPostLikeButton().setOnClickListener(event -> onLikeButtonClicked(holder, post));
 
@@ -158,16 +155,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
         }
     }
 
-    /**
-     * Set the profile picture of the owner of the post
-     *
-     * @param holder The HomeFeedViewHolder to be updated
-     * @param post   The post to set the likes and like button for
-     */
-    private void setProfilePicture(HomeFeedViewHolder holder, FeedPost post) {
-        postService.loadImage(holder.getPostAuthorProfilePicture(), post.getIdOwner(), "pfPictures/");
-    }
-
     @Override
     public int getItemCount()
     {
@@ -182,5 +169,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
     @Override
     public void addUserData(User user, AbstractViewHolder holder) {
         holder.getPostAuthor().setText(user.getUsername());
+        postService.loadImage(holder.getPostAuthorImage(), user.getUserId(), "pfPictures/");
     }
 }

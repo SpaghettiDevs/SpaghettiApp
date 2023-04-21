@@ -8,13 +8,12 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.backend.models.AbstractContent;
 import com.bitebybyte.backend.models.Comment;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.backend.models.Recipe;
-import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -176,10 +174,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Loads an image from Firebase Storage into an ImageView using Glide.
      *
      * @param imageView the ImageView to load the image into
-     * @param postId the ID of the post whose image is being loaded
+     * @param imageId the ID of the post whose image is being loaded
      */
-    public void loadImage(ImageView imageView, String postId, String location) {
-        StorageReference storageReference = dbStore.getReference(location + postId);
+    public void loadImage(ImageView imageView, String imageId, final String location) {
+        StorageReference storageReference = dbStore.getReference(location + imageId);
 
         // Try to load the image from Firebase Storage.
         storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -187,6 +185,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             Glide.with(imageView.getContext()).load(uri).into(imageView);
         }).addOnFailureListener(exception -> {
             // If an error occurred while loading the image, load a default image instead.
+            if (location.equals("pfPictures/")) {
+                Log.d("Storage", "No profile picture");
+                return;
+            }
             Glide.with(imageView.getContext())
                     .load("https://firebasestorage.googleapis.com/v0/b/bitebybyte-ac8f2.appspot.com/o/default_Image%20(1).jpg?alt=media&token=db6bf7f0-6c34-4f9f-892c-e8cc031f23c8")
                     .into(imageView);
