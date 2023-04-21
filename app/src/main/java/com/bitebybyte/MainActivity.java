@@ -1,5 +1,7 @@
 package com.bitebybyte;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,10 +13,12 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -22,6 +26,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.databinding.ActivityMainBinding;
+import com.bitebybyte.ui.home.HomeFragmentDirections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupUI(currentUser);
         setupNavController();
+        handleSearchQuery();
         disableBottomBar(navController);
         removeHamburgerIcon(navController);
         setupSettingsButton();
@@ -125,6 +131,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
     }
+    
+    /**
+     * Handle the search query from the user.
+     * 
+     * @post query gets passed to the backend
+     */
+    private void handleSearchQuery() {
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            NavDirections action = HomeFragmentDirections.actionNavigationHomeToNavigationSearch(query);
+            navController.navigate(action);
+
+        }
+    }
 
     /**
      * Disables the bottom navigation bar according to the argument "showBottomBar".
@@ -167,6 +189,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView    searchView    = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         return true;
     }
 

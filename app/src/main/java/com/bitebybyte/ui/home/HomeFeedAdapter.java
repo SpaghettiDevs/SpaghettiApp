@@ -93,7 +93,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
      */
     private void onLikeButtonClicked(HomeFeedViewHolder holder, FeedPost post) {
         int oldLikes = post.getLikes().size();
-        postService.updateLikes(post);
+        postService.updateLikes(post, "posts");
         int newLikes = post.getLikes().size();
 
         holder.getPostLikesAmount().setText(String.valueOf(newLikes));

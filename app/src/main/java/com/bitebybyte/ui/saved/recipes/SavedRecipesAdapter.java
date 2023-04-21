@@ -16,14 +16,14 @@ import com.bitebybyte.backend.models.User;
 import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.services.UserService;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.holders.SavedViewHolder;
+import com.bitebybyte.holders.CompactViewHolder;
 
 import java.util.List;
 
 /**
  * Adapter for displaying a list of user's saved recipes.
  */
-public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
+public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
         implements ServiceablePostFragment, ServiceableUserFragment {
 
     private final List<String> postIds;
@@ -32,6 +32,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
     /**
      * Constructor for SavedRecipesAdapter.
+     * 
      * @param postIds List of post IDs to be displayed in the adapter
      */
     SavedRecipesAdapter(List<String> postIds) {
@@ -42,17 +43,17 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
     @NonNull
     @Override
-    public SavedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CompactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // specify which xml layout to use for the recycler view
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_saved, parent, false);
+                .inflate(R.layout.post_compact, parent, false);
 
-        return new SavedViewHolder(view);
+        return new CompactViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
-        postService.inflatePostById(postIds.get(position), this, holder);
+    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
+        postService.inflatePostById(postIds.get(position), this, holder, "posts");
     }
 
     @Override
@@ -84,27 +85,28 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
 
         postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
 
-        //TODO: Load user profile image from firebase if it is set
+        // TODO: Load user profile image from firebase if it is set
 
         // Add delete button listener
-        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((SavedViewHolder) holder));
+        holder.getDeletePostButton().setOnClickListener(v -> onDeleteButtonClicked((CompactViewHolder) holder));
     }
 
     /**
      * Handles the delete button click.
      * Removes the post from the saved recipes list.
      * Displays a message to the user.
+     * 
      * @param holder the view holder for the deleted post
      */
-    private void onDeleteButtonClicked(SavedViewHolder holder) {
+    private void onDeleteButtonClicked(CompactViewHolder holder) {
         System.out.println("Delete button clicked");
         // Remove post from saved recipes and display message
         userService.removeSavedPost(holder.getAdapterPosition());
 
-        //Notify the adapter that the data has changed
+        // Notify the adapter that the data has changed
         notifyItemRemoved(holder.getAdapterPosition());
 
-        //TODO this toast doesn't work. The changes apply after refreshing!
+        // TODO this toast doesn't work. The changes apply after refreshing!
         Toast.makeText(holder.getDeletePostButton().getContext(), "Unsaved post", Toast.LENGTH_SHORT).show();
     }
 
@@ -125,7 +127,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
             // Remove post from saved recipes and display message
             userService.removeSavedPost(holder.getAdapterPosition());
 
-            //Notify the adapter that the data has changed
+            // Notify the adapter that the data has changed
             notifyItemRemoved(holder.getAdapterPosition());
         });
     }
@@ -146,5 +148,3 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<SavedViewHolder>
         postService.loadImage(viewHolder.getPostAuthorImage(), user.getUserId(), "pfPictures/");
     }
 }
-
-

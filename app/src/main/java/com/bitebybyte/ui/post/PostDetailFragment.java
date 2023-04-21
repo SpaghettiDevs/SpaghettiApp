@@ -2,6 +2,7 @@ package com.bitebybyte.ui.post;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bitebybyte.R;
 import com.bitebybyte.ServiceablePostFragment;
@@ -49,6 +51,7 @@ public class PostDetailFragment extends Fragment
 
     private PostService postService;
     private FeedPost post;
+    private ImageView deleteIcon;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,8 +84,12 @@ public class PostDetailFragment extends Fragment
         addComment.setOnClickListener(this::onCommentButtonPressed);
         commentIcon.setOnClickListener(this::onCommentButtonPressed);
 
+
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
+
+        setHasOptionsMenu(true);
+
 
         return root;
     }
@@ -108,6 +115,14 @@ public class PostDetailFragment extends Fragment
         likeIcon = view.findViewById(R.id.post_detail_likes_icon);
         commentIcon = view.findViewById(R.id.post_detail_comment_icon);
         bookmarkIcon = view.findViewById(R.id.post_detail_bookmark_icon);
+        deleteIcon = view.findViewById(R.id.post_detail_delete_button);
+
+    }
+
+    private void showDeleteButtonIfModerator() {
+        if (userService.isCurrentUserModerator()) {
+            deleteIcon.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -118,7 +133,7 @@ public class PostDetailFragment extends Fragment
      */
     private void onLikeButtonPressed(View view) {
         int oldLikes = post.getLikes().size();
-        postService.updateLikes(post);
+        postService.updateLikes(post, "posts");
         int newLikes = post.getLikes().size();
 
         if (oldLikes < newLikes)
@@ -165,11 +180,15 @@ public class PostDetailFragment extends Fragment
         likeAmount.setText(Integer.toString(post.getLikes().size()));
         commentAmount.setText(Integer.toString(post.getComments().size()));
 
+        showDeleteButtonIfModerator();
+
         //Add event listener for the like button
         likeIcon.setOnClickListener(this::onLikeButtonPressed);
 
         //Add event listener for the bookmark button
         bookmarkIcon.setOnClickListener(this::onBookmarkButtonPressed);
+
+        deleteIcon.setOnClickListener(this::onDeleteButtonPressed);
 
         //Check if this user has liked the post on load
         if (postService.hasLikedContent(post))
@@ -186,6 +205,16 @@ public class PostDetailFragment extends Fragment
         else
             //Update the bookmark icon to be outline if the user has bookmarked the post
             bookmarkIcon.setImageResource(R.drawable.ic_favorites_black_24dp);
+    }
+
+    private void onDeleteButtonPressed(View view)
+    {
+        postService.deletePost(post.getPostId(), "posts");
+        Toast.makeText(getContext(), "Post is deleted", Toast.LENGTH_LONG).show();
+
+        // navigate back to home feed
+        NavController controller = NavHostFragment.findNavController(this);
+        controller.navigate(R.id.navigation_home);
     }
 
     @Override
@@ -208,4 +237,19 @@ public class PostDetailFragment extends Fragment
     public void addUserData(User user, AbstractViewHolder viewHolder) {
 
     }
+
+    /**
+     * Hide the search icon when this fragment gets loaded.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.app_bar_search).setVisible(false);
+    }
+
 }

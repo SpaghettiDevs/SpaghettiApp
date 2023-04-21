@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -66,6 +67,9 @@ public class CreateFragment extends Fragment {
 
         imageButton.setOnClickListener(this::onImageButtonClick);
 
+        setHasOptionsMenu(true);
+
+
         return binding.getRoot();
     }
 
@@ -106,7 +110,8 @@ public class CreateFragment extends Fragment {
                 null, null,
                 method.getText().toString(), ingredients.getText().toString(),
                 Integer.parseInt(estimatedTime.getText().toString()),
-                spinner.getSelectedItem().toString());
+                spinner.getSelectedItem().toString(),
+                "posts");
 
         //Save the image to the database
         postService.saveImageToDatabase(imageURI, imageButton, postID, "images/");
@@ -233,4 +238,19 @@ public class CreateFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    /**
+     * Hide the search icon when this fragment gets loaded.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+
+        menu.findItem(R.id.app_bar_search).setVisible(false);
+    }
+
 }

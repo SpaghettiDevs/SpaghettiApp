@@ -6,13 +6,21 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeItemDecoration extends RecyclerView.ItemDecoration {
+/**
+ * Adds consistent margins between the recycler items and avoids doubling up on the margins.
+ */
+public class ItemDecoration extends RecyclerView.ItemDecoration {
     private final int columns;
     private final int margin;
 
-    public HomeItemDecoration(int margin, int columns) {
+    public ItemDecoration(int margin, int columns) {
         this.margin = margin;
         this.columns = columns;
+    }
+
+    public ItemDecoration() {
+        this.margin = 32;
+        this.columns = 1;
     }
 
     @Override

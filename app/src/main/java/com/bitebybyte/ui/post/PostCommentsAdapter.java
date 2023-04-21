@@ -67,14 +67,18 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         Comment comment = comments.get(position);
 
-        hideDeleteButtonIfNotOwner(holder, comment);
+        // always show the delete button if the current user is a moderator
+        if (!userService.isCurrentUserModerator()) {
+            hideDeleteButtonIfNotOwner(holder, comment);
+        }
+
         loadUserDataForCommentOwner(holder, comment);
         setCommentContent(holder, comment);
         setCommentPostedDate(holder, comment);
         setCommentLikesCount(holder, comment);
 
-        holder.getDeleteButton().setOnClickListener(v -> onDeleteButtonClicked(holder, position));
-        holder.getLikeButton().setOnClickListener(v -> onLikeButtonClicked(holder, comment, position));
+        holder.getDeleteButton().setOnClickListener(v -> onDeleteButtonClicked(holder, holder.getAdapterPosition()));
+        holder.getLikeButton().setOnClickListener(v -> onLikeButtonClicked(holder, comment, holder.getAdapterPosition()));
 
         if (postService.hasLikedContent(comment))
             //Update the like icon to be solid if the user has liked the post
@@ -145,7 +149,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
      * @param position the position of the comment in the adapter's list
      */
     private void onDeleteButtonClicked(CommentsViewHolder holder, int position) {
-        postService.deleteComment(comments, post.getPostId(), position);
+        postService.deleteComment(comments, post.getPostId(), position, "posts");
         Toast.makeText(holder.getContent().getContext(), "Comment deleted", Toast.LENGTH_SHORT).show();
 
         //Refresh the comments list
@@ -160,7 +164,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
      * @param position the position of the comment in the adapter's list
      */
     private void onLikeButtonClicked(CommentsViewHolder holder, Comment comment, int position) {
-        postService.updateLikes(comments, post.getPostId(), position);
+        postService.updateLikes(comments, post.getPostId(), position, "posts");
 
         if (postService.hasLikedContent(comment))
             //Update the like icon to be solid if the user has liked the post

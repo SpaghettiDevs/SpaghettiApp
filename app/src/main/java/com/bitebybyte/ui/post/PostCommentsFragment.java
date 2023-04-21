@@ -19,7 +19,7 @@ import com.bitebybyte.backend.services.PostService;
 import com.bitebybyte.backend.models.FeedPost;
 import com.bitebybyte.ServiceablePostFragment;
 import com.bitebybyte.holders.AbstractViewHolder;
-import com.bitebybyte.ui.home.HomeItemDecoration;
+import com.bitebybyte.ui.home.ItemDecoration;
 
 import java.util.List;
 
@@ -51,12 +51,10 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         commentsRecycler.setHasFixedSize(true);
         commentsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        // Use ItemDecoration to get consistent margins between items
-        HomeItemDecoration decoration = new HomeItemDecoration(32, 1);
-        commentsRecycler.addItemDecoration(decoration);
+        commentsRecycler.addItemDecoration(new ItemDecoration());
 
         //Inflate the view with the post data
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
 
         // Initialize the comment input field and send button
         initializeCommentInput(view);
@@ -100,7 +98,11 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         }
 
         // Add the comment to the post
-        postService.addComment(post, commentInput.getText().toString());
+        try {
+            postService.addComment(post, commentInput.getText().toString(), "posts");
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this.getContext(), "comment text cannot be null", Toast.LENGTH_SHORT).show();
+        }
 
         // Clear the input field and show a message
         commentInput.setText("");
