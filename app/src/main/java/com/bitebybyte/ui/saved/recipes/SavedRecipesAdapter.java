@@ -145,5 +145,6 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     @Override
     public void addUserData(User user, AbstractViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
+        postService.loadImage(viewHolder.getPostAuthorImage(), user.getUserId(), "pfPictures/");
     }
 }

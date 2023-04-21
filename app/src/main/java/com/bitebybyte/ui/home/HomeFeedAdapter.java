@@ -169,5 +169,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<HomeFeedViewHolder>
     @Override
     public void addUserData(User user, AbstractViewHolder holder) {
         holder.getPostAuthor().setText(user.getUsername());
+        postService.loadImage(holder.getPostAuthorImage(), user.getUserId(), "pfPictures/");
     }
 }

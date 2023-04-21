@@ -189,6 +189,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder
     @Override
     public void addUserData(User user, AbstractViewHolder viewHolder) {
         viewHolder.getPostAuthor().setText(user.getUsername());
+        postService.loadImage(viewHolder.getPostAuthorImage(), user.getUserId(), "pfPictures/");
     }
 
 }

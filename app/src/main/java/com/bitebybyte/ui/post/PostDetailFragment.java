@@ -40,6 +40,7 @@ public class PostDetailFragment extends Fragment
     private TextView ingredients;
     private TextView method;
     private TextView author;
+    private ImageView authorImage;
     private TextView likeAmount;
     private TextView commentAmount;
     private ImageView likeIcon;
@@ -106,6 +107,7 @@ public class PostDetailFragment extends Fragment
         ingredients = view.findViewById(R.id.post_detail_ingredients_text);
         method = view.findViewById(R.id.post_detail_method_text);
         author = view.findViewById(R.id.post_detail_author_name);
+        authorImage = view.findViewById(R.id.post_detail_author_picture);
         likeAmount = view.findViewById(R.id.post_detail_likes_amount);
         commentAmount = view.findViewById(R.id.post_detail_comment_amount);
 
@@ -228,6 +230,7 @@ public class PostDetailFragment extends Fragment
     @Override
     public void addUserData(User user) {
         author.setText(user.getUsername());
+        postService.loadImage(authorImage, user.getUserId(), "pfPictures/");
     }
 
     @Override
