@@ -85,7 +85,7 @@ public class PostDetailFragment extends Fragment
 
 
         String postId = PostDetailFragmentArgs.fromBundle(getArguments()).getPostId();
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
 
         setHasOptionsMenu(true);
 
@@ -131,7 +131,7 @@ public class PostDetailFragment extends Fragment
      */
     private void onLikeButtonPressed(View view) {
         int oldLikes = post.getLikes().size();
-        postService.updateLikes(post);
+        postService.updateLikes(post, "posts");
         int newLikes = post.getLikes().size();
 
         if (oldLikes < newLikes)
@@ -207,7 +207,7 @@ public class PostDetailFragment extends Fragment
 
     private void onDeleteButtonPressed(View view)
     {
-        postService.deletePost(post.getPostId());
+        postService.deletePost(post.getPostId(), "posts");
         Toast.makeText(getContext(), "Post is deleted", Toast.LENGTH_LONG).show();
 
         // navigate back to home feed

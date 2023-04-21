@@ -54,7 +54,7 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         commentsRecycler.addItemDecoration(new ItemDecoration());
 
         //Inflate the view with the post data
-        postService.inflatePostById(postId, this);
+        postService.inflatePostById(postId, this, "posts");
 
         // Initialize the comment input field and send button
         initializeCommentInput(view);
@@ -98,7 +98,11 @@ public class PostCommentsFragment extends Fragment implements ServiceablePostFra
         }
 
         // Add the comment to the post
-        postService.addComment(post, commentInput.getText().toString());
+        try {
+            postService.addComment(post, commentInput.getText().toString(), "posts");
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this.getContext(), "comment text cannot be null", Toast.LENGTH_SHORT).show();
+        }
 
         // Clear the input field and show a message
         commentInput.setText("");
