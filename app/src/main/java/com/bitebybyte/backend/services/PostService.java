@@ -198,7 +198,8 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * Loads an image from Firebase Storage into an ImageView using Glide.
      *
      * @param imageView the ImageView to load the image into
-     * @param imageId the ID of the post whose image is being loaded
+     * @param imageId the ID of the image that is being loaded
+     * @param location the folder location of the image in the storage
      */
     public void loadImage(ImageView imageView, String imageId, final String location) {
         StorageReference storageReference = dbStore.getReference(location + imageId);
