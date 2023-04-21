@@ -52,7 +52,7 @@ public class SearchAdapter extends RecyclerView.Adapter<CompactViewHolder>
         FeedPost post = posts.get(position);
 
         holder.getPostTitle().setText(post.getTitle());
-        postService.loadImage(holder.getPostImage(), post.getPostId());
+        postService.loadImage(holder.getPostImage(), post.getPostId(), "images/");
 
         // Get the username and user image
         loadUserData(holder, post);

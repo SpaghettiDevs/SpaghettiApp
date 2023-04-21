@@ -176,6 +176,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      *
      * @param imageView the ImageView to load the image into
      * @param postId the ID of the post whose image is being loaded
+     * @param location folder to store images (can be "images/" or "pfPictures/")
      */
     public void loadImage(ImageView imageView, String postId, String location) {
         StorageReference storageReference = dbStore.getReference(location + postId);
