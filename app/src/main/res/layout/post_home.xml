@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:maxEms="8"
+            android:maxEms="7"
             android:text="Super long title which needs to be"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constrainedWidth="true"
