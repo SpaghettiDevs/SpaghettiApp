@@ -31,7 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,7 +55,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param post     the post to save
      * @param location to which collection the post needs to be saved to
      */
-    public void saveToDatabase(FeedPost post, String location) {
+    public void saveToDatabase(FeedPost post, final String location) {
         db.collection(location)
                 .document(post.getPostId()).set(post)
                 .addOnSuccessListener(unused -> {
@@ -74,7 +73,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param post     the post to save
      * @param location to which collection the post needs to be saved to
      */
-    public void saveCommentToDatabase(FeedPost post, String location) {
+    public void saveCommentToDatabase(FeedPost post, final String location) {
         db.collection(location)
                 .document(post.getPostId()).set(post)
                 .addOnSuccessListener(this)
@@ -87,7 +86,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param postId   the id of the post to delete
      * @param location which collection the post is in
      */
-    public void deletePost(String postId, String location) {
+    public void deletePost(String postId, final String location) {
         DocumentReference reference = db.collection(location).document(postId);
         if (postExists(reference, postId)) {
             // If the post exists, delete it
@@ -142,7 +141,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param post        the post to add the comment to
      * @param commentText the text of the comment to add
      */
-    public void addComment(FeedPost post, String commentText, String location) {
+    public void addComment(FeedPost post, String commentText, final String location) {
         if (commentText == null || post == null) {
             throw new IllegalArgumentException("comment text or post cannot be null");
         }
@@ -161,7 +160,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param postId   the postId to use as the filename
      * @param location place of image in the storage
      */
-    public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId, String location) {
+    public void saveImageToDatabase(Uri imageUri, ImageView imageView, String postId, final String location) {
         StorageReference storageReference = dbStore.getReference(location + postId);
         try {
             storageReference.putFile(imageUri)
@@ -202,7 +201,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param postId    the ID of the post whose image is being loaded
      * @param location  place of the image in the storage
      */
-    public void loadImage(ImageView imageView, String postId, String location) {
+    public void loadImage(ImageView imageView, String postId, final String location) {
         StorageReference storageReference = dbStore.getReference(location + postId);
 
         // Try to load the image from Firebase Storage.
@@ -315,7 +314,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             String ingredients,
             int preparationTime,
             String preparationTimeUnit,
-            String location) {
+            final String location) {
 
         Recipe recipe = createRecipe(methods, ingredients, preparationTime, preparationTimeUnit);
         return createPost(idOwner, content, title, images, labels, recipe, location);
@@ -342,10 +341,10 @@ public class PostService implements OnSuccessListener, OnFailureListener {
             String images,
             List<String> labels,
             Recipe recipe,
-            String location) {
+            final String location) {
 
-        if (idOwner == null || content == null || title == null || images == null
-                || labels == null || recipe == null || location == null) {
+        if (idOwner == null || content == null || title == null || recipe == null
+                    || location == null) {
             throw new IllegalArgumentException("values cannot be null");
         }
 
@@ -384,7 +383,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param post     post to update
      * @param location which collection the document is in
      */
-    public void updateLikes(FeedPost post, String location) {
+    public void updateLikes(FeedPost post, final String location) {
         DocumentReference postRef = db.collection(location).document(post.getPostId());
 
         FirebaseUser user = auth.getCurrentUser();
@@ -414,7 +413,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param index    of comment
      * @param location collection of post of comment
      */
-    public void updateLikes(List<Comment> comments, String postId, int index, String location) {
+    public void updateLikes(List<Comment> comments, String postId, int index, final String location) {
         DocumentReference postRef = db.collection(location).document(postId);
         Comment comment = comments.get(index);
         if (comment.getLikes().containsKey(auth.getCurrentUser().getUid())) {
@@ -440,7 +439,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param index    of comment to delete
      * @param location collection of post of comment
      */
-    public void deleteComment(List<Comment> comments, String postId, int index, String location) {
+    public void deleteComment(List<Comment> comments, String postId, int index, final String location) {
         DocumentReference postRef = db.collection(location).document(postId);
         if (index < comments.size()) {
             comments.remove(index);
@@ -467,7 +466,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param fragment callback
      * @param location collection of post
      */
-    public void inflatePostById(String postId, ServiceablePostFragment fragment, String location) {
+    public void inflatePostById(String postId, ServiceablePostFragment fragment, final String location) {
         DocumentReference postRef = db.collection(location).document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");
@@ -484,7 +483,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param location collection of post
      */
     public void inflatePostById(String postId, ServiceablePostFragment fragment, AbstractViewHolder holder,
-            String location) {
+            final String location) {
         DocumentReference postRef = db.collection(location).document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.v("Firebase", "Post fetched successfully");
@@ -498,7 +497,7 @@ public class PostService implements OnSuccessListener, OnFailureListener {
      * @param fragment callback
      * @param location collection of posts
      */
-    public void getAllPosts(ServiceablePostFragment fragment, String location) {
+    public void getAllPosts(ServiceablePostFragment fragment, final String location) {
         db.collection(location)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .get()

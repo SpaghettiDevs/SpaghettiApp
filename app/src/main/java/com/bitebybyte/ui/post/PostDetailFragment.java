@@ -207,7 +207,7 @@ public class PostDetailFragment extends Fragment
 
     private void onDeleteButtonPressed(View view)
     {
-        postService.deletePost(post.getPostId());
+        postService.deletePost(post.getPostId(), "posts");
         Toast.makeText(getContext(), "Post is deleted", Toast.LENGTH_LONG).show();
 
         // navigate back to home feed

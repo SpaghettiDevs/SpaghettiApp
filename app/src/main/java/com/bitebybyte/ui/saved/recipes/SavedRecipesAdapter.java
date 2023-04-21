@@ -52,7 +52,7 @@ public class SavedRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
         postService.inflatePostById(postIds.get(position), this, holder, "posts");
     }
 

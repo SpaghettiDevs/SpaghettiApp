@@ -65,7 +65,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
      * @param position The position of the item within the adapter's data set
      */
     @Override
-    public void onBindViewHolder(@NonNull SavedViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CompactViewHolder holder, int position) {
         postService.inflatePostById(postIds.get(position), this, holder, "posts");
     }
 
@@ -118,7 +118,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<CompactViewHolder>
      * @param holder The ViewHolder for the post being deleted
      * @param post   The FeedPost object for the post being deleted
      */
-    private void onDeleteButtonClicked(SavedViewHolder holder, FeedPost post) {
+    private void onDeleteButtonClicked(CompactViewHolder holder, FeedPost post) {
         try {
             postService.deletePost(post.getPostId(), "posts");
             Toast.makeText(holder.getDeletePostButton().getContext(), "Post Deleted", Toast.LENGTH_SHORT).show();
